@@ -7,7 +7,7 @@ Untitled game for Liberated Pixel Cup
 Getting
 -------
 
-    $ git clone http://bitbucket.org/parasyte/lpcgame
+    $ git clone http://bitbucket.org/parasyte/lpcgame.git
 
 Running
 -------
