@@ -1,21 +1,20 @@
 /* Constants */
-var c = {
-    get DOWN() {
-        return 0;
-    },
-
-    get RIGHT() {
-        return 1;
-    },
-
-    get LEFT() {
-        return 2;
-    },
-
-    get UP() {
-        return 3;
-    }
-};
+var c = {};
+try {
+    c.__defineGetter__("reset_dir", function () { return -1; });
+    c.__defineGetter__("up",        function () { return 0; });
+    c.__defineGetter__("right",     function () { return 1; });
+    c.__defineGetter__("down",      function () { return 2; });
+    c.__defineGetter__("left",      function () { return 3; });
+}
+catch (e) {
+    // No getters? FAKE CONSTANTS!
+    c.reset_dir = -1;
+    c.up        = 0;
+    c.right     = 1;
+    c.down      = 2;
+    c.left      = 3;
+}
 
 /* Game namespace */
 var game = {
@@ -90,8 +89,18 @@ var PlayScreen = me.ScreenObject.extend({
 
 /* Player character */
 var PlayerEntity = me.ObjectEntity.extend({
+    // Direction facing
     dir: c.DOWN,
+
+    // Standing or walking?
     standing: true,
+
+    // Keys being held: [ "left", "up", "right", "down" ]
+    held: [ false, false, false, false ],
+    last_held: [ false, false, false, false ],
+
+    // A helper constant
+    angle: Math.sin(45 * (Math.PI / 180)),
 
     init: function (x, y, settings) {
         // Call the constructor.
@@ -101,10 +110,10 @@ var PlayerEntity = me.ObjectEntity.extend({
         this.setVelocity(1.5, 1.5);
 
         // Set animations.
-        this.addAnimation("walk_down", [ 0, 1, 2, 3 ]);
-        this.addAnimation("walk_right", [ 4, 5, 6, 7 ]);
-        this.addAnimation("walk_left", [ 8, 9, 10, 11 ]);
-        this.addAnimation("walk_up", [ 12, 13, 14, 15 ]);
+        this.addAnimation("walk_down",  [ 0,  1,  2,  3 ]);
+        this.addAnimation("walk_right", [ 4,  5,  6,  7 ]);
+        this.addAnimation("walk_left",  [ 8,  9,  10, 11 ]);
+        this.addAnimation("walk_up",    [ 12, 13, 14, 15 ]);
 
         // Do not handle gravity in a top-down perspective.
         this.gravity = 0;
@@ -114,59 +123,57 @@ var PlayerEntity = me.ObjectEntity.extend({
     },
 
     update: function () {
-        // Walking controls.
-        if (me.input.isKeyPressed("up")) {
-            if (this.dir != c.UP) {
-                this.dir = c.UP;
-                this.setCurrentAnimation("walk_up");
-            }
-            this.standing = false;
-            this.vel.y -= this.accel.y * me.timer.tick
-        }
-        else if (me.input.isKeyPressed("down")) {
-            if (this.dir != c.DOWN) {
-                this.dir = c.DOWN;
-                this.setCurrentAnimation("walk_down");
-            }
-            this.standing = false;
-            this.vel.y += this.accel.y * me.timer.tick
-        }
-        else {
-            this.vel.y = 0;
-        }
+        var self = this;
 
-        if (me.input.isKeyPressed("left")) {
-            if (this.dir != c.LEFT) {
-                this.dir = c.LEFT;
-                this.setCurrentAnimation("walk_left");
+        // Walking controls.
+        self.vel.x = self.vel.y = 0;
+        var directions = [ "left", "up", "right", "down" ];
+        directions.forEach(function (dir, i) {
+            if (me.input.isKeyPressed(dir)) {
+                self.held[i] = true;
+                self.standing = false;
+
+                if (!self.last_held[i] || (self.dir == c.reset_dir)) {
+                    self.dir = c[dir];
+                    self.setCurrentAnimation("walk_" + dir);
+                }
+
+                var axis = (i % 2) ? "y" : "x";
+                self.vel[axis] = self.accel[axis] * me.timer.tick;
+
+                // Walking at a 45-degree angle will slow the axis velocity by
+                // approximately 5/7. But we'll just use sin(45)  ;)
+                if (me.input.isKeyPressed(directions[(i + 1) % 4]) ||
+                    me.input.isKeyPressed(directions[(i + 3) % 4])) {
+                    self.vel[axis] *= self.angle;
+                }
+
+                if (i < 2) {
+                    self.vel[axis] = -self.vel[axis];
+                }
             }
-            this.standing = false;
-            this.vel.x -= this.accel.x * me.timer.tick
-        }
-        else if (me.input.isKeyPressed("right")) {
-            if (this.dir != c.RIGHT) {
-                this.dir = c.RIGHT;
-                this.setCurrentAnimation("walk_right");
+            else {
+                self.held[i] = false;
+                if (self.last_held[i]) {
+                    self.dir = c.reset_dir;
+                }
             }
-            this.standing = false;
-            this.vel.x += this.accel.x * me.timer.tick
-        }
-        else {
-            this.vel.x = 0;
-        }
+
+            self.last_held[i] = self.held[i];
+        });
 
         // Check & update player movement.
-        this.updateMovement();
+        self.updateMovement();
 
         // Update animation if necessary.
-        if ((this.vel.x != 0) || (this.vel.y != 0)) {
+        if ((self.vel.x != 0) || (self.vel.y != 0)) {
             // Update object animation.
-            this.parent(this);
+            self.parent(self);
             return true;
         }
-        else if (!this.standing) {
-            this.standing = true;
-            this.setAnimationFrame(0);
+        else if (!self.standing) {
+            self.standing = true;
+            self.setAnimationFrame(0);
             return true;
         }
 
