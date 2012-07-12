@@ -1,19 +1,19 @@
 /* Constants */
 var c = {};
 try {
-    c.__defineGetter__("reset_dir", function () { return -1; });
-    c.__defineGetter__("up",        function () { return 0; });
-    c.__defineGetter__("right",     function () { return 1; });
-    c.__defineGetter__("down",      function () { return 2; });
-    c.__defineGetter__("left",      function () { return 3; });
+    c.__defineGetter__("RESET_DIR", function () { return -1; });
+    c.__defineGetter__("UP",        function () { return 0; });
+    c.__defineGetter__("RIGHT",     function () { return 1; });
+    c.__defineGetter__("DOWN",      function () { return 2; });
+    c.__defineGetter__("LEFT",      function () { return 3; });
 }
 catch (e) {
     // No getters? FAKE CONSTANTS!
-    c.reset_dir = -1;
-    c.up        = 0;
-    c.right     = 1;
-    c.down      = 2;
-    c.left      = 3;
+    c.RESET_DIR = -1;
+    c.UP        = 0;
+    c.RIGHT     = 1;
+    c.DOWN      = 2;
+    c.LEFT      = 3;
 }
 
 /* Game namespace */
@@ -32,6 +32,11 @@ var game = {
 
         // Initialize the audio.
         me.audio.init("mp3,ogg");
+
+        // Game engine settings.
+        me.sys.gravity = 0;
+        me.sys.useNativeAnimFrame = true; // Be fast!
+        //me.debug.renderHitBox = true;
 
         // Set a callback to run when loading is complete.
         me.loader.onload = this.loaded.bind(this);
@@ -100,9 +105,9 @@ var PlayerEntity = me.ObjectEntity.extend({
     last_held: [ false, false, false, false ],
 
     // A helper constant
-    angle: Math.sin(45 * (Math.PI / 180)),
+    walk_angle: Math.sin((45).degToRad()),
 
-    init: function (x, y, settings) {
+    init: function init(x, y, settings) {
         // Call the constructor.
         this.parent(x, y, settings);
 
@@ -115,14 +120,11 @@ var PlayerEntity = me.ObjectEntity.extend({
         this.addAnimation("walk_left",  [ 8,  9,  10, 11 ]);
         this.addAnimation("walk_up",    [ 12, 13, 14, 15 ]);
 
-        // Do not handle gravity in a top-down perspective.
-        this.gravity = 0;
-
         // Set the display to follow our position on both axis.
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
     },
 
-    update: function () {
+    update: function update() {
         var self = this;
 
         // Walking controls.
@@ -133,8 +135,8 @@ var PlayerEntity = me.ObjectEntity.extend({
                 self.held[i] = true;
                 self.standing = false;
 
-                if (!self.last_held[i] || (self.dir == c.reset_dir)) {
-                    self.dir = c[dir];
+                if (!self.last_held[i] || (self.dir == c.RESET_DIR)) {
+                    self.dir = c[dir.toUpperCase()];
                     self.setCurrentAnimation("walk_" + dir);
                 }
 
@@ -145,7 +147,7 @@ var PlayerEntity = me.ObjectEntity.extend({
                 // approximately 5/7. But we'll just use sin(45)  ;)
                 if (me.input.isKeyPressed(directions[(i + 1) % 4]) ||
                     me.input.isKeyPressed(directions[(i + 3) % 4])) {
-                    self.vel[axis] *= self.angle;
+                    self.vel[axis] *= self.walk_angle;
                 }
 
                 if (i < 2) {
@@ -155,20 +157,20 @@ var PlayerEntity = me.ObjectEntity.extend({
             else {
                 self.held[i] = false;
                 if (self.last_held[i]) {
-                    self.dir = c.reset_dir;
+                    self.dir = c.RESET_DIR;
                 }
             }
 
             self.last_held[i] = self.held[i];
         });
 
-        // Check & update player movement.
+        // Move entity and detect collisions.
         self.updateMovement();
 
         // Update animation if necessary.
         if ((self.vel.x != 0) || (self.vel.y != 0)) {
             // Update object animation.
-            self.parent(self);
+            self.parent();
             return true;
         }
         else if (!self.standing) {
