@@ -95,15 +95,25 @@ var PlayScreen = me.ScreenObject.extend({
 /* Entity with extended collision detection support */
 var MovableEntity = me.ObjectEntity.extend({
     updateMovement: function updateMovement() {
-        var collision = this.parent();
+        this.computeVelocity(this.vel);
+
+        // Check for collision.
+        var collision = this.collisionMap.checkCollision(this.collisionBox, this.vel);
 
         if (collision.x) {
-            // TODO
+            // TODO: For now, just prevent movement.
+            this.vel.x = 0;
         }
 
         if (collision.y) {
-            // TODO
+            // TODO: For now, just prevent movement.
+            this.vel.y = 0;
         }
+
+        // Update entity position.
+        this.pos.add(this.vel);
+
+        return collision;
     }
 });
 
