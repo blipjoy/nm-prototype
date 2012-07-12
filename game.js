@@ -19,7 +19,7 @@ catch (e) {
 /* Game namespace */
 var game = {
     resources: {
-        img : [ "grass", "sandwater", "treetop", "trunk", "watergrass", "whitey" ],
+        img : [ "collision", "grass", "sandwater", "treetop", "trunk", "watergrass", "whitey" ],
         map : [ "island" ]
     },
 
@@ -92,8 +92,23 @@ var PlayScreen = me.ScreenObject.extend({
     }
 });
 
+/* Entity with extended collision detection support */
+var MovableEntity = me.ObjectEntity.extend({
+    updateMovement: function updateMovement() {
+        var collision = this.parent();
+
+        if (collision.x) {
+            // TODO
+        }
+
+        if (collision.y) {
+            // TODO
+        }
+    }
+});
+
 /* Player character */
-var PlayerEntity = me.ObjectEntity.extend({
+var PlayerEntity = MovableEntity.extend({
     // Direction facing
     dir: c.DOWN,
 
@@ -110,6 +125,9 @@ var PlayerEntity = me.ObjectEntity.extend({
     init: function init(x, y, settings) {
         // Call the constructor.
         this.parent(x, y, settings);
+
+        // Adjust collision bounding box.
+        this.updateColRect(8, 20, 16, 20);
 
         // Set the walking speed.
         this.setVelocity(1.5, 1.5);
