@@ -8,8 +8,21 @@ body {
     background-color: black;
 }
 
+canvas {
+    vertical-align: top;
+}
+
+#game {
+    position: relative;
+    width: 640px;
+    margin: auto;
+}
+
 #framecounter {
+    position: absolute;
+    right: 0;
     color: white;
-    font-size: 10px;
+    font-size: 8pt;
     font-family: "Courier New";
+    text-shadow: black 1px 1px;
 }
