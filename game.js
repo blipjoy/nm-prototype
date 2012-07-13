@@ -37,6 +37,7 @@ var game = {
         me.sys.gravity = 0;
         me.sys.useNativeAnimFrame = true; // Be fast!
         //me.debug.renderHitBox = true;
+        //me.debug.renderCollisionMap = true;
 
         // Set a callback to run when loading is complete.
         me.loader.onload = this.loaded.bind(this);
@@ -100,14 +101,97 @@ var MovableEntity = me.ObjectEntity.extend({
         // Check for collision.
         var collision = this.collisionMap.checkCollision(this.collisionBox, this.vel);
 
+        var where, zone, tile; // Temporary variables.
+        var hWidth = ~~(this.collisionMap.tilewidth / 2); // Half tile width.
+
         if (collision.x) {
-            // TODO: For now, just prevent movement.
-            this.vel.x = 0;
+            switch (collision.xprop.type) {
+                case "lower":
+                    where = ~~(this.collisionBox.bottom % this.collisionMap.tilewidth);
+                    if (where >= hWidth) {
+                        this.vel.x = 0;
+                    }
+                    break;
+
+                case "upper":
+                    where = ~~(this.collisionBox.top % this.collisionMap.tilewidth);
+                    if (where < hWidth) {
+                        this.vel.x = 0;
+                    }
+                    break;
+
+                case "left":
+                    where = ~~((this.collisionBox.left + collision.x) % this.collisionMap.tilewidth);
+                    if ((collision.x > 0) || (where < hWidth)) {
+                        this.vel.x = 0;
+                    }
+                    break;
+
+                case "right":
+                    where = ~~((this.collisionBox.right + collision.x) % this.collisionMap.tilewidth);
+                    if ((collision.x < 0) || (where >= hWidth)) {
+                        this.vel.x = 0;
+                    }
+                    break;
+
+                case "center":
+                    where = ~~(((collision.x < 0 ? this.collisionBox.left : this.collisionBox.right) + collision.x) % this.collisionMap.tilewidth);
+                    zone = ~~(hWidth / 2) + (collision.x < 0 ? hWidth : 0);
+                    if (((collision.x < 0) && (where <  zone)) ||
+                        ((collision.x > 0) && (where >= zone))) {
+                        this.vel.x = 0;
+                    }
+                    break;
+
+                default:
+                    this.vel.x = 0;
+                    break;
+            }
         }
 
         if (collision.y) {
-            // TODO: For now, just prevent movement.
-            this.vel.y = 0;
+            switch (collision.yprop.type) {
+                case "lower":
+                    where = ~~((this.collisionBox.bottom + collision.y) % this.collisionMap.tilewidth);
+                    if ((collision.y < 0) || (where >= hWidth)) {
+                        this.vel.y = 0;
+                    }
+                    break;
+
+                case "upper":
+                    where = ~~((this.collisionBox.top + collision.y) % this.collisionMap.tilewidth);
+                    if ((collision.y > 0) || (where < hWidth)) {
+                        this.vel.y = 0;
+                    }
+                    break;
+
+                case "left":
+                    where = ~~(this.collisionBox.left % this.collisionMap.tilewidth);
+                    if (where < hWidth) {
+                        this.vel.y = 0;
+                    }
+                    break;
+
+                case "right":
+                    where = ~~(this.collisionBox.right % this.collisionMap.tilewidth);
+                    if (where >= hWidth) {
+                        this.vel.y = 0;
+                    }
+                    break;
+
+                case "center":
+                    where = ~~((collision.ycorner === "left" ? this.collisionBox.left : this.collisionBox.right) % this.collisionMap.tilewidth);
+                    zone = ~~(hWidth / 2) + (collision.ycorner === "left" ? hWidth : 0);
+                    if (((collision.ycorner === "left")  && (where <  zone)) ||
+                        ((collision.ycorner === "right") && (where >= zone))) {
+                        this.vel.y = 0;
+                    }
+                    break;
+
+                default:
+                    this.vel.y = 0;
+                    break;
+            }
         }
 
         // Update entity position.
