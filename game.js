@@ -35,7 +35,9 @@ var game = {
 
         // Game engine settings.
         me.sys.gravity = 0;
-        me.sys.useNativeAnimFrame = true; // Be fast!
+        //me.sys.dirtyRegion = true; // Be fast!
+        me.sys.useNativeAnimFrame = true; // Be faster!
+        //cm.setSync(false); // Be fastest!
         //me.debug.renderHitBox = true;
         //me.debug.renderCollisionMap = true;
 
@@ -60,7 +62,7 @@ var game = {
         });
         me.loader.preload(resources);
 
-        // Load everything & display a loading screen.
+        // Initialize melonJS and display a loading screen.
         me.state.change(me.state.LOADING);
     },
 
@@ -93,18 +95,8 @@ var PlayScreen = me.ScreenObject.extend({
     }
 });
 
-/* Entity with extended collision detection support */
-var MovableEntity = me.ObjectEntity.extend({
-    updateMovement: function updateMovement() {
-        this.computeVelocity(this.vel);
-
-        // Update entity position.
-        this.pos.add(this.vel);
-    }
-});
-
 /* Player character */
-var PlayerEntity = MovableEntity.extend({
+var PlayerEntity = me.ObjectEntity.extend({
     // Direction facing
     dir: c.DOWN,
 
@@ -121,6 +113,15 @@ var PlayerEntity = MovableEntity.extend({
     init: function init(x, y, settings) {
         // Call the constructor.
         this.parent(x, y, settings);
+
+
+        // HACK
+        this.body = cm.getSpace().addBody(new cp.Body(1, cp.momentForBox(1, 36, 36))); // Infinity to disable rotation
+        this.body.setPos(cp.v(x, 480 - y));
+        this.shape = cm.getSpace().addShape(new cp.BoxShape(this.body, 36, 36));
+        this.shape.setElasticity(0);
+        this.shape.setFriction(0.8);
+
 
         // Adjust collision bounding box.
         this.updateColRect(8, 20, 16, 20);
