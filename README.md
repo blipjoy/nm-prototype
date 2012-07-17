@@ -9,6 +9,15 @@ Getting
 
     $ git clone http://bitbucket.org/parasyte/lpcgame.git
 
+License
+-------
+
+This code is released to the public under a dual license. The full license texts
+are available as follows:
+
+* [GPL V3](gpl-3.0.txt)
+* [EXPAT (aka MIT)](COPYING.txt)
+
 Running
 -------
 
@@ -16,11 +25,15 @@ Running
 
 * A browser supporting HTML5 canvas; Chrome, Safari, Firefox, Opera, ...
 
+### Easy mode ###
+
+Just go to http://parasyte.kodewerx.org/projects/lpcgame/ ;)
+
 ### Dev server ###
 
-The easiest way to host the HTML and JavaScript without a full-featured HTTP
-server (apache, nginx, lighttpd, ...) is by running a Python SimpleHTTPServer
-directly on your development environment:
+You can also host the HTML and JavaScript without a full-featured HTTP server
+(apache, nginx, lighttpd, ...) is by running a Python SimpleHTTPServer directly
+on your development environment:
 
     $ cd lpcgame
     $ python -m SimpleHTTPServer
