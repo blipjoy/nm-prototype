@@ -78,9 +78,6 @@ var PlayerEntity = me.ObjectEntity.extend({
         // Adjust collision bounding box.
         this.updateColRect(8, 20, 16, 20);
 
-        // Set the walking speed.
-        this.setVelocity(1.5, 1.5);
-
         // Set animations.
         this.addAnimation("walk_down",  [ 0,  1,  2,  3 ]);
         this.addAnimation("walk_right", [ 4,  5,  6,  7 ]);
@@ -101,6 +98,15 @@ var PlayerEntity = me.ObjectEntity.extend({
         // Walking controls.
         self.vel.x = self.vel.y = 0;
         if (!game.modal) {
+            // Set the walking speed.
+            if (me.input.isShiftPressed()) {
+                this.setVelocity(3, 3);
+            }
+            else {
+                this.setVelocity(1.5, 1.5);
+            }
+
+
             var directions = [ "left", "up", "right", "down" ];
             directions.forEach(function (dir, i) {
                 if (me.input.isKeyPressed(dir)) {

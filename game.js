@@ -14,11 +14,16 @@ var game = {
         me.audio.init("mp3,ogg");
 
         // Key bindings.
-        me.input.bindKey(me.input.KEY.LEFT,  "left");
-        me.input.bindKey(me.input.KEY.RIGHT, "right");
         me.input.bindKey(me.input.KEY.UP,    "up");
+        me.input.bindKey(me.input.KEY.LEFT,  "left");
         me.input.bindKey(me.input.KEY.DOWN,  "down");
+        me.input.bindKey(me.input.KEY.RIGHT, "right");
+        me.input.bindKey(me.input.KEY.W,     "up");
+        me.input.bindKey(me.input.KEY.A,     "left");
+        me.input.bindKey(me.input.KEY.S,     "down");
+        me.input.bindKey(me.input.KEY.D,     "right");
         me.input.bindKey(me.input.KEY.ENTER, "enter", true);
+        me.input.bindKey(me.input.KEY.SPACE, "enter", true);
 
         // Set a callback to run when loading is complete.
         me.loader.onload = this.loaded.bind(this);
