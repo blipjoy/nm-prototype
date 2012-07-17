@@ -1,6 +1,9 @@
 /* Game namespace */
 var game = {
-    onload: function () {
+    // Whether a dialog box is waiting for input.
+    modal : false,
+
+    onload : function () {
         // Initialize the video.
         if (!me.video.init("game", 640, 480)) {
             alert("Your browser does not support HTML5 canvas.");
@@ -9,6 +12,13 @@ var game = {
 
         // Initialize the audio.
         me.audio.init("mp3,ogg");
+
+        // Key bindings.
+        me.input.bindKey(me.input.KEY.LEFT,  "left");
+        me.input.bindKey(me.input.KEY.RIGHT, "right");
+        me.input.bindKey(me.input.KEY.UP,    "up");
+        me.input.bindKey(me.input.KEY.DOWN,  "down");
+        me.input.bindKey(me.input.KEY.ENTER, "enter", true);
 
         // Set a callback to run when loading is complete.
         me.loader.onload = this.loaded.bind(this);
@@ -35,18 +45,12 @@ var game = {
         me.state.change(me.state.LOADING);
     },
 
-    loaded: function () {
+    loaded : function () {
         // Set the "Play" ScreenObject.
         me.state.set(me.state.PLAY, new PlayScreen());
 
         // Player entity.
         me.entityPool.add("player", PlayerEntity);
-
-        // Key bindings.
-        me.input.bindKey(me.input.KEY.LEFT,  "left");
-        me.input.bindKey(me.input.KEY.RIGHT, "right");
-        me.input.bindKey(me.input.KEY.UP,    "up");
-        me.input.bindKey(me.input.KEY.DOWN,  "down");
 
         // Start the game.
         me.state.change(me.state.PLAY);

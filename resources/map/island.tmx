@@ -31,9 +31,9 @@
   </data>
  </layer>
  <objectgroup name="objects" width="40" height="15">
-  <object name="player" x="160" y="352" width="36" height="36">
+  <object name="player" x="160" y="320" width="36" height="36">
    <properties>
-    <property name="image" value="whitey"/>
+    <property name="image" value="rachel"/>
     <property name="spriteheight" value="36"/>
     <property name="spritewidth" value="36"/>
    </properties>
