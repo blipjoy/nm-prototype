@@ -27,7 +27,7 @@ Running
 
 ### Easy mode ###
 
-Just go to http://parasyte.kodewerx.org/projects/lpcgame/ ;)
+Just go to [the snapshot](http://parasyte.kodewerx.org/projects/lpcgame/) ;)
 
 ### Dev server ###
 
