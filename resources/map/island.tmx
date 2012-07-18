@@ -38,6 +38,13 @@
     <property name="spritewidth" value="36"/>
    </properties>
   </object>
+  <object name="mum" x="704" y="192" width="32" height="32">
+   <properties>
+    <property name="image" value="mum"/>
+    <property name="spriteheight" value="49"/>
+    <property name="spritewidth" value="28"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="air" width="40" height="15">
   <data encoding="base64">

@@ -58,6 +58,9 @@ var game = {
         // Player entity.
         me.entityPool.add("player", PlayerEntity);
 
+        // NPCs
+        me.entityPool.add("mum", NPCEntity);
+
         // Start the game.
         me.state.change(me.state.PLAY);
     }

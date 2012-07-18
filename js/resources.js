@@ -6,6 +6,7 @@ game.resources = {
         // Characters
         "rachel",
         "rachel_eyes",
+        "mum",
 
         // Tile maps
         "grass",

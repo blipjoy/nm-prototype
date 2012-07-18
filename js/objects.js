@@ -8,8 +8,8 @@ me.game.onLevelLoaded = function () {
     ];
     var background = me.loader.getImage("dialog");
     var font = new me.Font("acmesa", 20, "#eee");
-    var dialog_box = new DialogObject(30, 480 - background.height - 15, background, dialog, 555, 71, 12, 12, font, "enter");
-    me.game.add(dialog_box);
+    //var dialog_box = new DialogObject(30, 480 - background.height - 15, background, dialog, 555, 71, 12, 12, font, "enter");
+    //me.game.add(dialog_box);
 };
 
 /* Main game */
@@ -172,5 +172,25 @@ var PlayerEntity = me.ObjectEntity.extend({
         }
 
         return false;
+    }
+});
+
+/* NPC */
+var NPCEntity = me.ObjectEntity.extend({
+    init : function init(x, y, settings) {
+        this.parent(x, y, settings);
+
+        // FIXME: This sucks! With a low mass, shapes will fly away super fast
+        // when colliding. This is because of the retarded-low damping to
+        // simulate friction; We need equally retarded-high forces to move
+        // objects at a decent speed.
+        this.body.setMass(Infinity);
+    },
+
+    update : function update() {
+        // Move entity and detect collisions.
+        this.updateMovement();
+
+        return ((this.vel.x != 0) || (this.vel.y != 0));
     }
 });
