@@ -24,6 +24,7 @@ var game = {
         me.input.bindKey(me.input.KEY.D,     "right");
         me.input.bindKey(me.input.KEY.ENTER, "enter", true);
         me.input.bindKey(me.input.KEY.SPACE, "enter", true);
+        me.input.bindKey(me.input.KEY.SHIFT, "shift");
 
         // Set a callback to run when loading is complete.
         me.loader.onload = this.loaded.bind(this);

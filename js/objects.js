@@ -71,7 +71,7 @@ var PlayerEntity = me.ObjectEntity.extend({
     // A helper constant
     walk_angle: Math.sin((45).degToRad()),
 
-    init : function init(x, y, settings, z) {
+    init : function init(x, y, settings) {
         // Call the constructor.
         this.parent(x, y, settings);
 
@@ -86,7 +86,7 @@ var PlayerEntity = me.ObjectEntity.extend({
 
         // Animated eyes.
         this.eyes = new BlinkingEyes(x, y, me.loader.getImage("rachel_eyes"), 17, 6, this);
-        me.game.add(this.eyes, z);
+        me.game.add(this.eyes, /*this.z*/ 4); // FIXME: No way to add to scene with proper z-order? :(
 
         // Set the display to follow our position on both axis.
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
@@ -98,11 +98,13 @@ var PlayerEntity = me.ObjectEntity.extend({
         // Walking controls.
         self.vel.x = self.vel.y = 0;
         if (!game.modal) {
-            // Set the walking speed.
-            if (me.input.isShiftPressed()) {
+            // Set the movement speed.
+            if (!me.input.keyStatus("shift")) {
+                // Run
                 this.setVelocity(3, 3);
             }
             else {
+                // Walk
                 this.setVelocity(1.5, 1.5);
             }
 
