@@ -29,29 +29,32 @@ var BlinkingEyes = me.AnimationSheet.extend({
         this.addAnimation("walk_right", [ 2, 3 ]);
         this.addAnimation("walk_left",  [ 4, 5 ]);
         this.addAnimation("walk_up",    [ 6, 7 ]);
+        this.setCurrentAnimation("walk_down", this.reset);
         this.animationspeed = 1;
+        this.reset();
+    },
 
-        this.blinking = false;
-        this.isDirty = false;
+    reset : function reset() {
+        this.animationpause = true;
     },
 
     update : function update() {
         this.pos.x = this.owner.pos.x + 9;
         this.pos.y = this.owner.pos.y + 18 + (this.owner.current.idx % 2);
-        this.setCurrentAnimation("walk_" + this.owner.dir_name);
+
+        var idx = this.current.idx;
+        this.setCurrentAnimation("walk_" + this.owner.dir_name, this.reset);
+        this.setAnimationFrame(idx);
 
         // Awesome random blinking action!
-        var random = Math.floor(Math.random() * 50);
-        if (this.blinking || !random) {
+        if (this.animationpause && !Math.floor(Math.random() * 50)) {
             // About 2% of of all frames rendered will cause blinking eyes!
-            this.isDirty = this.parent();
-            this.blinking = !!this.current.idx;
+            this.animationpause = false;
         }
-        return this.isDirty;
-    },
 
-    dirty : function dirty() {
-        this.isDirty = true;
+        var dirty = this.owner.isDirty;
+        this.owner.isDirty = false;
+        return this.parent() || dirty;
     }
 });
 
@@ -60,6 +63,9 @@ var PlayerEntity = me.ObjectEntity.extend({
     // Direction facing
     dir : c.DOWN,
     dir_name : "down",
+
+    // Update composed sprites?
+    isDirty : false,
 
     // Standing or walking?
     standing : true,
@@ -83,9 +89,10 @@ var PlayerEntity = me.ObjectEntity.extend({
         this.addAnimation("walk_right", [ 4,  5,  6,  7 ]);
         this.addAnimation("walk_left",  [ 8,  9,  10, 11 ]);
         this.addAnimation("walk_up",    [ 12, 13, 14, 15 ]);
+        this.setCurrentAnimation("walk_down");
 
         // Animated eyes.
-        this.eyes = new BlinkingEyes(x, y, me.loader.getImage("rachel_eyes"), 17, 6, this);
+        this.eyes = new BlinkingEyes(x + 9, y + 18, me.loader.getImage("rachel_eyes"), 17, 6, this);
         me.game.add(this.eyes, /*this.z*/ 4); // FIXME: No way to add to scene with proper z-order? :(
 
         // Set the display to follow our position on both axis.
@@ -101,13 +108,14 @@ var PlayerEntity = me.ObjectEntity.extend({
             // Set the movement speed.
             if (!me.input.keyStatus("shift")) {
                 // Run
-                this.setVelocity(3, 3);
+                this.setVelocity(2.5, 2.5);
+                this.animationspeed = 6;
             }
             else {
                 // Walk
-                this.setVelocity(1.5, 1.5);
+                this.setVelocity(5, 5);
+                this.animationspeed = 3;
             }
-
 
             var directions = [ "left", "up", "right", "down" ];
             directions.forEach(function (dir, i) {
@@ -153,11 +161,13 @@ var PlayerEntity = me.ObjectEntity.extend({
         if ((self.vel.x != 0) || (self.vel.y != 0)) {
             // Update object animation.
             self.parent();
+            this.isDirty = true;
             return true;
         }
         else if (!self.standing) {
             self.standing = true;
             self.setAnimationFrame(0);
+            this.isDirty = true;
             return true;
         }
 
