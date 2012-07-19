@@ -9,6 +9,10 @@ game.resources = {
         "char_shadow",
         "mum",
 
+        // Collectibles
+        "coin_gold",
+        "coin_shadow",
+
         // Tile maps
         "grass",
         "sandwater",

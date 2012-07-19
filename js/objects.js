@@ -51,6 +51,9 @@ game.Sprite = me.AnimationSheet.extend({
     init : function init(x, y, settings) {
         var self = this;
 
+        self.body = settings.body;
+        self.shape = settings.shape;
+
         // Create this object's AnimationSheet.
         self.parent(
             x,
@@ -68,7 +71,12 @@ game.Sprite = me.AnimationSheet.extend({
 
         // Compose additional sprites.
         if (settings.compose) {
-            var compose = JSON.parse(settings.compose);
+            try {
+                var compose = JSON.parse(settings.compose);
+            }
+            catch (e) {
+                throw "Composition setting error. JSON PARSE: " + e + " in " + settings.compose;
+            }
             self.composition = [];
             self.children = {};
 
@@ -250,9 +258,6 @@ game.PlayerEntity = game.Sprite.extend({
     walk_angle: Math.sin((45).degToRad()),
 
     init : function init(x, y, settings) {
-        this.body = settings.body;
-        this.shape = settings.shape;
-
         // Call the constructor.
         this.parent(x, y, settings);
 
@@ -407,5 +412,25 @@ game.NPCEntity = me.ObjectEntity.extend({
         this.updateMovement();
 
         return ((this.vel.x != 0) || (this.vel.y != 0));
+    }
+});
+
+/* Coins */
+game.CoinEntity = game.Sprite.extend({
+    init : function init(x, y, settings) {
+        // Call the constructor.
+        this.parent(x, y, settings);
+
+        // FIXME: This sucks! With a low mass, shapes will fly away super fast
+        // when colliding. This is because of the retarded-low damping to
+        // simulate friction; We need equally retarded-high forces to move
+        // objects at a decent speed.
+        this.body.setMass(Infinity);
+
+        this.animationspeed = 4;
+    },
+
+    update : function update() {
+        return this.parent();
     }
 });

@@ -61,6 +61,9 @@ var game = {
         // NPCs
         me.entityPool.add("mum", game.NPCs.Mum);
 
+        // Collectibles
+        me.entityPool.add("coin_gold", game.CoinEntity);
+
         // Start the game.
         me.state.change(me.state.PLAY);
     },
