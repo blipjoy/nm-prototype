@@ -22,8 +22,8 @@ var game = {
         me.input.bindKey(me.input.KEY.A,     "left");
         me.input.bindKey(me.input.KEY.S,     "down");
         me.input.bindKey(me.input.KEY.D,     "right");
-        me.input.bindKey(me.input.KEY.ENTER, "enter", true);
-        me.input.bindKey(me.input.KEY.SPACE, "enter", true);
+        me.input.bindKey(me.input.KEY.ENTER, "action", true);
+        me.input.bindKey(me.input.KEY.SPACE, "action", true);
         me.input.bindKey(me.input.KEY.SHIFT, "shift");
 
         // Set a callback to run when loading is complete.
@@ -53,13 +53,13 @@ var game = {
 
     loaded : function () {
         // Set the "Play" ScreenObject.
-        me.state.set(me.state.PLAY, new PlayScreen());
+        me.state.set(me.state.PLAY, new game.PlayScreen());
 
         // Player entity.
-        me.entityPool.add("player", PlayerEntity);
+        me.entityPool.add("player", game.PlayerEntity);
 
         // NPCs
-        me.entityPool.add("mum", NPCEntity);
+        me.entityPool.add("mum", game.NPCs.Mum);
 
         // Start the game.
         me.state.change(me.state.PLAY);

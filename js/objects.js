@@ -1,26 +1,23 @@
-me.game.onLevelLoaded = function () {
-    // Display a dialog box
-    var dialog = [
-        "Hi! Welcome to Parasyte's Liberated Pixel Cup game! (Press Enter to continue...)",
-        "I'm Rachel! (Aren't I just adorable?) The dialog is here for demo purposes. It will help me tell the game story...",
-        "... when I finish writing it!",
-        "Anyway, let's explore the test island together! :D (Sorry there isn't much to do here, yet. I'm working on that.)"
-    ];
+game.dialog = function dialog(script) {
     var background = me.loader.getImage("dialog");
     var font = new me.Font("acmesa", 20, "#eee");
-    //var dialog_box = new DialogObject(30, 480 - background.height - 15, background, dialog, 555, 71, 12, 12, font, "enter");
-    //me.game.add(dialog_box);
+
+    game.modal = true;
+
+    var dialog_box = new DialogObject(30, 480 - background.height - 15, background, script, 555, 71, 12, 12, font, "action");
+    me.game.add(dialog_box);
+    me.game.sort();
 };
 
 /* Main game */
-var PlayScreen = me.ScreenObject.extend({
+game.PlayScreen = me.ScreenObject.extend({
     onResetEvent: function () {
         // Load the first level.
         me.levelDirector.loadLevel("island");
     }
 });
 
-var BlinkingEyes = me.AnimationSheet.extend({
+game.BlinkingEyes = me.AnimationSheet.extend({
     init : function init(x, y, image, w, h, owner) {
         this.parent(x, y, image, w, h);
 
@@ -47,8 +44,8 @@ var BlinkingEyes = me.AnimationSheet.extend({
         this.setAnimationFrame(idx);
 
         // Awesome random blinking action!
-        if (this.animationpause && !Math.floor(Math.random() * 50)) {
-            // About 2% of of all frames rendered will cause blinking eyes!
+        if (this.animationpause && !Math.floor(Math.random() * 100)) {
+            // About 1% of of all frames rendered will cause blinking eyes!
             this.animationpause = false;
         }
 
@@ -59,7 +56,7 @@ var BlinkingEyes = me.AnimationSheet.extend({
 });
 
 /* Player character */
-var PlayerEntity = me.ObjectEntity.extend({
+game.PlayerEntity = me.ObjectEntity.extend({
     // Direction facing
     dir : c.DOWN,
     dir_name : "down",
@@ -92,7 +89,7 @@ var PlayerEntity = me.ObjectEntity.extend({
         this.setCurrentAnimation("walk_down");
 
         // Animated eyes.
-        this.eyes = new BlinkingEyes(x + 9, y + 18, me.loader.getImage("rachel_eyes"), 17, 6, this);
+        this.eyes = new game.BlinkingEyes(x + 9, y + 18, me.loader.getImage("rachel_eyes"), 17, 6, this);
         me.game.add(this.eyes, /*this.z*/ 4); // FIXME: No way to add to scene with proper z-order? :(
 
         // Set the display to follow our position on both axis.
@@ -102,21 +99,21 @@ var PlayerEntity = me.ObjectEntity.extend({
     update : function update() {
         var self = this;
 
-        // Walking controls.
         self.vel.x = self.vel.y = 0;
         if (!game.modal) {
             // Set the movement speed.
             if (!me.input.keyStatus("shift")) {
-                // Run
-                this.setVelocity(2.5, 2.5);
-                this.animationspeed = 6;
+                // Run.
+                self.setVelocity(2.5, 2.5);
+                self.animationspeed = 6;
             }
             else {
-                // Walk
-                this.setVelocity(5, 5);
-                this.animationspeed = 3;
+                // Walk.
+                self.setVelocity(5, 5);
+                self.animationspeed = 3;
             }
 
+            // Walking controls.
             var directions = [ "left", "up", "right", "down" ];
             directions.forEach(function (dir, i) {
                 if (me.input.isKeyPressed(dir)) {
@@ -152,6 +149,26 @@ var PlayerEntity = me.ObjectEntity.extend({
 
                 self.last_held[i] = self.held[i];
             });
+
+            // Interaction controls.
+            if (me.input.isKeyPressed("action")) {
+                var v = [
+                    self.collisionBox.hWidth *  ((self.dir_name === "right") ? 1 : ((self.dir_name === "left") ? -1 : 0)),
+                    self.collisionBox.hHeight * ((self.dir_name === "up")    ? 1 : ((self.dir_name === "down") ? -1 : 0))
+                ];
+                var p = cp.v(
+                    self.body.p.x + v[0],
+                    self.body.p.y + v[1]
+                );
+                var sensor = cm.bbNewForCircle(p, 3);
+                // FIXME: Using ALL_LAYERS is a really bad idea.
+                cm.getSpace().bbQuery(sensor, cp.ALL_LAYERS, 0, function (shape) {
+                    if (shape.data.name === "player") return;
+
+                    // DO SOMETHING!
+                    me.game.getEntityByName(shape.data.name)[0].talk();
+                });
+            }
         }
 
         // Move entity and detect collisions.
@@ -176,7 +193,7 @@ var PlayerEntity = me.ObjectEntity.extend({
 });
 
 /* NPC */
-var NPCEntity = me.ObjectEntity.extend({
+game.NPCEntity = me.ObjectEntity.extend({
     init : function init(x, y, settings) {
         this.parent(x, y, settings);
 

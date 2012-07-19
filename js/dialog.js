@@ -36,7 +36,6 @@ var DialogObject = me.SpriteObject.extend(
         this.currentRow = 0;
         this.callback = callback;
         this.z = 1000;
-        game.modal = true;
     },
 
     getWords : function(text)
