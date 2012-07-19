@@ -6,7 +6,7 @@ game.dialog = function dialog(script) {
 
     var dialog_box = new DialogObject(30, 480 - background.height - 15, background, script, 555, 71, 12, 12, font, "action");
     me.game.add(dialog_box);
-    me.game.sort();
+    me.game.sort.defer();
 };
 
 /* Main game */
@@ -17,30 +17,207 @@ game.PlayScreen = me.ScreenObject.extend({
     }
 });
 
+/**
+ * Generic sprite composition manager.
+ *
+ * Instances of this class look just like an ObjectEntity to melonJS.
+ * Except it does not have public user functions for handling movement or
+ * physics. (That's Chipmunk-js's job!)
+ *
+ * If a `compose` property is included on the object (in Tiled), this class
+ * will parse it as a composition list, and create new child objects from the
+ * composition items within the list.
+ *
+ * The format of a composition list is an array of objects. Each object must
+ * contain at least a `name` key. If the `name` === this object's name, no
+ * further keys are required. (This allows specifying the rendering order.)
+ * Otherwise, ALL of the following keys are required:
+ *
+ * - name: Name of the sprite to composite.
+ * - class: Class for the sprite to composite. (Usually "me.AnimationSheet")
+ * - image: Image reference to use for the sprite.
+ * - spritewidth: Width (in pixels) of each frame within the animation sheet.
+ * - spriteheight: Height (in pixels) of each frame within the animation sheet.
+ *
+ * Any arbitrary keys can be included on the composition item; the full item is
+ * passed to the composited sprite's constructor, in case it needs additional
+ * configuration info from Tiled (including its OWN compositions).
+ *
+ * If a composition list does NOT reference this object's name, this object will
+ * be rendered before the composed objects. To change the rendering order, you
+ * MUST reference this object's name within the composition list.
+ */
+game.Sprite = me.AnimationSheet.extend({
+    init : function init(x, y, settings) {
+        var self = this;
+
+        // Create this object's AnimationSheet.
+        self.parent(
+            x,
+            y,
+            (typeof(settings.image) === "string") ? me.loader.getImage(settings.image) : settings.image,
+            settings.spritewidth,
+            settings.spriteheight
+        );
+
+        // Set some things that the engine wants.
+        self.GUID = me.utils.createGUID();
+        self.name = settings.name ? settings.name.toLowerCase() : "";
+        self.pos.set(x, me.game.currentLevel ? (y + (settings.height || 0) - self.height) : y);
+        self.isEntity = true;
+
+        // Compose additional sprites.
+        if (settings.compose) {
+            var compose = JSON.parse(settings.compose);
+            self.composition = [];
+            self.children = {};
+
+            if (!Array.isArray(compose)) {
+                throw "Composition setting error. NOT AN ARRAY: " + JSON.stringify(item);
+            }
+
+            self.compose = compose;
+            self.compose.forEach(function (item) {
+                // Validate composition item format.
+                if (!game.isObject(item)) {
+                    throw "Composition setting error. NOT AN OBJECT: " + JSON.stringify(item);
+                }
+
+                // Special case for defining rendering order.
+                if (item.name === self.name) {
+                    self.composition.push(item.name);
+                    return;
+                }
+
+                // Require keys.
+                [ "name", "class", "image", "spritewidth", "spriteheight" ].forEach(function (key) {
+                    if (!item.hasOwnProperty(key)) {
+                        throw "Composition setting error. MISSING KEY `" + key + "`: " + JSON.stringify(item);
+                    }
+                });
+
+                function getClass(str) {
+                    var node = window;
+                    var tokens = str.split(".");
+                    tokens.forEach(function (token) {
+                        if (typeof(node) !== "undefined") {
+                            node = node[token];
+                        }
+                    });
+                    return node;
+                }
+
+                // `class` should usually be "me.AnimationSheet", but can be anything.
+                self.children[item.name] = new (getClass(item.class))(
+                    x,
+                    y,
+                    me.loader.getImage(item.image),
+                    item.spritewidth,
+                    item.spriteheight,
+                    self,
+                    item
+                );
+                self.composition.push(item.name);
+            });
+
+            // Render this object first, if it is not referenced in the composition list.
+            if (!(self.name in self.composition)) {
+                self.composition.unshift(self.name);
+            }
+        }
+    },
+
+    update : function update() {
+        var self = this;
+        var results = [];
+
+        // Update this sprite animation.
+        results.push(self.parent());
+
+        // Update composited sprite animations.
+        if (self.composition) {
+            self.composition.forEach(function (name) {
+                if (name !== self.name) {
+                    results.push(self.children[name].update());
+                }
+            });
+        }
+
+        // Return true if any of the sprites want to be rendered.
+        return results.some(function (result) {
+            return result;
+        });
+    },
+
+    draw : function draw(context) {
+        if (!this.composition) {
+            return this.parent(context);
+        }
+
+        // Render all composed sprites in the proper order.
+        var self = this;
+        self.composition.forEach(function (name) {
+            if (name === self.name) {
+                self.parent(context);
+            }
+            else {
+                self.children[name].draw(context);
+            }
+        });
+    }
+});
+
+/* Shadow sprites */
+game.Shadow = me.AnimationSheet.extend({
+    init : function init(x, y, image, w, h, owner) {
+        this.parent(x, y, image, w, h);
+
+        this.owner = owner;
+        this.updatePosition();
+    },
+
+    updatePosition : function updatePosition() {
+        this.pos.x = this.owner.pos.x + ~~(this.owner.width / 2) - ~~(this.width / 2);
+        this.pos.y = this.owner.pos.y + this.owner.height - ~~(this.height * 0.8);
+    },
+
+    update : function update() {
+        this.updatePosition();
+        return false;
+    }
+});
+
+/* Eyes ... that blink! */
 game.BlinkingEyes = me.AnimationSheet.extend({
     init : function init(x, y, image, w, h, owner) {
         this.parent(x, y, image, w, h);
 
         this.owner = owner;
+        this.updatePosition();
+
         this.addAnimation("walk_down",  [ 0, 1 ]);
         this.addAnimation("walk_right", [ 2, 3 ]);
         this.addAnimation("walk_left",  [ 4, 5 ]);
         this.addAnimation("walk_up",    [ 6, 7 ]);
-        this.setCurrentAnimation("walk_down", this.reset);
+        this.setCurrentAnimation("walk_down", this.resetAnimation);
         this.animationspeed = 1;
-        this.reset();
+        this.resetAnimation();
     },
 
-    reset : function reset() {
+    resetAnimation : function resetAnimation() {
         this.animationpause = true;
     },
 
-    update : function update() {
+    updatePosition : function updatePosition() {
         this.pos.x = this.owner.pos.x + 9;
         this.pos.y = this.owner.pos.y + 18 + (this.owner.current.idx % 2);
+    },
+
+    update : function update() {
+        this.updatePosition();
 
         var idx = this.current.idx;
-        this.setCurrentAnimation("walk_" + this.owner.dir_name, this.reset);
+        this.setCurrentAnimation("walk_" + this.owner.dir_name, this.resetAnimation);
         this.setAnimationFrame(idx);
 
         // Awesome random blinking action!
@@ -49,19 +226,17 @@ game.BlinkingEyes = me.AnimationSheet.extend({
             this.animationpause = false;
         }
 
-        var dirty = this.owner.isDirty;
-        this.owner.isDirty = false;
-        return this.parent() || dirty;
+        return this.parent();
     }
 });
 
 /* Player character */
-game.PlayerEntity = me.ObjectEntity.extend({
+game.PlayerEntity = game.Sprite.extend({
     // Direction facing
     dir : c.DOWN,
     dir_name : "down",
 
-    // Update composed sprites?
+    // Re-render when true
     isDirty : false,
 
     // Standing or walking?
@@ -75,124 +250,147 @@ game.PlayerEntity = me.ObjectEntity.extend({
     walk_angle: Math.sin((45).degToRad()),
 
     init : function init(x, y, settings) {
+        this.body = settings.body;
+        this.shape = settings.shape;
+
         // Call the constructor.
         this.parent(x, y, settings);
 
         // Adjust collision bounding box.
-        this.updateColRect(8, 20, 16, 20);
+        //this.updateColRect(8, 20, 16, 20);
 
         // Set animations.
-        this.addAnimation("walk_down",  [ 0,  1,  2,  3 ]);
-        this.addAnimation("walk_right", [ 4,  5,  6,  7 ]);
-        this.addAnimation("walk_left",  [ 8,  9,  10, 11 ]);
-        this.addAnimation("walk_up",    [ 12, 13, 14, 15 ]);
-        this.setCurrentAnimation("walk_down");
-
-        // Animated eyes.
-        this.eyes = new game.BlinkingEyes(x + 9, y + 18, me.loader.getImage("rachel_eyes"), 17, 6, this);
-        me.game.add(this.eyes, /*this.z*/ 4); // FIXME: No way to add to scene with proper z-order? :(
+        this.addAnimation("walk_down",   [ 0,  1,  2,  3 ]);
+        this.addAnimation("walk_right",  [ 4,  5,  6,  7 ]);
+        this.addAnimation("walk_left",   [ 8,  9,  10, 11 ]);
+        this.addAnimation("walk_up",     [ 12, 13, 14, 15 ]);
+        this.addAnimation("stand_down",  [ 0 ]);
+        this.addAnimation("stand_right", [ 4 ]);
+        this.addAnimation("stand_left",  [ 8 ]);
+        this.addAnimation("stand_up",    [ 12 ]);
+        this.setCurrentAnimation("stand_down");
 
         // Set the display to follow our position on both axis.
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
     },
 
+    checkMovement : function checkMovement() {
+        var self = this;
+
+        var force = {
+            x : 0,
+            y : 0
+        };
+        var velocity;
+
+        // Set the movement speed.
+        if (!me.input.keyStatus("shift")) {
+            // Walk.
+            velocity = 2.5;
+            self.animationspeed = 6;
+        }
+        else {
+            // Run.
+            velocity = 5;
+            self.animationspeed = 3;
+        }
+
+        // Walking controls.
+        var directions = [ "left", "up", "right", "down" ];
+        directions.forEach(function (dir, i) {
+            if (me.input.isKeyPressed(dir)) {
+                self.held[i] = true;
+                self.standing = false;
+
+                if (!self.last_held[i] || (self.dir == c.RESET_DIR)) {
+                    self.dir = c[dir.toUpperCase()];
+                    self.dir_name = dir;
+                }
+                self.setCurrentAnimation("walk_" + self.dir_name);
+
+                var axis = (i % 2) ? "y" : "x";
+                force[axis] = velocity * me.timer.tick;
+
+                // Walking at a 45-degree angle will slow the axis velocity by
+                // approximately 5/7. But we'll just use sin(45)  ;)
+                if (me.input.isKeyPressed(directions[(i + 1) % 4]) ||
+                    me.input.isKeyPressed(directions[(i + 3) % 4])) {
+                    force[axis] *= self.walk_angle;
+                }
+
+                if (i < 2) {
+                    force[axis] = -force[axis];
+                }
+            }
+            else {
+                self.held[i] = false;
+                if (self.last_held[i]) {
+                    self.dir = c.RESET_DIR;
+                }
+            }
+
+            self.last_held[i] = self.held[i];
+        });
+
+        // Move entity and detect collisions.
+        self.body.applyForce(cp.v(force.x * 600, force.y * -600), cp.vzero);
+
+        // Update melonJS state with Chipmunk body state.
+        self.pos.x = self.body.p.x - self.width/2;
+        self.pos.y = c.HEIGHT - self.body.p.y - self.height/2;
+
+        // Update animation if necessary.
+        self.isDirty = (self.isDirty || (~~self.body.vx !== 0) || (~~self.body.vy !== 0));
+        if (!self.isDirty && !self.standing) {
+            // Force standing animation.
+            self.isDirty = true;
+            self.standing = true;
+            self.setCurrentAnimation("stand_" + self.dir_name);
+        }
+    },
+
+    checkInteraction : function checkInteraction() {
+        var self = this;
+
+        // Interaction controls.
+        if (me.input.isKeyPressed("action")) {
+            var v = [
+                self.collisionBox.hWidth *  ((self.dir_name === "right") ? 1 : ((self.dir_name === "left") ? -1 : 0)),
+                self.collisionBox.hHeight * ((self.dir_name === "up")    ? 1 : ((self.dir_name === "down") ? -1 : 0))
+            ];
+            var p = cp.v(
+                self.body.p.x + v[0],
+                self.body.p.y + v[1]
+            );
+            var sensor = cm.bbNewForCircle(p, 3);
+            // FIXME: Using ALL_LAYERS is a really bad idea.
+            cm.getSpace().bbQuery(sensor, cp.ALL_LAYERS, 0, function (shape) {
+                if (!shape.data.name || (shape.data.name === "player")) {
+                    return;
+                }
+
+                // DO SOMETHING!
+                me.game.getEntityByName(shape.data.name)[0].talk();
+            });
+        }
+    },
+
     update : function update() {
         var self = this;
 
-        self.vel.x = self.vel.y = 0;
+        self.isDirty = false;
+        self.body.resetForces();
         if (!game.modal) {
-            // Set the movement speed.
-            if (!me.input.keyStatus("shift")) {
-                // Run.
-                self.setVelocity(2.5, 2.5);
-                self.animationspeed = 6;
-            }
-            else {
-                // Walk.
-                self.setVelocity(5, 5);
-                self.animationspeed = 3;
-            }
-
-            // Walking controls.
-            var directions = [ "left", "up", "right", "down" ];
-            directions.forEach(function (dir, i) {
-                if (me.input.isKeyPressed(dir)) {
-                    self.held[i] = true;
-                    self.standing = false;
-
-                    if (!self.last_held[i] || (self.dir == c.RESET_DIR)) {
-                        self.dir = c[dir.toUpperCase()];
-                        self.dir_name = dir;
-                        self.setCurrentAnimation("walk_" + dir);
-                    }
-
-                    var axis = (i % 2) ? "y" : "x";
-                    self.vel[axis] = self.accel[axis] * me.timer.tick;
-
-                    // Walking at a 45-degree angle will slow the axis velocity by
-                    // approximately 5/7. But we'll just use sin(45)  ;)
-                    if (me.input.isKeyPressed(directions[(i + 1) % 4]) ||
-                        me.input.isKeyPressed(directions[(i + 3) % 4])) {
-                        self.vel[axis] *= self.walk_angle;
-                    }
-
-                    if (i < 2) {
-                        self.vel[axis] = -self.vel[axis];
-                    }
-                }
-                else {
-                    self.held[i] = false;
-                    if (self.last_held[i]) {
-                        self.dir = c.RESET_DIR;
-                    }
-                }
-
-                self.last_held[i] = self.held[i];
-            });
-
-            // Interaction controls.
-            if (me.input.isKeyPressed("action")) {
-                var v = [
-                    self.collisionBox.hWidth *  ((self.dir_name === "right") ? 1 : ((self.dir_name === "left") ? -1 : 0)),
-                    self.collisionBox.hHeight * ((self.dir_name === "up")    ? 1 : ((self.dir_name === "down") ? -1 : 0))
-                ];
-                var p = cp.v(
-                    self.body.p.x + v[0],
-                    self.body.p.y + v[1]
-                );
-                var sensor = cm.bbNewForCircle(p, 3);
-                // FIXME: Using ALL_LAYERS is a really bad idea.
-                cm.getSpace().bbQuery(sensor, cp.ALL_LAYERS, 0, function (shape) {
-                    if (shape.data.name === "player") return;
-
-                    // DO SOMETHING!
-                    me.game.getEntityByName(shape.data.name)[0].talk();
-                });
-            }
+            self.checkMovement();
+            self.checkInteraction();
         }
 
-        // Move entity and detect collisions.
-        self.updateMovement();
-
-        // Update animation if necessary.
-        if ((self.vel.x != 0) || (self.vel.y != 0)) {
-            // Update object animation.
-            self.parent();
-            this.isDirty = true;
-            return true;
-        }
-        else if (!self.standing) {
-            self.standing = true;
-            self.setAnimationFrame(0);
-            this.isDirty = true;
-            return true;
-        }
-
-        return false;
+        return self.parent() || self.isDirty;
     }
 });
 
 /* NPC */
+// FIXME: Don't extend ObjectEntity.
 game.NPCEntity = me.ObjectEntity.extend({
     init : function init(x, y, settings) {
         this.parent(x, y, settings);

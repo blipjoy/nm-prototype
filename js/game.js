@@ -5,7 +5,7 @@ var game = {
 
     onload : function () {
         // Initialize the video.
-        if (!me.video.init("game", 640, 480)) {
+        if (!me.video.init("game", c.WIDTH, c.HEIGHT)) {
             alert("Your browser does not support HTML5 canvas.");
             return;
         }
@@ -63,5 +63,14 @@ var game = {
 
         // Start the game.
         me.state.change(me.state.PLAY);
+    },
+
+    isObject : function isObject(object) {
+        try {
+            return (!Array.isArray(object) && Object.keys(object));
+        }
+        catch (e) {
+            return false;
+        }
     }
 };

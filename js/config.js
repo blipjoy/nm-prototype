@@ -6,6 +6,8 @@ try {
     c.__defineGetter__("RIGHT",     function () { return 1; });
     c.__defineGetter__("DOWN",      function () { return 2; });
     c.__defineGetter__("LEFT",      function () { return 3; });
+    c.__defineGetter__("WIDTH",     function () { return 640; });
+    c.__defineGetter__("HEIGHT",    function () { return 480; });
 }
 catch (e) {
     // No getters? FAKE CONSTANTS!
@@ -14,6 +16,8 @@ catch (e) {
     c.RIGHT     = 1;
     c.DOWN      = 2;
     c.LEFT      = 3;
+    c.WIDTH     = 640;
+    c.HEIGHT    = 480;
 }
 
 // Game engine settings.

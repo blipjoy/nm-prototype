@@ -33,6 +33,7 @@
  <objectgroup name="objects" width="40" height="15">
   <object name="player" x="160" y="320" width="36" height="36">
    <properties>
+    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;char_shadow&quot;,&quot;spritewidth&quot;:18,&quot;spriteheight&quot;:9},{&quot;name&quot;:&quot;player&quot;},{&quot;name&quot;:&quot;eyes&quot;,&quot;class&quot;:&quot;game.BlinkingEyes&quot;,&quot;image&quot;:&quot;rachel_eyes&quot;,&quot;spritewidth&quot;:17,&quot;spriteheight&quot;:6}]"/>
     <property name="image" value="rachel"/>
     <property name="spriteheight" value="36"/>
     <property name="spritewidth" value="36"/>
