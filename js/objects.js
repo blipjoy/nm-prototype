@@ -1,10 +1,11 @@
+/* Dialog box */
 game.dialog = function dialog(script) {
     var background = me.loader.getImage("dialog");
     var font = new me.Font("acmesa", 20, "#eee");
 
     game.modal = true;
 
-    var dialog_box = new DialogObject(30, 480 - background.height - 15, background, script, 555, 71, 12, 12, font, "action");
+    var dialog_box = new game.DialogObject(30, 480 - background.height - 15, background, script, 555, 71, 12, 12, font, "action");
     me.game.add(dialog_box);
     me.game.sort.defer();
 };
@@ -14,6 +15,69 @@ game.PlayScreen = me.ScreenObject.extend({
     onResetEvent: function () {
         // Load the first level.
         me.levelDirector.loadLevel("island");
+    }
+});
+
+/* A Chipmunk-controlled entity */
+game.Chipmunk = me.AnimationSheet.extend({
+    init : function init(x, y, settings) {
+        this.hWidth = ~~(settings.spritewidth / 2);
+        this.hHeight = ~~(settings.spriteheight / 2);
+
+        this.body = cm.getSpace().addBody(new cp.Body(1, Infinity));
+        this.body.setPos(cp.v(settings.x + this.hWidth, c.HEIGHT - settings.y - this.hHeight));
+        var shape = cm.getSpace().addShape(cp.BoxShape(this.body, settings.spritewidth, settings.spriteheight));
+
+        shape.data = {
+            GUID : settings.GUID,
+            name : settings.name
+        };
+        shape.setLayers(c.LAYER_SPRITE);
+
+        this.parent(
+            x,
+            y,
+            (typeof(settings.image) === "string") ? me.loader.getImage(settings.image) : settings.image,
+            settings.spritewidth,
+            settings.spriteheight
+        );
+    },
+
+    adjustBoxShape : function adjustBoxShape(x, y, w, h) {
+        this.body.shapeList[0].data.offset = {
+            x : x,
+            y : y
+        };
+        this.body.shapeList[0].setVerts(cm.bb2verts(
+            -(~~(w / 2) - x),
+            ~~(h / 2) - y,
+            w,
+            h
+        ), cp.vzero);
+    },
+
+    update : function update() {
+        // Update melonJS state with Chipmunk body state.
+        this.pos.x = ~~(this.body.p.x - this.hWidth);
+        this.pos.y = ~~(c.HEIGHT - this.body.p.y - this.hHeight);
+
+        return this.parent();
+    },
+
+    draw : function draw(context) {
+        this.parent(context);
+
+        if (game.debug) {
+            var bb = this.body.shapeList[0].getBB();
+
+            context.strokeStyle = "red";
+            context.strokeRect(
+                ~~(bb.l - me.game.viewport.pos.x),
+                ~~(c.HEIGHT - bb.t - me.game.viewport.pos.y),
+                ~~(bb.r - bb.l),
+                ~~(bb.t - bb.b)
+            );
+        }
     }
 });
 
@@ -47,24 +111,18 @@ game.PlayScreen = me.ScreenObject.extend({
  * be rendered before the composed objects. To change the rendering order, you
  * MUST reference this object's name within the composition list.
  */
-game.Sprite = me.AnimationSheet.extend({
+game.Sprite = game.Chipmunk.extend({
     init : function init(x, y, settings) {
         var self = this;
+        var GUID = me.utils.createGUID();
 
-        self.body = settings.body;
-        self.shape = settings.shape;
+        settings.GUID = GUID;
 
-        // Create this object's AnimationSheet.
-        self.parent(
-            x,
-            y,
-            (typeof(settings.image) === "string") ? me.loader.getImage(settings.image) : settings.image,
-            settings.spritewidth,
-            settings.spriteheight
-        );
+        // Create this object.
+        self.parent(x, y, settings);
 
         // Set some things that the engine wants.
-        self.GUID = me.utils.createGUID();
+        self.GUID = GUID;
         self.name = settings.name ? settings.name.toLowerCase() : "";
         self.pos.set(x, me.game.currentLevel ? (y + (settings.height || 0) - self.height) : y);
         self.isEntity = true;
@@ -135,6 +193,10 @@ game.Sprite = me.AnimationSheet.extend({
         }
     },
 
+    interact : function interact() {
+        console.warn("Missing interaction for " + this.name);
+    },
+
     update : function update() {
         var self = this;
         var results = [];
@@ -159,7 +221,8 @@ game.Sprite = me.AnimationSheet.extend({
 
     draw : function draw(context) {
         if (!this.composition) {
-            return this.parent(context);
+            this.parent(context);
+            return;
         }
 
         // Render all composed sprites in the proper order.
@@ -255,14 +318,24 @@ game.PlayerEntity = game.Sprite.extend({
     last_held : [ false, false, false, false ],
 
     // A helper constant
-    walk_angle: Math.sin((45).degToRad()),
+    walk_angle : Math.sin((45).degToRad()),
 
     init : function init(x, y, settings) {
         // Call the constructor.
         this.parent(x, y, settings);
 
         // Adjust collision bounding box.
-        //this.updateColRect(8, 20, 16, 20);
+        this.adjustBoxShape(-1, 10, 15, 20);
+
+        // Register Chipmunk collision handlers.
+        this.body.eachShape(function (shape) {
+            shape.collision_type = c.COLLIDE_PLAYER;
+        });
+        cm.getSpace().addCollisionHandler(
+            c.COLLIDE_PLAYER,
+            c.COLLIDE_COLLECTIBLE,
+            this.collect
+        );
 
         // Set animations.
         this.addAnimation("walk_down",   [ 0,  1,  2,  3 ]);
@@ -277,6 +350,19 @@ game.PlayerEntity = game.Sprite.extend({
 
         // Set the display to follow our position on both axis.
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
+    },
+
+    collect : function collect(arbiter, space) {
+        // FIXME: play coin-pickup, earn money, etc.
+        publish("collect coin");
+
+        space.addPostStepCallback(function post_collect() {
+            arbiter.b.body.eachShape(function remove_shape(shape) {
+                me.game.remove(me.game.getEntityByGUID(shape.data.GUID));
+                space.removeShape(shape);
+            });
+            space.removeBody(arbiter.b.body);
+        });
     },
 
     checkMovement : function checkMovement() {
@@ -340,17 +426,11 @@ game.PlayerEntity = game.Sprite.extend({
         // Move entity and detect collisions.
         self.body.applyForce(cp.v(force.x * 600, force.y * -600), cp.vzero);
 
-        // Update melonJS state with Chipmunk body state.
-        self.pos.x = self.body.p.x - self.width/2;
-        self.pos.y = c.HEIGHT - self.body.p.y - self.height/2;
-
         // Update animation if necessary.
         self.isDirty = (self.isDirty || (~~self.body.vx !== 0) || (~~self.body.vy !== 0));
         if (!self.isDirty && !self.standing) {
             // Force standing animation.
-            self.isDirty = true;
-            self.standing = true;
-            self.setCurrentAnimation("stand_" + self.dir_name);
+            self.stand();
         }
     },
 
@@ -359,25 +439,31 @@ game.PlayerEntity = game.Sprite.extend({
 
         // Interaction controls.
         if (me.input.isKeyPressed("action")) {
+            var bb = self.body.shapeList[0].getBB();
+            var hw = ~~((bb.r - bb.l) / 2);
+            var hh = ~~((bb.t - bb.b) / 2);
+
             var v = [
-                self.collisionBox.hWidth *  ((self.dir_name === "right") ? 1 : ((self.dir_name === "left") ? -1 : 0)),
-                self.collisionBox.hHeight * ((self.dir_name === "up")    ? 1 : ((self.dir_name === "down") ? -1 : 0))
+                hw * ((self.dir_name === "left") ? -1 : ((self.dir_name === "right") ? 1 : 0)),
+                hh * ((self.dir_name === "up")   ? -1 : ((self.dir_name === "down")  ? 1 : 0))
             ];
             var p = cp.v(
-                self.body.p.x + v[0],
-                self.body.p.y + v[1]
+                self.body.p.x + v[0] + self.body.shapeList[0].data.offset.x,
+                self.body.p.y - v[1] - self.body.shapeList[0].data.offset.y
             );
             var sensor = cm.bbNewForCircle(p, 3);
-            // FIXME: Using ALL_LAYERS is a really bad idea.
-            cm.getSpace().bbQuery(sensor, cp.ALL_LAYERS, 0, function (shape) {
-                if (!shape.data.name || (shape.data.name === "player")) {
-                    return;
-                }
-
+            cm.getSpace().bbQuery(sensor, c.LAYER_INTERACTIVE, 0, function (shape) {
                 // DO SOMETHING!
-                me.game.getEntityByName(shape.data.name)[0].talk();
+                me.game.getEntityByName(shape.data.name)[0].interact();
             });
         }
+    },
+
+    stand : function stand() {
+        // Force standing animation.
+        this.isDirty = true;
+        this.standing = true;
+        this.setCurrentAnimation("stand_" + this.dir_name);
     },
 
     update : function update() {
@@ -389,29 +475,28 @@ game.PlayerEntity = game.Sprite.extend({
             self.checkMovement();
             self.checkInteraction();
         }
+        else if (!self.standing) {
+            this.stand();
+        }
 
         return self.parent() || self.isDirty;
     }
 });
 
 /* NPC */
-// FIXME: Don't extend ObjectEntity.
-game.NPCEntity = me.ObjectEntity.extend({
+game.NPCEntity = game.Sprite.extend({
     init : function init(x, y, settings) {
         this.parent(x, y, settings);
+
+        this.body.eachShape(function (shape) {
+            shape.setLayers(shape.layers | c.LAYER_INTERACTIVE);
+        });
 
         // FIXME: This sucks! With a low mass, shapes will fly away super fast
         // when colliding. This is because of the retarded-low damping to
         // simulate friction; We need equally retarded-high forces to move
         // objects at a decent speed.
         this.body.setMass(Infinity);
-    },
-
-    update : function update() {
-        // Move entity and detect collisions.
-        this.updateMovement();
-
-        return ((this.vel.x != 0) || (this.vel.y != 0));
     }
 });
 
@@ -420,6 +505,10 @@ game.CoinEntity = game.Sprite.extend({
     init : function init(x, y, settings) {
         // Call the constructor.
         this.parent(x, y, settings);
+
+        this.body.eachShape(function (shape) {
+            shape.collision_type = c.COLLIDE_COLLECTIBLE;
+        });
 
         // FIXME: This sucks! With a low mass, shapes will fly away super fast
         // when colliding. This is because of the retarded-low damping to

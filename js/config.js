@@ -1,23 +1,39 @@
 /* Constants */
-var c = {};
+var c = {
+    // Directions a sprite can face
+    RESET_DIR               : -1,
+    UP                      : 0,
+    RIGHT                   : 1,
+    DOWN                    : 2,
+    LEFT                    : 3,
+
+    // Screen resolution
+    WIDTH                   : 640,
+    HEIGHT                  : 480,
+
+    // Chipmunk shape layers
+    LAYER_NONE              : 0x00000000,
+    LAYER_SPRITE            : 0x00000001,
+    LAYER_INTERACTIVE       : 0x00000002,
+
+    // Chipmunk collision types
+    COLLIDE_PLAYER          : 0x00000001,
+    COLLIDE_COLLECTIBLE     : 0x00000002,
+    COLLIDE_PAINFUL         : 0x00000003
+};
+
 try {
-    c.__defineGetter__("RESET_DIR", function () { return -1; });
-    c.__defineGetter__("UP",        function () { return 0; });
-    c.__defineGetter__("RIGHT",     function () { return 1; });
-    c.__defineGetter__("DOWN",      function () { return 2; });
-    c.__defineGetter__("LEFT",      function () { return 3; });
-    c.__defineGetter__("WIDTH",     function () { return 640; });
-    c.__defineGetter__("HEIGHT",    function () { return 480; });
+    Object.keys(c).forEach(function (key) {
+        c.__defineGetter__(
+            key,
+            (function (value) {
+                return function () { return value };
+            })(c[key])
+        );
+    });
 }
 catch (e) {
     // No getters? FAKE CONSTANTS!
-    c.RESET_DIR = -1;
-    c.UP        = 0;
-    c.RIGHT     = 1;
-    c.DOWN      = 2;
-    c.LEFT      = 3;
-    c.WIDTH     = 640;
-    c.HEIGHT    = 480;
 }
 
 // Game engine settings.

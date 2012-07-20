@@ -17,7 +17,7 @@
  * @example
  * dialog = new DialogObject(10, 10, background, dialog, background.width - OFFSET_SIZE_TEXT_X, background.width - OFFSET_SIZE_TEXT_Y, OFFSET_DIALOG_X, OFFSET_DIALOG_Y, new me.Font("acmesa",20,"#880D0D", "center"), "enter", activateControls);
  */
-var DialogObject = me.SpriteObject.extend(
+game.DialogObject = me.SpriteObject.extend(
 {
     init: function(x, y, background, dialog, widthText, heightText, offsetTextX, offsetTextY, font, tagKey, callback)
     {

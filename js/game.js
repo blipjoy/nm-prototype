@@ -1,11 +1,15 @@
 /* Game namespace */
 var game = {
+    // Debug mode!
+    debug : false,
+
     // Whether a dialog box is waiting for input.
     modal : false,
 
+    // Run on page load.
     onload : function () {
         // Initialize the video.
-        if (!me.video.init("game", c.WIDTH, c.HEIGHT)) {
+        if (!me.video.init("screen", c.WIDTH, c.HEIGHT)) {
             alert("Your browser does not support HTML5 canvas.");
             return;
         }
@@ -51,6 +55,7 @@ var game = {
         me.state.change(me.state.LOADING);
     },
 
+    // Run on game resources loaded.
     loaded : function () {
         // Set the "Play" ScreenObject.
         me.state.set(me.state.PLAY, new game.PlayScreen());
@@ -68,6 +73,7 @@ var game = {
         me.state.change(me.state.PLAY);
     },
 
+    // helper function to determine if a variable is an Object.
     isObject : function isObject(object) {
         try {
             return (!Array.isArray(object) && Object.keys(object));
@@ -75,5 +81,73 @@ var game = {
         catch (e) {
             return false;
         }
-    }
+    },
+
+    // Simple quests make the game interesting!
+    quests : (function () {
+        var all = [];
+        var subscribed = [];
+
+        /**
+         * Update quest progress.
+         *
+         *
+         */
+        function progress(event) {
+            // Iterate over all active quests on the queue.
+            all.forEach(function (quest, key) {
+                // When the quest is waiting for this event...
+                var i = quest.list.indexOf(event);
+                if (i >= 0) {
+                    // Remove the event
+                    quest.list.splice(i, 1);
+
+                    // When all events have been received...
+                    if (quest.list.length === 0) {
+                        // Notify, and remove this quest.
+                        quest.callback();
+                        all.splice(key, 1);
+                    }
+                }
+            });
+        }
+
+        return {
+            /**
+             * Add a new quest.
+             *
+             * @param {Array} list Array of quest events to subscribe to.
+             * @param {Function} callback Called when all events have been received.
+             */
+            add : function add_quest(list, callback) {
+                // Add this quest to the queue.
+                all.push({
+                    list : list,
+                    callback : callback
+                });
+
+                // Check for new subscriptions.
+                list.forEach(function (item) {
+                    if (subscribed.indexOf(item) === -1) {
+                        subscribed.push(item);
+
+                        subscribe(item, (function (event) {
+                            return function () {
+                                progress(event);
+                            };
+                        })(item));
+                    }
+                });
+            },
+
+            /**
+             * Get all active quests
+             * @return {Array} Complete list of
+             */
+            getAll : function get_quests() {
+                // Return a copy; don't let callers modify internal state.
+                return all.slice(0);
+            }
+        };
+    })()
 };

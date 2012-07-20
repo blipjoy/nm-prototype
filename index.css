@@ -12,7 +12,7 @@ canvas {
     vertical-align: top;
 }
 
-#game {
+#screen {
     position: relative;
     width: 640px;
     margin: auto;
