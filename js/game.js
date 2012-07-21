@@ -87,7 +87,7 @@ var game = {
     // Run on game resources loaded.
     loaded : function () {
         // Set the "Play" ScreenObject.
-        me.state.set(me.state.PLAY, new game.PlayScreen(15));
+        me.state.set(me.state.PLAY, new game.PlayScreen(20));
 
         // Player entity.
         me.entityPool.add("player", game.PlayerEntity);
