@@ -39,7 +39,7 @@ game.NPCs = {
                             spriteheight    : 21
                         }), self.z);
                     });
-                    me.game.sort();
+                    me.game.sort(game.sort);
                 });
             }
             else if (!self.quest_complete) {

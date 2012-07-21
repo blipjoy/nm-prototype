@@ -7,7 +7,7 @@ game.dialog = function dialog(script, callback) {
 
     var dialog_box = new game.DialogObject(30, 480 - background.height - 15, background, script, 555, 71, 12, 12, font, "action", callback);
     me.game.add(dialog_box);
-    me.game.sort.defer();
+    me.game.sort.defer(game.sort);
 };
 
 /* Screen object supporting layer-animation */
@@ -26,6 +26,11 @@ game.AnimatedScreen = me.ScreenObject.extend({
     },
 
     update : function update() {
+        if (game.wantsResort) {
+            game.wantsResort = false;
+            me.game.sort.defer(game.sort);
+        }
+
         if (!this.layers) {
             return false;
         }
@@ -491,6 +496,10 @@ game.PlayerEntity = game.Sprite.extend({
 
         // Move entity and detect collisions.
         self.body.applyForce(cp.v(force.x * 600, force.y * -600), cp.vzero);
+
+        if (~~self.body.vy !== 0) {
+            game.wantsResort = true;
+        }
 
         // Update animation if necessary.
         self.isDirty = (self.isDirty || (~~self.body.vx !== 0) || (~~self.body.vy !== 0));

@@ -6,6 +6,9 @@ var game = {
     // Whether a dialog box is waiting for input.
     modal : false,
 
+    // `true` when an object's y-coordinate changes to put it at the proper Z-order.
+    wantsResort : false,
+
     // Run on page load.
     onload : function () {
         // Initialize the video.
@@ -107,6 +110,12 @@ var game = {
         catch (e) {
             return false;
         }
+    },
+
+    // Helper function to sort objects by `z` property, then `y` property.
+    sort : function sort(a, b) {
+        var result = (b.z - a.z);
+        return (result ? result : (b.pos.y - a.pos.y) || 0);
     },
 
     // Simple quests make the game interesting!
