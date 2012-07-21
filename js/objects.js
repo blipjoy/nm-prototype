@@ -73,6 +73,8 @@ game.PlayScreen = game.AnimatedScreen.extend({
     },
 
     onResetEvent : function onResetEvent() {
+        this.parent();
+
         // Start music when level loads.
         me.game.onLevelLoaded = this.onLevelLoaded.bind(this);
 
