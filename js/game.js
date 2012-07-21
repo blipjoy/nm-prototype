@@ -97,6 +97,7 @@ var game = {
 
         // Collectibles
         me.entityPool.add("coin_gold", game.CoinEntity);
+        me.entityPool.add("coin_silver", game.CoinEntity);
 
         // Start the game.
         me.state.change(me.state.PLAY);
@@ -126,22 +127,32 @@ var game = {
         /**
          * Update quest progress.
          *
-         *
+         * @param {String} event
+         *      Process all quests listening for `event`.
          */
-        function progress(event) {
+        function progress(event, quantity) {
             // Iterate over all active quests on the queue.
             all.forEach(function (quest, key) {
                 // When the quest is waiting for this event...
-                var i = quest.list.indexOf(event);
-                if (i >= 0) {
-                    // Remove the event
-                    quest.list.splice(i, 1);
+                if (quest.list.hasOwnProperty(event)) {
+                    // Update the quantity...
+                    quest.list[event] -= +quantity;
 
-                    // When all events have been received...
-                    if (quest.list.length === 0) {
-                        // Notify, and remove this quest.
-                        quest.callback();
-                        all.splice(key, 1);
+                    // If the quota has been fulfilled...
+                    if (quest.list[event] <= 0) {
+                        // Remove the event...
+                        delete quest.list[event];
+
+                        // Notify...
+                        if (typeof(quest.callback) === "function") {
+                            quest.callback();
+                        }
+
+                        // And if all events have fulfilled their quota...
+                        if (!Object.keys(quest.list).length) {
+                            // Remove the quest from this listener...
+                            all.splice(key, 1);
+                        }
                     }
                 }
             });
@@ -151,24 +162,28 @@ var game = {
             /**
              * Add a new quest.
              *
-             * @param {Array} list Array of quest events to subscribe to.
-             * @param {Function} callback Called when all events have been received.
+             * @param {Array} list
+             *      Array of quest events to subscribe to.
+             * @param {Function}
+             *      callback Called when all events have been received.
              */
             add : function add_quest(list, callback) {
                 // Add this quest to the queue.
                 all.push({
-                    list : list,
-                    callback : callback
+                    "list"      : list,
+                    "callback"  : callback
                 });
 
                 // Check for new subscriptions.
-                list.forEach(function (item) {
+                Object.keys(list).forEach(function (item) {
                     if (subscribed.indexOf(item) === -1) {
                         subscribed.push(item);
 
                         subscribe(item, (function (event) {
                             return function () {
-                                progress(event);
+                                progress.apply(progress, [ event ].concat(
+                                    Array.prototype.slice.call(arguments))
+                                );
                             };
                         })(item));
                     }
@@ -177,7 +192,8 @@ var game = {
 
             /**
              * Get all active quests
-             * @return {Array} Complete list of
+             * @return {Array}
+             *      Complete list of active quests.
              */
             getAll : function get_quests() {
                 // Return a copy; don't let callers modify internal state.

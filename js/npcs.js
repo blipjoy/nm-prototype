@@ -12,11 +12,9 @@ game.NPCs = {
                     "Mum: I seemed to have dropped all of my change. Can you collect it for me?"
                 ], function () {
                     self.quest_started = true;
-                    game.quests.add([
-                        "collect coin",
-                        "collect coin",
-                        "collect coin"
-                    ], function quest_complete() {
+                    game.quests.add({
+                        "collect coin" : 300 // Mum wants 300 coins.
+                    }, function quest_complete() {
                         self.quest_complete = true;
                         game.dialog([
                             "Congratulations on completing your first quest! Go back and talk to Mum!"

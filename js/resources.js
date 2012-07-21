@@ -15,6 +15,7 @@ game.resources = {
 
         // Collectibles
         "coin_gold",
+        "coin_silver",
         "coin_shadow",
 
         // Tile maps

@@ -57,23 +57,31 @@
     <property name="spritewidth" value="28"/>
    </properties>
   </object>
-  <object name="coin_gold" x="992" y="224" width="32" height="32">
+  <object name="coin_silver" x="992" y="224" width="32" height="32">
    <properties>
-    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;coin_shadow&quot;,&quot;spritewidth&quot;:10,&quot;spriteheight&quot;:5},{&quot;name&quot;:&quot;coin_gold&quot;}]"/>
-    <property name="image" value="coin_gold"/>
+    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;coin_shadow&quot;,&quot;spritewidth&quot;:10,&quot;spriteheight&quot;:5},{&quot;name&quot;:&quot;coin_silver&quot;}]"/>
+    <property name="image" value="coin_silver"/>
     <property name="spriteheight" value="21"/>
     <property name="spritewidth" value="18"/>
    </properties>
   </object>
-  <object name="coin_gold" x="960" y="192" width="32" height="32">
+  <object name="coin_silver" x="960" y="192" width="32" height="32">
    <properties>
-    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;coin_shadow&quot;,&quot;spritewidth&quot;:10,&quot;spriteheight&quot;:5},{&quot;name&quot;:&quot;coin_gold&quot;}]"/>
-    <property name="image" value="coin_gold"/>
+    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;coin_shadow&quot;,&quot;spritewidth&quot;:10,&quot;spriteheight&quot;:5},{&quot;name&quot;:&quot;coin_silver&quot;}]"/>
+    <property name="image" value="coin_silver"/>
     <property name="spriteheight" value="21"/>
     <property name="spritewidth" value="18"/>
    </properties>
   </object>
-  <object name="coin_gold" x="1024" y="192" width="32" height="32">
+  <object name="coin_silver" x="1024" y="192" width="32" height="32">
+   <properties>
+    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;coin_shadow&quot;,&quot;spritewidth&quot;:10,&quot;spriteheight&quot;:5},{&quot;name&quot;:&quot;coin_silver&quot;}]"/>
+    <property name="image" value="coin_silver"/>
+    <property name="spriteheight" value="21"/>
+    <property name="spritewidth" value="18"/>
+   </properties>
+  </object>
+  <object name="coin_gold" x="992" y="160" width="32" height="32">
    <properties>
     <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;coin_shadow&quot;,&quot;spritewidth&quot;:10,&quot;spriteheight&quot;:5},{&quot;name&quot;:&quot;coin_gold&quot;}]"/>
     <property name="image" value="coin_gold"/>

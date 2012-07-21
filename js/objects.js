@@ -557,7 +557,13 @@ game.PlayerEntity = game.Sprite.extend({
         switch (arbiter.b.data.name) {
             case "coin_gold":
                 game.HUD.updateItemValue("coins", 100);
-                publish("collect coin");
+                publish("collect coin", [ 100 ]);
+                me.audio.play("collect_coin");
+                break;
+
+            case "coin_silver":
+                game.HUD.updateItemValue("coins", 1);
+                publish("collect coin", [ 1 ]);
                 me.audio.play("collect_coin");
                 break;
         }
