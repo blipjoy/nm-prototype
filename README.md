@@ -29,17 +29,6 @@ Running
 
 Just go to [the snapshot](http://parasyte.kodewerx.org/projects/lpcgame/) ;)
 
-### Dev server ###
-
-You can also host the HTML and JavaScript without a full-featured HTTP server
-(apache, nginx, lighttpd, ...) is by running a Python SimpleHTTPServer directly
-on your development environment:
-
-    $ cd lpcgame
-    $ python -m SimpleHTTPServer
-
-Then connect to http://localhost:8000/ in your favorite browser!
-
 Level Editor
 ------------
 

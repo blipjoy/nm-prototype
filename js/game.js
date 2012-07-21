@@ -15,7 +15,7 @@ var game = {
         }
 
         // Initialize the audio.
-        me.audio.init("mp3,ogg");
+        me.audio.init("ogg");
 
         // Key bindings.
         me.input.bindKey(me.input.KEY.UP,    "up");
@@ -35,6 +35,8 @@ var game = {
 
         // Set all resources to be loaded.
         var resources = [];
+
+        // Graphics.
         this.resources["img"].forEach(function (value) {
             resources.push({
                 name : value,
@@ -42,6 +44,8 @@ var game = {
                 src  : "resources/img/" + value + ".png"
             })
         });
+
+        // Maps.
         this.resources["map"].forEach(function (value) {
             resources.push({
                 name : value,
@@ -49,6 +53,28 @@ var game = {
                 src  : "resources/map/" + value + ".tmx"
             })
         });
+
+        // Sound effects.
+        this.resources["sfx"].forEach(function (value) {
+            resources.push({
+                name    : value,
+                type    : "audio",
+                src     : "resources/sfx/",
+                channel : 1
+            })
+        });
+
+        // Music.
+        this.resources["music"].forEach(function (value) {
+            resources.push({
+                name    : value,
+                type    : "audio",
+                src     : "resources/music/",
+                channel : 1
+            })
+        });
+
+        // Load the resources.
         me.loader.preload(resources);
 
         // Initialize melonJS and display a loading screen.

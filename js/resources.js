@@ -1,4 +1,5 @@
 game.resources = {
+    /* Graphics. */
     img : [
         // UI
         "dialog",
@@ -20,7 +21,19 @@ game.resources = {
         "trunk",
         "watergrass"
     ],
+
+    /* Maps from Tiled. */
     map : [
         "island"
+    ],
+
+    /* 1-channel audio. Usually sound effects. */
+    sfx : [
+        "collect_coin"
+    ],
+
+    /* 2-channel audio. Usually music. */
+    music : [
+        "pink_and_lively"
     ]
 };

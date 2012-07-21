@@ -12,7 +12,15 @@ game.dialog = function dialog(script) {
 
 /* Main game */
 game.PlayScreen = me.ScreenObject.extend({
-    onResetEvent: function () {
+    onLevelLoaded : function onLevelLoaded() {
+        me.audio.stopTrack();
+        me.audio.playTrack("pink_and_lively");
+    },
+
+    onResetEvent : function onResetEvent() {
+        // Start music when level loads.
+        me.game.onLevelLoaded = this.onLevelLoaded.bind(this);
+
         // Load the first level.
         me.levelDirector.loadLevel("island");
     }
@@ -353,8 +361,9 @@ game.PlayerEntity = game.Sprite.extend({
     },
 
     collect : function collect(arbiter, space) {
-        // FIXME: play coin-pickup, earn money, etc.
+        // FIXME: earn money, etc.
         publish("collect coin");
+        me.audio.play("collect_coin");
 
         space.addPostStepCallback(function post_collect() {
             arbiter.b.body.eachShape(function remove_shape(shape) {
