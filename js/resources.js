@@ -15,11 +15,11 @@ game.resources = {
         "coin_shadow",
 
         // Tile maps
+        "animwater",
         "grass",
         "sandwater",
         "treetop",
-        "trunk",
-        "watergrass"
+        "trunk"
     ],
 
     /* Maps from Tiled. */

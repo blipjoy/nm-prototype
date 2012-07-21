@@ -10,9 +10,64 @@ game.dialog = function dialog(script) {
     me.game.sort.defer();
 };
 
-/* Main game */
-game.PlayScreen = me.ScreenObject.extend({
+/* Screen object supporting layer-animation */
+game.AnimatedScreen = me.ScreenObject.extend({
+    layers : [],
+
+    animationspeed : me.sys.fps / 10,
+
+    framecount : 0,
+
+    frameidx : 0,
+
+    init : function init(animationspeed) {
+        this.parent(true);
+        this.animationspeed = animationspeed || this.animationspeed;
+    },
+
+    update : function update() {
+        if (!this.layers) {
+            return false;
+        }
+
+        if (++this.framecount > this.animationspeed) {
+            this.framecount = 0;
+
+            if (this.frameidx < this.layers.length) {
+                this.layers[this.frameidx].visible = false;
+            }
+            ++this.frameidx;
+            this.frameidx %= (this.layers.length + 1);
+            if (this.frameidx < this.layers.length) {
+                this.layers[this.frameidx].visible = true;
+            }
+
+            return true;
+        }
+        return false;
+    },
+
     onLevelLoaded : function onLevelLoaded() {
+        var self = this;
+        self.layers = [];
+
+        var layers = me.game.currentLevel.getLayers();
+        layers.forEach(function (layer, idx) {
+            if (layer.name.toLowerCase().indexOf("animated") >= 0) {
+                if (self.layers) {
+                    layer.visible = false;
+                }
+                self.layers.push(layer);
+            }
+        });
+    }
+});
+
+/* Main game */
+game.PlayScreen = game.AnimatedScreen.extend({
+    onLevelLoaded : function onLevelLoaded() {
+        this.parent();
+
         me.audio.stopTrack();
         me.audio.playTrack("pink_and_lively");
     },

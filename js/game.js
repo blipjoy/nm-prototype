@@ -70,7 +70,7 @@ var game = {
                 name    : value,
                 type    : "audio",
                 src     : "resources/music/",
-                channel : 1
+                channel : 2
             })
         });
 
@@ -84,7 +84,7 @@ var game = {
     // Run on game resources loaded.
     loaded : function () {
         // Set the "Play" ScreenObject.
-        me.state.set(me.state.PLAY, new game.PlayScreen());
+        me.state.set(me.state.PLAY, new game.PlayScreen(15));
 
         // Player entity.
         me.entityPool.add("player", game.PlayerEntity);
@@ -99,7 +99,7 @@ var game = {
         me.state.change(me.state.PLAY);
     },
 
-    // helper function to determine if a variable is an Object.
+    // Helper function to determine if a variable is an Object.
     isObject : function isObject(object) {
         try {
             return (!Array.isArray(object) && Object.keys(object));
