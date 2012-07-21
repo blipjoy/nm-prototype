@@ -10,18 +10,36 @@ game.NPCs = {
                 game.dialog([
                     "Mum: Hi Rachel! Welcome to Test island!",
                     "Mum: I seemed to have dropped all of my change. Can you collect it for me?"
-                ]);
+                ], function () {
+                    self.quest_started = true;
+                    game.quests.add([
+                        "collect coin",
+                        "collect coin",
+                        "collect coin"
+                    ], function quest_complete() {
+                        self.quest_complete = true;
+                        game.dialog([
+                            "Congratulations on completing your first quest! Go back and talk to Mum!"
+                        ]);
+                    });
 
-                self.quest_started = true;
-                game.quests.add([
-                    "collect coin",
-                    "collect coin",
-                    "collect coin"
-                ], function quest_complete() {
-                    self.quest_complete = true;
-                    game.dialog([
-                        "Congratulations on completing your first quest! Go back and talk to Mum!"
-                    ]);
+                    // Create 3 coins
+                    [
+                        { x : 28, y : 6 },
+                        { x : 25, y : 7 },
+                        { x : 27, y : 4 }
+                    ].forEach(function (pos) {
+                        var x = pos.x * 32;
+                        var y = pos.y * 32;
+                        me.game.add(new game.CoinEntity(x, y, {
+                            name            : "coin_gold",
+                            image           : "coin_gold",
+                            compose         : '[{"name":"shadow","class":"game.Shadow","image":"coin_shadow","spritewidth":10,"spriteheight":5},{"name":"coin_gold"}]',
+                            spritewidth     : 18,
+                            spriteheight    : 21
+                        }), self.z);
+                    });
+                    me.game.sort();
                 });
             }
             else if (!self.quest_complete) {

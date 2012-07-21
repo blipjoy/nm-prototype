@@ -1,11 +1,11 @@
 /* Dialog box */
-game.dialog = function dialog(script) {
+game.dialog = function dialog(script, callback) {
     var background = me.loader.getImage("dialog");
     var font = new me.Font("acmesa", 20, "#eee");
 
     game.modal = true;
 
-    var dialog_box = new game.DialogObject(30, 480 - background.height - 15, background, script, 555, 71, 12, 12, font, "action");
+    var dialog_box = new game.DialogObject(30, 480 - background.height - 15, background, script, 555, 71, 12, 12, font, "action", callback);
     me.game.add(dialog_box);
     me.game.sort.defer();
 };
@@ -90,7 +90,7 @@ game.Chipmunk = me.AnimationSheet.extend({
         this.hHeight = ~~(settings.spriteheight / 2);
 
         this.body = cm.getSpace().addBody(new cp.Body(1, Infinity));
-        this.body.setPos(cp.v(settings.x + this.hWidth, c.HEIGHT - settings.y - this.hHeight));
+        this.body.setPos(cp.v(x + this.hWidth, c.HEIGHT - y - this.hHeight));
         var shape = cm.getSpace().addShape(cp.BoxShape(this.body, settings.spritewidth, settings.spriteheight));
 
         shape.data = {
