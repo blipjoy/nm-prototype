@@ -3,6 +3,9 @@ game.resources = {
     img : [
         // UI
         "dialog",
+        "heart_empty",
+        "heart_half",
+        "heart_full",
 
         // Characters
         "rachel",

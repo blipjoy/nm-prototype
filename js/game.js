@@ -115,7 +115,7 @@ var game = {
     // Helper function to sort objects by `z` property, then `y` property.
     sort : function sort(a, b) {
         var result = (b.z - a.z);
-        return (result ? result : (b.pos.y - a.pos.y) || 0);
+        return (result ? result : ((b.pos && b.pos.y) - (a.pos && a.pos.y)) || 0);
     },
 
     // Simple quests make the game interesting!

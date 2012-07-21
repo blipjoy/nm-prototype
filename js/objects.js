@@ -1,7 +1,7 @@
 /* Dialog box */
 game.dialog = function dialog(script, callback) {
     var background = me.loader.getImage("dialog");
-    var font = new me.Font("acmesa", 20, "#eee");
+    var font = new me.Font("Tahoma", 18, "#eee");
 
     game.modal = true;
 
@@ -9,6 +9,129 @@ game.dialog = function dialog(script, callback) {
     me.game.add(dialog_box);
     me.game.sort.defer(game.sort);
 };
+
+/* The almighty HUD. Keeps track of stats; not just a renderer! */
+game.HUD = function HUD() {
+    var items;
+
+    // Override the HUD.update method to perform animation.
+    var HUD = me.HUD_Object.extend({
+        update : function update() {
+            var result = [];
+            Object.keys(items).forEach(function (key) {
+                result.push(items[key].request_update());
+            })
+
+            if (result.some(function (x) { return x; })) {
+                this.HUD_invalidated = true;
+            }
+            return this.HUD_invalidated;
+        }
+    });
+
+    var HUD_Item = me.HUD_Item.extend({
+        request_update : function request_update() {
+            return false;
+        }
+    });
+
+    // Coins counter.
+    var coins = HUD_Item.extend({
+        init : function init(x, y, value) {
+            this.parent(x, y, value);
+            this.gold_font = new me.Font("Monaco", 20, "#DFBD00");
+            this.silver_font = new me.Font("Monaco", 20, "#C4B59F");
+            this.image = new me.AnimationSheet(0, 0, me.loader.getImage("coin_gold"), 18, 21);
+            this.image.animationspeed = 4;
+        },
+
+        request_update : function request_update() {
+            return this.image.update();
+        },
+
+        draw : function draw(context, x, y) {
+            // Draw animated coin.
+            context.drawImage(
+                this.image.image,
+                this.image.offset.x, this.image.offset.y,
+                this.image.width, this.image.height,
+                this.pos.x + x + 2, this.pos.y + y + 2,
+                this.image.width, this.image.height
+            );
+
+            // Break value into strings.
+            var gold_value = Math.floor(this.value / 100) + ".";
+            var silver_value = (this.value % 100);
+            silver_value = ((silver_value < 10) ? "0" : "") + silver_value;
+
+            // Calculate width of gold part.
+            var gold_width = this.gold_font.measureText(context, gold_value).width;
+
+            // Draw coin counter.
+            this.gold_font.draw(context, gold_value, this.pos.x + x + 25, this.pos.y + y + this.gold_font.height);
+            this.silver_font.draw(context, silver_value, this.pos.x + x + 25 + gold_width, this.pos.y + y + this.silver_font.height);
+        }
+    });
+
+    // Health display.
+    var hearts = HUD_Item.extend({
+        init : function init(x, y, value) {
+            var self = this;
+            self.parent(x, y, value);
+            self.hearts = [];
+            [ "heart_empty", "heart_half", "heart_full" ].forEach(function (value, i) {
+                self.hearts[i] = me.loader.getImage(value);
+            });
+        },
+
+        request_update : function request_update() {
+            return items.containers.updated;
+        },
+
+        draw : function draw(context, x, y) {
+            var image;
+            var count = items.containers.value
+            var value = this.value;
+
+            x += this.pos.x;
+            y += this.pos.y;
+            for (var i = 0; i < count; i++) {
+                if (i < value) {
+                    image = 2;
+                }
+                else if (value % 1) {
+                    image = 1;
+                    value = Math.floor(value);
+                }
+                else {
+                    image = 0;
+                }
+
+                context.drawImage(this.hearts[image], x, y);
+                x += this.hearts[image].width + 2;
+            }
+        }
+    })
+
+    // Create a HUD container.
+    game.HUD = new HUD(0, 0, 640, 50);
+    me.game.add(game.HUD);
+
+    // Create a list of items to add to the HUD.
+    items = {
+        coins : new coins(0, 0),
+        containers : new HUD_Item(0, 25, 3),
+        hearts : new hearts(2, 25, 3)
+    };
+
+    // Add them all.
+    Object.keys(items).forEach(function (key) {
+        game.HUD.addItem(key, items[key]);
+    });
+
+    me.game.sort(game.sort);
+};
+
 
 /* Screen object supporting layer-animation */
 game.AnimatedScreen = me.ScreenObject.extend({
@@ -80,11 +203,19 @@ game.PlayScreen = game.AnimatedScreen.extend({
     onResetEvent : function onResetEvent() {
         this.parent();
 
+        // Initialize the HUD.
+        game.HUD();
+
         // Start music when level loads.
         me.game.onLevelLoaded = this.onLevelLoaded.bind(this);
 
         // Load the first level.
         me.levelDirector.loadLevel("island");
+    },
+
+    onDestroyEvent : function onDestroyEvent() {
+        // Remove the HUD.
+        me.game.remove(game.HUD);;
     }
 });
 
@@ -423,10 +554,15 @@ game.PlayerEntity = game.Sprite.extend({
     },
 
     collect : function collect(arbiter, space) {
-        // FIXME: earn money, etc.
-        publish("collect coin");
-        me.audio.play("collect_coin");
+        switch (arbiter.b.data.name) {
+            case "coin_gold":
+                game.HUD.updateItemValue("coins", 100);
+                publish("collect coin");
+                me.audio.play("collect_coin");
+                break;
+        }
 
+        // Remove the collectible item.
         space.addPostStepCallback(function post_collect() {
             arbiter.b.body.eachShape(function remove_shape(shape) {
                 me.game.remove(me.game.getEntityByGUID(shape.data.GUID));
