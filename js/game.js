@@ -72,7 +72,7 @@ var game = {
             resources.push({
                 name    : value,
                 type    : "audio",
-                src     : "resources/music/",
+                src     : "resources/bgm/",
                 channel : 2
             })
         });
