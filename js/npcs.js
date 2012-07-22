@@ -47,7 +47,8 @@ game.NPCs = {
             }
             else {
                 game.dialog([
-                    "Mum: Thank you, Rachel! You can keep it."
+                    "Mum: Thank you, Rachel! You can keep it.",
+                    "Mum: You should try the chest on the right."
                 ]);
             }
         }

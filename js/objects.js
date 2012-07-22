@@ -114,8 +114,8 @@ game.HUD = function HUD() {
     })
 
     // Create a HUD container.
-    game.HUD = new HUD(0, 0, 640, 50);
-    me.game.add(game.HUD);
+    me.game.HUD = new HUD(0, 0, 640, 50);
+    me.game.add(me.game.HUD);
 
     // Create a list of items to add to the HUD.
     items = {
@@ -126,7 +126,7 @@ game.HUD = function HUD() {
 
     // Add them all.
     Object.keys(items).forEach(function (key) {
-        game.HUD.addItem(key, items[key]);
+        me.game.HUD.addItem(key, items[key]);
     });
 
     me.game.sort(game.sort);
@@ -144,7 +144,7 @@ game.AnimatedScreen = me.ScreenObject.extend({
     frameidx : 0,
 
     init : function init(animationspeed) {
-        this.parent(true);
+        this.parent(true, true);
         this.animationspeed = animationspeed || this.animationspeed;
     },
 
@@ -193,11 +193,41 @@ game.AnimatedScreen = me.ScreenObject.extend({
 
 /* Main game */
 game.PlayScreen = game.AnimatedScreen.extend({
-    onLevelLoaded : function onLevelLoaded() {
+    onLevelLoaded : function onLevelLoaded(level) {
         this.parent();
 
+        var music;
+        switch (level) {
+            case "island":
+                music = "pink_and_lively";
+                break;
+
+            case "rachels_room":
+                music = "bells";
+                break;
+
+            default:
+                return;
+        }
+
         me.audio.stopTrack();
-        me.audio.playTrack("pink_and_lively");
+        me.audio.playTrack(music);
+    },
+
+    loadLevel : function loadLevel(level_id) {
+        var self = this;
+
+        cm.removeAll();
+
+        // Start music when level loads.
+        me.game.onLevelLoaded = (function (level) {
+            return function () {
+                return self.onLevelLoaded(level);
+            };
+        })(level_id);
+
+        // Load the first level.
+        me.levelDirector.loadLevel(level_id);
     },
 
     onResetEvent : function onResetEvent() {
@@ -206,16 +236,13 @@ game.PlayScreen = game.AnimatedScreen.extend({
         // Initialize the HUD.
         game.HUD();
 
-        // Start music when level loads.
-        me.game.onLevelLoaded = this.onLevelLoaded.bind(this);
-
-        // Load the first level.
-        me.levelDirector.loadLevel("island");
+        // Load the level.
+        this.loadLevel("island");
     },
 
     onDestroyEvent : function onDestroyEvent() {
         // Remove the HUD.
-        me.game.remove(game.HUD);;
+        me.game.remove(me.game.HUD);
     }
 });
 
@@ -233,7 +260,7 @@ game.Chipmunk = me.AnimationSheet.extend({
             GUID : settings.GUID,
             name : settings.name
         };
-        shape.setLayers(c.LAYER_SPRITE);
+        shape.setLayers(c.LAYER_SPRITE | c.LAYER_WALL);
 
         this.parent(
             x,
@@ -263,22 +290,6 @@ game.Chipmunk = me.AnimationSheet.extend({
         this.pos.y = ~~(c.HEIGHT - this.body.p.y - this.hHeight);
 
         return this.parent();
-    },
-
-    draw : function draw(context) {
-        this.parent(context);
-
-        if (game.debug) {
-            var bb = this.body.shapeList[0].getBB();
-
-            context.strokeStyle = "red";
-            context.strokeRect(
-                ~~(bb.l - me.game.viewport.pos.x),
-                ~~(c.HEIGHT - bb.t - me.game.viewport.pos.y),
-                ~~(bb.r - bb.l),
-                ~~(bb.t - bb.b)
-            );
-        }
     }
 });
 
@@ -472,7 +483,7 @@ game.BlinkingEyes = me.AnimationSheet.extend({
         this.addAnimation("walk_left",  [ 4, 5 ]);
         this.addAnimation("walk_up",    [ 6, 7 ]);
         this.setCurrentAnimation("walk_down", this.resetAnimation);
-        this.animationspeed = 1;
+        this.animationspeed = 4;
         this.resetAnimation();
     },
 
@@ -531,6 +542,7 @@ game.PlayerEntity = game.Sprite.extend({
         // Register Chipmunk collision handlers.
         this.body.eachShape(function (shape) {
             shape.collision_type = c.COLLIDE_PLAYER;
+            shape.setLayers(c.LAYER_SPRITE | c.LAYER_WALL);
         });
         cm.getSpace().addCollisionHandler(
             c.COLLIDE_PLAYER,
@@ -556,13 +568,13 @@ game.PlayerEntity = game.Sprite.extend({
     collect : function collect(arbiter, space) {
         switch (arbiter.b.data.name) {
             case "coin_gold":
-                game.HUD.updateItemValue("coins", 100);
+                me.game.HUD.updateItemValue("coins", 100);
                 publish("collect coin", [ 100 ]);
                 me.audio.play("collect_coin");
                 break;
 
             case "coin_silver":
-                game.HUD.updateItemValue("coins", 1);
+                me.game.HUD.updateItemValue("coins", 1);
                 publish("collect coin", [ 1 ]);
                 me.audio.play("collect_coin");
                 break;
@@ -651,6 +663,15 @@ game.PlayerEntity = game.Sprite.extend({
         }
     },
 
+    interactionCallback : function interactionCallback(data) {
+        console.log(data);
+
+        // DEBUG
+        if (data.indexOf("still") >= 0) {
+            game.state.loadLevel("rachels_room");
+        }
+    },
+
     checkInteraction : function checkInteraction() {
         var self = this;
 
@@ -671,7 +692,7 @@ game.PlayerEntity = game.Sprite.extend({
             var sensor = cm.bbNewForCircle(p, 3);
             cm.getSpace().bbQuery(sensor, c.LAYER_INTERACTIVE, 0, function (shape) {
                 // DO SOMETHING!
-                me.game.getEntityByName(shape.data.name)[0].interact();
+                me.game.getEntityByGUID(shape.data.GUID).interact(self.interactionCallback);
             });
         }
     },
@@ -700,13 +721,13 @@ game.PlayerEntity = game.Sprite.extend({
     }
 });
 
-/* NPC */
+/* NPCs */
 game.NPCEntity = game.Sprite.extend({
     init : function init(x, y, settings) {
         this.parent(x, y, settings);
 
         this.body.eachShape(function (shape) {
-            shape.setLayers(shape.layers | c.LAYER_INTERACTIVE);
+            shape.setLayers(c.LAYER_SPRITE | c.LAYER_INTERACTIVE | c.LAYER_WALL);
         });
 
         // FIXME: This sucks! With a low mass, shapes will fly away super fast
@@ -714,6 +735,56 @@ game.NPCEntity = game.Sprite.extend({
         // simulate friction; We need equally retarded-high forces to move
         // objects at a decent speed.
         this.body.setMass(Infinity);
+    }
+});
+
+/* Chests */
+game.ChestEntity = game.NPCEntity.extend({
+    // Whether the chest has been opened.
+    open : false,
+
+    // Do something when the chest has opened.
+    callback: null,
+
+    init : function init(x, y, settings) {
+        this.parent(x, y, settings);
+
+        this.body.eachShape(function (shape) {
+            shape.setLayers(c.LAYER_SPRITE | c.LAYER_INTERACTIVE);
+        });
+
+        // What item do we get?
+        this.item = settings.item;
+
+        // Which chest to display.
+        // 0 = Square
+        // 1 = Round
+        var which = ~~(+settings.which).clamp(0, 1);
+
+        // Setup animation.
+        this.addAnimation("square", [ 0, 2, 4 ]);
+        this.addAnimation("round",  [ 1, 3, 5 ]);
+        this.setCurrentAnimation(which ? "round" : "square", this.resetAnimation);
+        this.animationpause = true;
+    },
+
+    resetAnimation : function resetAnimation() {
+        this.animationpause = true;
+        this.open = true;
+        this.setAnimationFrame(2);
+        if (typeof(this.callback) === "function") {
+            this.callback(this.item);
+        }
+    },
+
+    interact : function interact(callback) {
+        if (this.open || !this.animationpause) {
+            return;
+        }
+
+        me.audio.play("chests");
+        this.callback = callback;
+        this.animationpause = false;
     }
 });
 
@@ -738,5 +809,17 @@ game.CoinEntity = game.Sprite.extend({
 
     update : function update() {
         return this.parent();
+    }
+});
+
+/* Static banister for stairs. */
+// Implemented as a sprite because it follows the rules of Y-coordinate priority.
+game.StaticBanister = me.SpriteObject.extend({
+    init : function init(x, y, settings) {
+        var image = me.loader.getImage(settings.image);
+
+        this.parent(x, y, image, settings.spritewidth, settings.spriteheight);
+
+        this.offset = new me.Vector2d(0 * settings.spritewidth, 9 * settings.spriteheight);
     }
 });

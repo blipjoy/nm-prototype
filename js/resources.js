@@ -18,26 +18,43 @@ game.resources = {
         "coin_silver",
         "coin_shadow",
 
+        // Interactive objects
+        "chests",
+
         // Tile maps
+        /* island */
         "animwater",
         "grass",
         "sandwater",
         "treetop",
-        "trunk"
+        "trunk",
+
+        /* rachels_room */
+        "accessories",
+        "cabinets",
+        "country",
+        "floor",
+        "house",
+        "inside",
+        "stairs",
+        "victoria"
     ],
 
     /* Maps from Tiled. */
     map : [
-        "island"
+        "island",
+        "rachels_room"
     ],
 
     /* 1-channel audio. Usually sound effects. */
     sfx : [
+        "chests",
         "collect_coin"
     ],
 
     /* 2-channel audio. Usually music. */
     music : [
+        "bells",
         "pink_and_lively"
     ]
 };

@@ -15,6 +15,8 @@ var c = {
     LAYER_NONE              : 0x00000000,
     LAYER_SPRITE            : 0x00000001,
     LAYER_INTERACTIVE       : 0x00000002,
+    LAYER_WALL              : 0x00000004,
+    LAYER_ALL               : 0xFFFFFFFF,
 
     // Chipmunk collision types
     COLLIDE_PLAYER          : 0x00000001,

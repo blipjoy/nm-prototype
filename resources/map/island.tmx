@@ -42,9 +42,9 @@
   </data>
  </layer>
  <objectgroup name="objects" width="40" height="15">
-  <object name="player" x="160" y="320" width="36" height="36">
+  <object name="rachel" x="160" y="320" width="32" height="32">
    <properties>
-    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;char_shadow&quot;,&quot;spritewidth&quot;:18,&quot;spriteheight&quot;:9},{&quot;name&quot;:&quot;player&quot;},{&quot;name&quot;:&quot;eyes&quot;,&quot;class&quot;:&quot;game.BlinkingEyes&quot;,&quot;image&quot;:&quot;rachel_eyes&quot;,&quot;spritewidth&quot;:17,&quot;spriteheight&quot;:6}]"/>
+    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;char_shadow&quot;,&quot;spritewidth&quot;:18,&quot;spriteheight&quot;:9},{&quot;name&quot;:&quot;rachel&quot;},{&quot;name&quot;:&quot;eyes&quot;,&quot;class&quot;:&quot;game.BlinkingEyes&quot;,&quot;image&quot;:&quot;rachel_eyes&quot;,&quot;spritewidth&quot;:17,&quot;spriteheight&quot;:6}]"/>
     <property name="image" value="rachel"/>
     <property name="spriteheight" value="36"/>
     <property name="spritewidth" value="36"/>
@@ -87,6 +87,24 @@
     <property name="image" value="coin_gold"/>
     <property name="spriteheight" value="21"/>
     <property name="spritewidth" value="18"/>
+   </properties>
+  </object>
+  <object name="chest" x="928" y="96" width="32" height="32">
+   <properties>
+    <property name="image" value="chests"/>
+    <property name="item" value="It's still a secret to everybody."/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+    <property name="which" value="1"/>
+   </properties>
+  </object>
+  <object name="chest" x="800" y="96" width="32" height="32">
+   <properties>
+    <property name="image" value="chests"/>
+    <property name="item" value="It's a secret to everybody."/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+    <property name="which" value="0"/>
    </properties>
   </object>
  </objectgroup>

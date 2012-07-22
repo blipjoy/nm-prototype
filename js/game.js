@@ -1,8 +1,5 @@
 /* Game namespace */
 var game = {
-    // Debug mode!
-    debug : false,
-
     // Whether a dialog box is waiting for input.
     modal : false,
 
@@ -87,17 +84,24 @@ var game = {
     // Run on game resources loaded.
     loaded : function () {
         // Set the "Play" ScreenObject.
-        me.state.set(me.state.PLAY, new game.PlayScreen(20));
+        game.state = new game.PlayScreen(20);
+        me.state.set(me.state.PLAY, game.state);
 
         // Player entity.
-        me.entityPool.add("player", game.PlayerEntity);
+        me.entityPool.add("rachel", game.PlayerEntity);
 
-        // NPCs
+        // NPCs.
         me.entityPool.add("mum", game.NPCs.Mum);
 
-        // Collectibles
+        // Collectibles.
         me.entityPool.add("coin_gold", game.CoinEntity);
         me.entityPool.add("coin_silver", game.CoinEntity);
+
+        // Interactive objects.
+        me.entityPool.add("chest", game.ChestEntity);
+
+        // Static objects.
+        me.entityPool.add("banister", game.StaticBanister);
 
         // Start the game.
         me.state.change(me.state.PLAY);
