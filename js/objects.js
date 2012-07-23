@@ -44,8 +44,8 @@ game.HUD = function HUD() {
     var coins = HUD_Item.extend({
         init : function init(x, y, value) {
             this.parent(x, y, value);
-            this.gold_font = new me.Font("Monaco", 20, "#DFBD00");
-            this.silver_font = new me.Font("Monaco", 20, "#C4B59F");
+            this.gold_font = new me.Font("serif", 20, "#DFBD00");
+            this.silver_font = new me.Font("serif", 20, "#C4B59F");
             this.image = new me.AnimationSheet(0, 0, me.loader.getImage("coin_gold"), 18, 21);
             this.image.animationspeed = 4;
         },
@@ -73,8 +73,13 @@ game.HUD = function HUD() {
             var gold_width = this.gold_font.measureText(context, gold_value).width;
 
             // Draw coin counter.
-            this.gold_font.draw(context, gold_value, this.pos.x + x + 25, this.pos.y + y + this.gold_font.height);
-            this.silver_font.draw(context, silver_value, this.pos.x + x + 25 + gold_width, this.pos.y + y + this.silver_font.height);
+            context.save();
+            context.shadowColor     = "black";
+            context.shadowBlur      = 2;
+            context.shadowOffsetX   = 1;
+            context.shadowOffsetY   = 1;
+            this.gold_font.draw(context, gold_value, this.pos.x + x + 25, this.pos.y + y);
+            this.silver_font.draw(context, silver_value, this.pos.x + x + 25 + gold_width, this.pos.y + y);
         }
     });
 
@@ -813,6 +818,10 @@ game.ChestEntity = game.NPCEntity.extend({
     init : function init(x, y, settings) {
         this.parent(x, y, settings);
 
+        // Adjust collision bounding box.
+        this.adjustBoxShape(0, 0, 46, 32);
+
+        // Set shape layers.
         this.body.eachShape(function (shape) {
             shape.setLayers(c.LAYER_SPRITE | c.LAYER_INTERACTIVE);
         });
@@ -858,6 +867,7 @@ game.CoinEntity = game.Sprite.extend({
         // Call the constructor.
         this.parent(x, y, settings);
 
+        // Set shape layers.
         this.body.eachShape(function (shape) {
             shape.collision_type = c.COLLIDE_COLLECTIBLE;
         });
@@ -892,6 +902,7 @@ game.ExitEntity = me.LevelEntity.extend({
     init : function init(x, y, settings) {
         this.parent(x, y, settings);
 
+        // Create and configure a static shape.
         var shape = cm.staticBox(x, y, settings.width, settings.height);
         shape.setLayers(c.LAYER_SPRITE);
         shape.collision_type = c.COLLIDE_EXIT;

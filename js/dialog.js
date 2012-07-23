@@ -121,7 +121,7 @@ game.DialogObject = me.SpriteObject.extend(
             {
                 if(typeof(this.rows[this.counter][this.currentRow + i]) !== 'undefined')
                 {
-                    this.font.draw(context, this.rows[this.counter][this.currentRow + i], this.pos.x + this.offsetTextX, this.pos.y + this.offsetTextY + offset + this.font.height);
+                    this.font.draw(context, this.rows[this.counter][this.currentRow + i], this.pos.x + this.offsetTextX, this.pos.y + this.offsetTextY + offset);
                     offset += (this.font.height * 1.1);
                 }
             }
