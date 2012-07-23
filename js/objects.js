@@ -16,6 +16,11 @@ game.HUD = function HUD() {
 
     // Override the HUD.update method to perform animation.
     var HUD = me.HUD_Object.extend({
+        init : function init() {
+            this.parent.apply(this, arguments);
+            this.persist = true; // FIXME: https://github.com/obiot/melonJS/issues/75
+        },
+
         update : function update() {
             var result = [];
             Object.keys(items).forEach(function (key) {
@@ -114,8 +119,9 @@ game.HUD = function HUD() {
     })
 
     // Create a HUD container.
-    me.game.HUD = new HUD(0, 0, 640, 50);
-    me.game.add(me.game.HUD);
+    // NOTE: This turns game.HUD into a singleton!
+    game.HUD = new HUD(0, 0, 640, 50);
+    me.game.add(game.HUD);
 
     // Create a list of items to add to the HUD.
     items = {
@@ -126,7 +132,7 @@ game.HUD = function HUD() {
 
     // Add them all.
     Object.keys(items).forEach(function (key) {
-        me.game.HUD.addItem(key, items[key]);
+        game.HUD.addItem(key, items[key]);
     });
 
     me.game.sort(game.sort);
@@ -144,7 +150,8 @@ game.AnimatedScreen = me.ScreenObject.extend({
     frameidx : 0,
 
     init : function init(animationspeed) {
-        this.parent(true, true);
+        this.parent(true);
+        this.persist = true; // FIXME: https://github.com/obiot/melonJS/issues/75
         this.animationspeed = animationspeed || this.animationspeed;
     },
 
@@ -242,7 +249,7 @@ game.PlayScreen = game.AnimatedScreen.extend({
 
     onDestroyEvent : function onDestroyEvent() {
         // Remove the HUD.
-        me.game.remove(me.game.HUD);
+        me.game.remove(game.HUD);
     }
 });
 
@@ -568,13 +575,13 @@ game.PlayerEntity = game.Sprite.extend({
     collect : function collect(arbiter, space) {
         switch (arbiter.b.data.name) {
             case "coin_gold":
-                me.game.HUD.updateItemValue("coins", 100);
+                game.HUD.updateItemValue("coins", 100);
                 publish("collect coin", [ 100 ]);
                 me.audio.play("collect_coin");
                 break;
 
             case "coin_silver":
-                me.game.HUD.updateItemValue("coins", 1);
+                game.HUD.updateItemValue("coins", 1);
                 publish("collect coin", [ 1 ]);
                 me.audio.play("collect_coin");
                 break;
