@@ -44,10 +44,38 @@ game.HUD = function HUD() {
     var coins = HUD_Item.extend({
         init : function init(x, y, value) {
             this.parent(x, y, value);
-            this.gold_font = new me.Font("serif", 20, "#DFBD00");
-            this.silver_font = new me.Font("serif", 20, "#C4B59F");
+
+            // Fonts.
+            this.gold_font = new me.Font("Futura", 20, "#DFBD00");
+            this.silver_font = new me.Font("Futura", 20, "#C4B59F");
+            this.gold_font.bold();
+            this.silver_font.bold();
+
+            // Animated coin image.
             this.image = new me.AnimationSheet(0, 0, me.loader.getImage("coin_gold"), 18, 21);
             this.image.animationspeed = 4;
+
+            function bufferForFont(context, font) {
+                var width = context.canvas.width;
+                // Why can't I measure text height?!
+                // I'll just have to measure the width of a wide character and double it!
+                var height = context.measureText("m").width * 2;
+
+                var el = document.createElement("canvas");
+                el.setAttribute("width", width);
+                el.setAttribute("height", height);
+
+                var ctx = el.getContext("2d");
+                ctx.font = font.font;
+                ctx.textBaseline = "top";
+
+                return el;
+            }
+
+            // Back-buffer and mask for the inset shadow effect.
+            // Note we only need to use one font, because the only difference is color.
+            this.backbuffer = bufferForFont(me.video.getScreenFrameBuffer(), this.gold_font);
+            this.backmask   = bufferForFont(me.video.getScreenFrameBuffer(), this.gold_font);
         },
 
         request_update : function request_update() {
@@ -55,31 +83,82 @@ game.HUD = function HUD() {
         },
 
         draw : function draw(context, x, y) {
+            var self = this;
+
             // Draw animated coin.
             context.drawImage(
-                this.image.image,
-                this.image.offset.x, this.image.offset.y,
-                this.image.width, this.image.height,
-                this.pos.x + x + 2, this.pos.y + y + 2,
-                this.image.width, this.image.height
+                self.image.image,
+                self.image.offset.x, self.image.offset.y,
+                self.image.width, self.image.height,
+                self.pos.x + x + 2, self.pos.y + y + 2,
+                self.image.width, self.image.height
             );
 
+            function insetShadowText(context, str, x, y, color, shadowColor, offsetX, offsetY) {
+                var width = self.backbuffer.width;
+                var height = self.backbuffer.height;
+                var bctx = self.backbuffer.getContext("2d");
+                var mctx = self.backmask.getContext("2d");
+
+                bctx.save();
+                bctx.clearRect(0, 0, width, height);
+
+                // Inset shadow color!
+                bctx.fillStyle = shadowColor;
+                bctx.fillText(str, 0, 0);
+
+                // Text color!
+                bctx.translate(0, -height);
+                bctx.shadowColor = color;
+                bctx.shadowOffsetX = offsetX;
+                bctx.shadowOffsetY = height + offsetY;
+                bctx.fillText(str, 0, 0);
+                bctx.restore();
+
+                // Create mask.
+                mctx.clearRect(0, 0, width, height);
+                mctx.fillStyle = "black";
+                mctx.fillText(str, 0, 0);
+
+                // Mask it!
+                bctx.save();
+                bctx.globalCompositeOperation = "destination-in";
+                bctx.drawImage(self.backmask, 0, 0);
+                bctx.restore();
+
+                // Final destination!
+                context.drawImage(self.backbuffer, x, y);
+            }
+
             // Break value into strings.
-            var gold_value = Math.floor(this.value / 100) + ".";
-            var silver_value = (this.value % 100);
+            var gold_value = Math.floor(self.value / 100) + ".";
+            var silver_value = (self.value % 100);
             silver_value = ((silver_value < 10) ? "0" : "") + silver_value;
 
             // Calculate width of gold part.
-            var gold_width = this.gold_font.measureText(context, gold_value).width;
+            var gold_width = self.gold_font.measureText(context, gold_value).width;
 
             // Draw coin counter.
-            context.save();
-            context.shadowColor     = "black";
-            context.shadowBlur      = 2;
-            context.shadowOffsetX   = 1;
-            context.shadowOffsetY   = 1;
-            this.gold_font.draw(context, gold_value, this.pos.x + x + 25, this.pos.y + y);
-            this.silver_font.draw(context, silver_value, this.pos.x + x + 25 + gold_width, this.pos.y + y);
+            insetShadowText(
+                context,
+                gold_value,
+                self.pos.x + x + 25,
+                self.pos.y + y,
+                self.gold_font.color,
+                "#333",
+                1,
+                1
+            );
+            insetShadowText(
+                context,
+                silver_value,
+                self.pos.x + x + 25 + gold_width,
+                self.pos.y + y,
+                self.silver_font.color,
+                "#333",
+                1,
+                1
+            );
         }
     });
 
