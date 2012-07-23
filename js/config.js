@@ -1,11 +1,20 @@
 /* Constants */
 var c = {
+    /*
+     * To convert between numeric and named directions:
+     * name2dir : c[name.toUpperCase()]
+     * dir2name : c.DIR_NAMES[dir]
+     */
+
     // Directions a sprite can face
     RESET_DIR               : -1,
-    UP                      : 0,
-    RIGHT                   : 1,
-    DOWN                    : 2,
-    LEFT                    : 3,
+    LEFT                    : 0,
+    UP                      : 1,
+    RIGHT                   : 2,
+    DOWN                    : 3,
+
+    // Available directions, in a *VERY* specific order.
+    DIR_NAMES               : [ "left", "up", "right", "down" ],
 
     // Screen resolution
     WIDTH                   : 640,
@@ -21,11 +30,16 @@ var c = {
     // Chipmunk collision types
     COLLIDE_PLAYER          : 0x00000001,
     COLLIDE_COLLECTIBLE     : 0x00000002,
-    COLLIDE_PAINFUL         : 0x00000003
+    COLLIDE_EXIT            : 0x00000003,
+    COLLIDE_PAINFUL         : 0x00000004
 };
 
 try {
     Object.keys(c).forEach(function (key) {
+        if (typeof(c[key]) === "function") {
+            return;
+        }
+
         c.__defineGetter__(
             key,
             (function (value) {
@@ -37,6 +51,7 @@ try {
 catch (e) {
     // No getters? FAKE CONSTANTS!
 }
+
 
 // Game engine settings.
 me.sys.gravity = 0;

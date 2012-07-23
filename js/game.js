@@ -101,6 +101,7 @@ var game = {
         me.entityPool.add("chest", game.ChestEntity);
 
         // Static objects.
+        me.entityPool.add("ExitEntity", game.ExitEntity);
         me.entityPool.add("banister", game.StaticBanister);
 
         // Start the game.

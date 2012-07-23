@@ -200,41 +200,70 @@ game.AnimatedScreen = me.ScreenObject.extend({
 
 /* Main game */
 game.PlayScreen = game.AnimatedScreen.extend({
-    onLevelLoaded : function onLevelLoaded(level) {
-        this.parent();
+    loading : false,
 
-        var music;
-        switch (level) {
-            case "island":
-                music = "pink_and_lively";
-                break;
-
-            case "rachels_room":
-                music = "bells";
-                break;
-
-            default:
-                return;
-        }
-
-        me.audio.stopTrack();
-        me.audio.playTrack(music);
-    },
-
-    loadLevel : function loadLevel(level_id) {
+    onLevelLoaded : function onLevelLoaded(settings) {
         var self = this;
 
-        cm.removeAll();
+        self.parent();
+        self.loading = false;
 
-        // Start music when level loads.
-        me.game.onLevelLoaded = (function (level) {
-            return function () {
-                return self.onLevelLoaded(level);
+        var rachel = me.game.getEntityByName("rachel")[0];
+
+        if (settings.location) {
+            var p = settings.location.split(",").map(function (value) {
+                return +value.trim();
+            });
+            rachel.body.setPos(cp.v(p[0], c.HEIGHT - p[1]));
+        }
+
+        if (settings.dir) {
+            rachel.dir_name = settings.dir;
+            rachel.setCurrentAnimation("stand_" + settings.dir);
+        }
+
+        if (settings.music) {
+            me.audio.stopTrack();
+            me.audio.playTrack(settings.music);
+        }
+    },
+
+    loadLevel : function loadLevel(settings) {
+        var fade;
+        var self = this;
+
+        if (self.loading) {
+            return;
+        }
+        self.loading = true;
+
+        // Handle outbound transitions.
+        fade = settings.fade || settings.fadeIn;
+        if (fade) {
+            me.game.viewport.fadeIn(fade, +settings.duration || 250, fadeComplete);
+        }
+        else {
+            fadeComplete();
+        }
+
+        function fadeComplete() {
+            // Remove all Chipmunk bodies and shapes.
+            cm.removeAll();
+
+            // When level loads, start music and move Rachel to the proper location.
+            me.game.onLevelLoaded = function () {
+                self.onLevelLoaded(settings);
             };
-        })(level_id);
 
-        // Load the first level.
-        me.levelDirector.loadLevel(level_id);
+            // Load the first level.
+            me.levelDirector.loadLevel(settings.to);
+
+            // Handle transitions.
+            fade = settings.fade || settings.fadeOut;
+            if (fade) {
+                me.game.viewport.fadeOut(fade, +settings.duration || 250);
+            }
+        }
     },
 
     onResetEvent : function onResetEvent() {
@@ -243,8 +272,28 @@ game.PlayScreen = game.AnimatedScreen.extend({
         // Initialize the HUD.
         game.HUD();
 
+        // Initialize some Chipmunk stuff.
+        /* Player<->ExitEntity collisions */
+        cm.getSpace().addCollisionHandler(
+            c.COLLIDE_PLAYER,
+            c.COLLIDE_EXIT,
+            function exit_level(arbiter, space) {
+                space.addPostStepCallback(function () {
+                    game.state.loadLevel(arbiter.b.data);
+                });
+
+                // Return false so collision does not assert a force.
+                return false;
+            }
+        );
+
         // Load the level.
-        this.loadLevel("island");
+        this.loadLevel({
+            to          : "island",
+            music       : "pink_and_lively",
+            fadeOut     : "black",
+            duration    : 250
+        });
     },
 
     onDestroyEvent : function onDestroyEvent() {
@@ -523,7 +572,7 @@ game.BlinkingEyes = me.AnimationSheet.extend({
 /* Player character */
 game.PlayerEntity = game.Sprite.extend({
     // Direction facing
-    dir : c.DOWN,
+    dir : c.RESET_DIR,
     dir_name : "down",
 
     // Re-render when true
@@ -595,6 +644,10 @@ game.PlayerEntity = game.Sprite.extend({
             });
             space.removeBody(arbiter.b.body);
         });
+
+        // Returning false tells Chipmunk to stop processing this collision.
+        // That means the object will not act as a wall!
+        return false;
     },
 
     checkMovement : function checkMovement() {
@@ -619,15 +672,14 @@ game.PlayerEntity = game.Sprite.extend({
         }
 
         // Walking controls.
-        var directions = [ "left", "up", "right", "down" ];
-        directions.forEach(function (dir, i) {
-            if (me.input.isKeyPressed(dir)) {
+        c.DIR_NAMES.forEach(function (dir_name, i) {
+            if (me.input.isKeyPressed(dir_name)) {
                 self.held[i] = true;
                 self.standing = false;
 
                 if (!self.last_held[i] || (self.dir == c.RESET_DIR)) {
-                    self.dir = c[dir.toUpperCase()];
-                    self.dir_name = dir;
+                    self.dir = c[dir_name.toUpperCase()];
+                    self.dir_name = dir_name;
                 }
                 self.setCurrentAnimation("walk_" + self.dir_name);
 
@@ -636,8 +688,8 @@ game.PlayerEntity = game.Sprite.extend({
 
                 // Walking at a 45-degree angle will slow the axis velocity by
                 // approximately 5/7. But we'll just use sin(45)  ;)
-                if (me.input.isKeyPressed(directions[(i + 1) % 4]) ||
-                    me.input.isKeyPressed(directions[(i + 3) % 4])) {
+                if (me.input.isKeyPressed(c.DIR_NAMES[(i + 1) % 4]) ||
+                    me.input.isKeyPressed(c.DIR_NAMES[(i + 3) % 4])) {
                     force[axis] *= self.walk_angle;
                 }
 
@@ -675,7 +727,12 @@ game.PlayerEntity = game.Sprite.extend({
 
         // DEBUG
         if (data.indexOf("still") >= 0) {
-            game.state.loadLevel("rachels_room");
+            game.state.loadLevel({
+                to          : "rachels_room",
+                music       : "bells",
+                fade        : "black",
+                duration    : 250
+            });
         }
     },
 
@@ -828,5 +885,16 @@ game.StaticBanister = me.SpriteObject.extend({
         this.parent(x, y, image, settings.spritewidth, settings.spriteheight);
 
         this.offset = new me.Vector2d(0 * settings.spritewidth, 9 * settings.spriteheight);
+    }
+});
+
+game.ExitEntity = me.LevelEntity.extend({
+    init : function init(x, y, settings) {
+        this.parent(x, y, settings);
+
+        var shape = cm.staticBox(x, y, settings.width, settings.height);
+        shape.setLayers(c.LAYER_SPRITE);
+        shape.collision_type = c.COLLIDE_EXIT;
+        shape.data = settings;
     }
 });
