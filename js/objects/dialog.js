@@ -1,3 +1,43 @@
+/* Dialog box */
+game.dialog = function dialog(script, callback) {
+    var background = me.loader.getImage("dialog");
+    var font = new me.Font("Tahoma", 18, "#eee");
+
+    game.modal = true;
+
+    var dialog_box = new game.DialogObject(
+        // x, y
+        30,
+        me.video.getHeight() - background.height - 15,
+
+        // Background image.
+        background,
+
+        // Text to display.
+        script,
+
+        // width, height.
+        555,
+        71,
+
+        // Text offset x, y.
+        12,
+        12,
+
+        // Font to display it in.
+        font,
+
+        // Which key to watch for.
+        "action",
+
+        // What to do when dialog has closed.
+        callback
+    );
+    me.game.add(dialog_box);
+    me.game.sort.defer(game.sort);
+};
+
+
 /**
  * A simple dialog manager.
  * @class

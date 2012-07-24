@@ -16,7 +16,7 @@
   <image source="../img/inside.png" width="320" height="320"/>
  </tileset>
  <tileset firstgid="211" name="stairs" tilewidth="32" tileheight="32">
-  <image source="../img/stairs.png" width="256" height="544"/>
+  <image source="../img/stairs.png" width="256" height="448"/>
  </tileset>
  <tileset firstgid="347" name="victoria" tilewidth="32" tileheight="32">
   <image source="../img/victoria.png" width="352" height="160"/>
@@ -25,7 +25,7 @@
   <image source="../img/house.png" width="320" height="224"/>
  </tileset>
  <tileset firstgid="472" name="accessories" tilewidth="32" tileheight="32">
-  <image source="../img/accessories.png" width="128" height="128"/>
+  <image source="../img/accessories.png" width="64" height="64"/>
  </tileset>
  <layer name="floor" width="10" height="9">
   <data encoding="base64">
@@ -65,9 +65,11 @@
     <property name="which" value="1"/>
    </properties>
   </object>
-  <object name="banister" x="160" y="96" width="64" height="32">
+  <object name="static" x="160" y="96" width="64" height="32">
    <properties>
     <property name="image" value="stairs"/>
+    <property name="offsetx" value="0"/>
+    <property name="offsety" value="9"/>
     <property name="spriteheight" value="32"/>
     <property name="spritewidth" value="64"/>
    </properties>
@@ -80,7 +82,7 @@
   <object x="160" y="96">
    <polyline points="0,0 128,0 128,64 104,64 104,160 -128,160"/>
   </object>
-  <object name="ExitEntity" x="180" y="101" width="24" height="24">
+  <object name="exit" x="180" y="101" width="24" height="24">
    <properties>
     <property name="dir" value="left"/>
     <property name="duration" value="250"/>

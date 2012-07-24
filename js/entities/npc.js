@@ -1,5 +1,5 @@
-game.NPCs = {
-    Mum : game.NPCEntity.extend({
+game.NPCEntities = {
+    Mum : game.NPC.extend({
         quest_started : false,
         quest_complete : false,
 

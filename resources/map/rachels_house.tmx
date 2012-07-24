@@ -59,7 +59,7 @@
     <property name="spritewidth" value="36"/>
    </properties>
   </object>
-  <object name="ExitEntity" x="180" y="5" width="24" height="24">
+  <object name="exit" x="180" y="5" width="24" height="24">
    <properties>
     <property name="dir" value="right"/>
     <property name="duration" value="250"/>

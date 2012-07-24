@@ -91,10 +91,10 @@ var game = {
         me.state.set(me.state.PLAY, game.state);
 
         // Player entity.
-        me.entityPool.add("rachel", game.PlayerEntity);
+        me.entityPool.add("rachel", game.RachelEntity);
 
         // NPCs.
-        me.entityPool.add("mum", game.NPCs.Mum);
+        me.entityPool.add("mum", game.NPCEntities.Mum);
 
         // Collectibles.
         me.entityPool.add("coin_gold", game.CoinEntity);
@@ -104,8 +104,8 @@ var game = {
         me.entityPool.add("chest", game.ChestEntity);
 
         // Static objects.
-        me.entityPool.add("ExitEntity", game.ExitEntity);
-        me.entityPool.add("banister", game.StaticBanister);
+        me.entityPool.add("exit", game.Exit);
+        me.entityPool.add("static", game.Static);
 
         // Start the game.
         me.state.change(me.state.PLAY);
