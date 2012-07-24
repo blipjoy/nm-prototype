@@ -10,6 +10,8 @@ game.resources = {
         // Characters
         "rachel",
         "rachel_eyes",
+        "jessica",
+        "jessica_eyes",
         "char_shadow",
         "mum",
 

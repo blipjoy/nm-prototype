@@ -95,6 +95,7 @@ var game = {
 
         // NPCs.
         me.entityPool.add("mum", game.NPCEntities.Mum);
+        me.entityPool.add("jessica", game.NPCEntities.Jessica);
 
         // Collectibles.
         me.entityPool.add("coin_gold", game.CoinEntity);
@@ -125,6 +126,15 @@ var game = {
     sort : function sort(a, b) {
         var result = (b.z - a.z);
         return (result ? result : ((b.pos && b.pos.y) - (a.pos && a.pos.y)) || 0);
+    },
+
+    // Helper function to get an image with error checking.
+    getImage : function getImage(name) {
+        var result = me.loader.getImage(name);
+        if (!result) {
+            throw "Error: No image named `" + name + "` (Did you forget to include the resource?)";
+        }
+        return result;
     },
 
     // Simple quests make the game interesting!

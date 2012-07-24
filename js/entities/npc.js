@@ -1,4 +1,5 @@
 game.NPCEntities = {
+    /* Mum */
     Mum : game.NPC.extend({
         quest_started : false,
         quest_complete : false,
@@ -51,6 +52,20 @@ game.NPCEntities = {
                     "Mum: You should try the chest on the right."
                 ]);
             }
+        }
+    }),
+
+
+    /* Jessica */
+    Jessica : game.NPC.extend({
+        init : function init(x, y, settings) {
+            this.parent(x, y, settings);
+        },
+
+        interact : function interact() {
+            game.dialog([
+                "Jessica: Hellooooo!"
+            ]);
         }
     })
 };

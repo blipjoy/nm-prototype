@@ -17,7 +17,7 @@ game.Chipmunk = me.AnimationSheet.extend({
         this.parent(
             x,
             y,
-            (typeof(settings.image) === "string") ? me.loader.getImage(settings.image) : settings.image,
+            (typeof(settings.image) === "string") ? game.getImage(settings.image) : settings.image,
             settings.spritewidth,
             settings.spriteheight
         );
@@ -141,7 +141,7 @@ game.Sprite = game.Chipmunk.extend({
                 self.children[item.name] = new (getClass(item.class))(
                     x,
                     y,
-                    me.loader.getImage(item.image),
+                    game.getImage(item.image),
                     item.spritewidth,
                     item.spriteheight,
                     self,

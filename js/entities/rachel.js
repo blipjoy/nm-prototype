@@ -1,14 +1,7 @@
-/* Player character */
-game.RachelEntity = game.Sprite.extend({
-    // Direction facing
+/* Rachel */
+game.RachelEntity = game.NPC.extend({
+    // Keep track of the last direction key pressed.
     dir : c.RESET_DIR,
-    dir_name : "down",
-
-    // Re-render when true
-    isDirty : false,
-
-    // Standing or walking?
-    standing : true,
 
     // Keys being held: [ "left", "up", "right", "down" ]
     held : [ false, false, false, false ],
@@ -24,6 +17,9 @@ game.RachelEntity = game.Sprite.extend({
         // Adjust collision bounding box.
         this.adjustBoxShape(-1, 10, 15, 20);
 
+        // Rachel's mass is always 1.
+        this.body.setMass(1);
+
         // Register Chipmunk collision handlers.
         this.body.eachShape(function eachShape(shape) {
             shape.collision_type = c.COLLIDE_PLAYER;
@@ -34,17 +30,6 @@ game.RachelEntity = game.Sprite.extend({
             c.COLLIDE_COLLECTIBLE,
             this.collect
         );
-
-        // Set animations.
-        this.addAnimation("walk_down",   [ 0,  1,  2,  3 ]);
-        this.addAnimation("walk_right",  [ 4,  5,  6,  7 ]);
-        this.addAnimation("walk_left",   [ 8,  9,  10, 11 ]);
-        this.addAnimation("walk_up",     [ 12, 13, 14, 15 ]);
-        this.addAnimation("stand_down",  [ 0 ]);
-        this.addAnimation("stand_right", [ 4 ]);
-        this.addAnimation("stand_left",  [ 8 ]);
-        this.addAnimation("stand_up",    [ 12 ]);
-        this.setCurrentAnimation("stand_down");
 
         // Set the display to follow our position on both axis.
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
@@ -77,6 +62,20 @@ game.RachelEntity = game.Sprite.extend({
         // Returning false tells Chipmunk to stop processing this collision.
         // That means the object will not act as a wall!
         return false;
+    },
+
+    interactionCallback : function interactionCallback(data) {
+        console.log(data);
+
+        // DEBUG
+        if (data.indexOf("still") >= 0) {
+            game.state.loadLevel({
+                to          : "rachels_room",
+                music       : "bells",
+                fade        : "black",
+                duration    : 250
+            });
+        }
     },
 
     checkMovement : function checkMovement() {
@@ -136,7 +135,7 @@ game.RachelEntity = game.Sprite.extend({
             self.last_held[i] = self.held[i];
         });
 
-        // Move entity and detect collisions.
+        // Move body and detect collisions.
         self.body.applyForce(cp.v(force.x * 600, force.y * -600), cp.vzero);
 
         if (~~self.body.vy !== 0) {
@@ -148,20 +147,6 @@ game.RachelEntity = game.Sprite.extend({
         if (!self.isDirty && !self.standing) {
             // Force standing animation.
             self.stand();
-        }
-    },
-
-    interactionCallback : function interactionCallback(data) {
-        console.log(data);
-
-        // DEBUG
-        if (data.indexOf("still") >= 0) {
-            game.state.loadLevel({
-                to          : "rachels_room",
-                music       : "bells",
-                fade        : "black",
-                duration    : 250
-            });
         }
     },
 
@@ -188,28 +173,5 @@ game.RachelEntity = game.Sprite.extend({
                 me.game.getEntityByGUID(shape.data.GUID).interact(self.interactionCallback);
             });
         }
-    },
-
-    stand : function stand() {
-        // Force standing animation.
-        this.isDirty = true;
-        this.standing = true;
-        this.setCurrentAnimation("stand_" + this.dir_name);
-    },
-
-    update : function update() {
-        var self = this;
-
-        self.isDirty = false;
-        self.body.resetForces();
-        if (!game.modal) {
-            self.checkMovement();
-            self.checkInteraction();
-        }
-        else if (!self.standing) {
-            this.stand();
-        }
-
-        return self.parent() || self.isDirty;
     }
 });

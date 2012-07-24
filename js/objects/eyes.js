@@ -1,8 +1,9 @@
 /* Eyes ... that blink! */
 game.BlinkingEyes = me.AnimationSheet.extend({
-    init : function init(x, y, image, w, h, owner) {
+    init : function init(x, y, image, w, h, owner, settings) {
         this.parent(x, y, image, w, h);
 
+        this.settings = settings;
         this.owner = owner;
         this.updatePosition();
 
@@ -20,8 +21,8 @@ game.BlinkingEyes = me.AnimationSheet.extend({
     },
 
     updatePosition : function updatePosition() {
-        this.pos.x = this.owner.pos.x + 9;
-        this.pos.y = this.owner.pos.y + 18 + (this.owner.current.idx % 2);
+        this.pos.x = this.owner.pos.x + this.settings.offsetx;
+        this.pos.y = this.owner.pos.y + this.settings.offsety + (this.owner.current.idx % 2);
     },
 
     update : function update() {

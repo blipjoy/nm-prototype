@@ -40,7 +40,7 @@ game.HUD = function HUD() {
             this.silver_font.bold();
 
             // Animated coin image.
-            this.image = new me.AnimationSheet(0, 0, me.loader.getImage("coin_gold"), 18, 21);
+            this.image = new me.AnimationSheet(0, 0, game.getImage("coin_gold"), 18, 21);
             this.image.animationspeed = 4;
 
             function bufferForFont(context, font) {
@@ -157,7 +157,7 @@ game.HUD = function HUD() {
             self.parent(x, y, value);
             self.hearts = [];
             [ "heart_empty", "heart_half", "heart_full" ].forEach(function forEach(value, i) {
-                self.hearts[i] = me.loader.getImage(value);
+                self.hearts[i] = game.getImage(value);
             });
         },
 
