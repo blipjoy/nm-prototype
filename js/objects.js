@@ -878,11 +878,11 @@ game.NPCEntity = game.Sprite.extend({
             shape.setLayers(c.LAYER_SPRITE | c.LAYER_INTERACTIVE | c.LAYER_WALL);
         });
 
-        // FIXME: This sucks! With a low mass, shapes will fly away super fast
-        // when colliding. This is because of the retarded-low damping to
-        // simulate friction; We need equally retarded-high forces to move
-        // objects at a decent speed.
-        this.body.setMass(Infinity);
+        // Rachel is defined with a mass of 1. give NPCs a larger mass so Rachel
+        // can't push them around easily. May also want to handle this as a
+        // special case in a collision handler, such that Player<->Sprite
+        // collisions do not cause them to push one another.
+        this.body.setMass(3);
     }
 });
 
@@ -904,6 +904,9 @@ game.ChestEntity = game.NPCEntity.extend({
         this.body.eachShape(function (shape) {
             shape.setLayers(c.LAYER_SPRITE | c.LAYER_INTERACTIVE);
         });
+
+        // Chests cannot be moved.
+        this.body.setMass(Infinity);
 
         // What item do we get?
         this.item = settings.item;
@@ -950,12 +953,6 @@ game.CoinEntity = game.Sprite.extend({
         this.body.eachShape(function (shape) {
             shape.collision_type = c.COLLIDE_COLLECTIBLE;
         });
-
-        // FIXME: This sucks! With a low mass, shapes will fly away super fast
-        // when colliding. This is because of the retarded-low damping to
-        // simulate friction; We need equally retarded-high forces to move
-        // objects at a decent speed.
-        this.body.setMass(Infinity);
 
         this.animationspeed = 4;
     },
