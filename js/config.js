@@ -1,5 +1,7 @@
 /* Constants */
 var c = {
+    DEBUG                   : false,
+
     /*
      * To convert between numeric and named directions:
      * name2dir : c[name.toUpperCase()]
@@ -34,6 +36,12 @@ var c = {
     COLLIDE_PAINFUL         : 0x00000004
 };
 
+// Helper to enable debug by setting a special hash in the URL.
+if (document.location.hash === "#debug") {
+    c.DEBUG = true;
+}
+
+// Turn the `c` object into a hash of constants.
 try {
     Object.keys(c).forEach(function (key) {
         if (typeof(c[key]) === "function") {
@@ -60,3 +68,8 @@ me.sys.useNativeAnimFrame = true; // Be faster!
 //cm.setSync(false); // Be fastest!
 //me.debug.renderHitBox = true;
 //me.debug.renderCollisionMap = true;
+
+if (c.DEBUG) {
+    me.sys.pauseOnBlur = false;
+    cm.setDebug(true);
+};
