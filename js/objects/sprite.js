@@ -107,7 +107,7 @@ game.Sprite = game.Chipmunk.extend({
             }
 
             self.compose = compose;
-            self.compose.forEach(function (item) {
+            self.compose.forEach(function forEach(item) {
                 // Validate composition item format.
                 if (!game.isObject(item)) {
                     throw "Composition setting error. NOT AN OBJECT: " + JSON.stringify(item);
@@ -120,7 +120,7 @@ game.Sprite = game.Chipmunk.extend({
                 }
 
                 // Require keys.
-                [ "name", "class", "image", "spritewidth", "spriteheight" ].forEach(function (key) {
+                [ "name", "class", "image", "spritewidth", "spriteheight" ].forEach(function forEach(key) {
                     if (!item.hasOwnProperty(key)) {
                         throw "Composition setting error. MISSING KEY `" + key + "`: " + JSON.stringify(item);
                     }
@@ -129,7 +129,7 @@ game.Sprite = game.Chipmunk.extend({
                 function getClass(str) {
                     var node = window;
                     var tokens = str.split(".");
-                    tokens.forEach(function (token) {
+                    tokens.forEach(function forEach(token) {
                         if (typeof(node) !== "undefined") {
                             node = node[token];
                         }
@@ -170,7 +170,7 @@ game.Sprite = game.Chipmunk.extend({
 
         // Update composited sprite animations.
         if (self.composition) {
-            self.composition.forEach(function (name) {
+            self.composition.forEach(function forEach(name) {
                 if (name !== self.name) {
                     results.push(self.children[name].update());
                 }
@@ -178,7 +178,7 @@ game.Sprite = game.Chipmunk.extend({
         }
 
         // Return true if any of the sprites want to be rendered.
-        return results.some(function (result) {
+        return results.some(function some(result) {
             return result;
         });
     },
@@ -191,7 +191,7 @@ game.Sprite = game.Chipmunk.extend({
 
         // Render all composed sprites in the proper order.
         var self = this;
-        self.composition.forEach(function (name) {
+        self.composition.forEach(function forEach(name) {
             if (name === self.name) {
                 self.parent(context);
             }

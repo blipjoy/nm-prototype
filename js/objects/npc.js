@@ -3,7 +3,7 @@ game.NPC = game.Sprite.extend({
     init : function init(x, y, settings) {
         this.parent(x, y, settings);
 
-        this.body.eachShape(function (shape) {
+        this.body.eachShape(function eachShape(shape) {
             shape.setLayers(c.LAYER_SPRITE | c.LAYER_INTERACTIVE | c.LAYER_WALL);
         });
 

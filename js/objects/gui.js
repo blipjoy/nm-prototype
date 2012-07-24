@@ -11,11 +11,11 @@ game.HUD = function HUD() {
 
         update : function update() {
             var result = [];
-            Object.keys(items).forEach(function (key) {
+            Object.keys(items).forEach(function eachKey(key) {
                 result.push(items[key].request_update());
             })
 
-            if (result.some(function (x) { return x; })) {
+            if (result.some(function some(x) { return x; })) {
                 this.HUD_invalidated = true;
             }
             return this.HUD_invalidated;
@@ -156,7 +156,7 @@ game.HUD = function HUD() {
             var self = this;
             self.parent(x, y, value);
             self.hearts = [];
-            [ "heart_empty", "heart_half", "heart_full" ].forEach(function (value, i) {
+            [ "heart_empty", "heart_half", "heart_full" ].forEach(function forEach(value, i) {
                 self.hearts[i] = me.loader.getImage(value);
             });
         },
@@ -203,7 +203,7 @@ game.HUD = function HUD() {
     };
 
     // Add them all.
-    Object.keys(items).forEach(function (key) {
+    Object.keys(items).forEach(function eachKey(key) {
         game.HUD.addItem(key, items[key]);
     });
 

@@ -7,7 +7,7 @@ var game = {
     wantsResort : false,
 
     // Run on page load.
-    onload : function () {
+    onload : function onload() {
         // Initialize the video.
         if (!me.video.init("screen", c.WIDTH, c.HEIGHT)) {
             alert("Your browser does not support HTML5 canvas.");
@@ -43,7 +43,7 @@ var game = {
         var resources = [];
 
         // Graphics.
-        this.resources["img"].forEach(function (value) {
+        this.resources["img"].forEach(function forEach(value) {
             resources.push({
                 name : value,
                 type : "image",
@@ -52,7 +52,7 @@ var game = {
         });
 
         // Maps.
-        this.resources["map"].forEach(function (value) {
+        this.resources["map"].forEach(function forEach(value) {
             resources.push({
                 name : value,
                 type : "tmx",
@@ -61,7 +61,7 @@ var game = {
         });
 
         // Sound effects.
-        this.resources["sfx"].forEach(function (value) {
+        this.resources["sfx"].forEach(function forEach(value) {
             resources.push({
                 name    : value,
                 type    : "audio",
@@ -71,7 +71,7 @@ var game = {
         });
 
         // Music.
-        this.resources["music"].forEach(function (value) {
+        this.resources["music"].forEach(function forEach(value) {
             resources.push({
                 name    : value,
                 type    : "audio",
@@ -85,7 +85,7 @@ var game = {
     },
 
     // Run on game resources loaded.
-    loaded : function () {
+    loaded : function loaded() {
         // Set the "Play" ScreenObject.
         game.state = new game.PlayScreen(20);
         me.state.set(me.state.PLAY, game.state);
@@ -128,7 +128,7 @@ var game = {
     },
 
     // Simple quests make the game interesting!
-    quests : (function () {
+    quests : (function quests() {
         var all = [];
         var subscribed = [];
 
@@ -140,7 +140,7 @@ var game = {
          */
         function progress(event, quantity) {
             // Iterate over all active quests on the queue.
-            all.forEach(function (quest, key) {
+            all.forEach(function forEach(quest, key) {
                 // When the quest is waiting for this event...
                 if (quest.list.hasOwnProperty(event)) {
                     // Update the quantity...
@@ -183,12 +183,12 @@ var game = {
                 });
 
                 // Check for new subscriptions.
-                Object.keys(list).forEach(function (item) {
+                Object.keys(list).forEach(function eachKey(item) {
                     if (subscribed.indexOf(item) === -1) {
                         subscribed.push(item);
 
-                        subscribe(item, (function (event) {
-                            return function () {
+                        subscribe(item, (function subscribeFactory(event) {
+                            return function onPublish() {
                                 progress.apply(progress, [ event ].concat(
                                     Array.prototype.slice.call(arguments))
                                 );

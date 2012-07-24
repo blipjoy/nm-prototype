@@ -5,7 +5,7 @@ game.installExitHandler = function installExitHandler() {
         c.COLLIDE_PLAYER,
         c.COLLIDE_EXIT,
         function exit_level(arbiter, space) {
-            space.addPostStepCallback(function () {
+            space.addPostStepCallback(function onPostSteppCallback() {
                 game.state.loadLevel(arbiter.b.data);
             });
 

@@ -43,15 +43,17 @@ if (document.location.hash === "#debug") {
 
 // Turn the `c` object into a hash of constants.
 try {
-    Object.keys(c).forEach(function (key) {
+    Object.keys(c).forEach(function eachKey(key) {
         if (typeof(c[key]) === "function") {
             return;
         }
 
         c.__defineGetter__(
             key,
-            (function (value) {
-                return function () { return value };
+            (function getterFactory(value) {
+                return function returnValue() {
+                    return value
+                };
             })(c[key])
         );
     });

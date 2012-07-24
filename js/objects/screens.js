@@ -46,7 +46,7 @@ game.AnimatedScreen = me.ScreenObject.extend({
         self.layers = [];
 
         var layers = me.game.currentLevel.getLayers();
-        layers.forEach(function (layer, idx) {
+        layers.forEach(function forEach(layer, idx) {
             if (layer.name.toLowerCase().indexOf("animated") >= 0) {
                 if (self.layers) {
                     layer.visible = false;
@@ -70,7 +70,7 @@ game.PlayScreen = game.AnimatedScreen.extend({
         game.rachel = me.game.getEntityByName("rachel")[0];
 
         if (settings.location) {
-            var p = settings.location.split(",").map(function (value) {
+            var p = settings.location.split(",").map(function map(value) {
                 return +value.trim();
             });
             game.rachel.body.setPos(cp.v(p[0], c.HEIGHT - p[1]));
@@ -110,7 +110,7 @@ game.PlayScreen = game.AnimatedScreen.extend({
             cm.removeAll();
 
             // When level loads, start music and move Rachel to the proper location.
-            me.game.onLevelLoaded = function () {
+            me.game.onLevelLoaded = function onLevelLoaded() {
                 self.onLevelLoaded(settings);
             };
 

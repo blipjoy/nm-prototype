@@ -5,7 +5,7 @@ game.CoinEntity = game.Sprite.extend({
         this.parent(x, y, settings);
 
         // Set shape layers.
-        this.body.eachShape(function (shape) {
+        this.body.eachShape(function eachShape(shape) {
             shape.collision_type = c.COLLIDE_COLLECTIBLE;
         });
 

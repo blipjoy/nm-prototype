@@ -10,7 +10,7 @@ game.NPCEntities = {
                 game.dialog([
                     "Mum: Hi Rachel! Welcome to Test island!",
                     "Mum: I seemed to have dropped all of my change. Can you collect it for me?"
-                ], function () {
+                ], function onDialogEnd() {
                     self.quest_started = true;
                     game.quests.add({
                         "collect coin" : 300 // Mum wants 300 coins.
@@ -26,7 +26,7 @@ game.NPCEntities = {
                         { x : 28, y : 6 },
                         { x : 25, y : 7 },
                         { x : 27, y : 4 }
-                    ].forEach(function (pos) {
+                    ].forEach(function forEach(pos) {
                         var x = pos.x * 32;
                         var y = pos.y * 32;
                         me.game.add(new game.CoinEntity(x, y, {

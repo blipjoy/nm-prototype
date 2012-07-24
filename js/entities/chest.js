@@ -13,7 +13,7 @@ game.ChestEntity = game.Sprite.extend({
         this.adjustBoxShape(0, 0, 46, 32);
 
         // Set shape layers.
-        this.body.eachShape(function (shape) {
+        this.body.eachShape(function eachShape(shape) {
             shape.setLayers(c.LAYER_SPRITE | c.LAYER_INTERACTIVE);
         });
 

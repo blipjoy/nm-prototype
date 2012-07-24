@@ -25,7 +25,7 @@ game.RachelEntity = game.Sprite.extend({
         this.adjustBoxShape(-1, 10, 15, 20);
 
         // Register Chipmunk collision handlers.
-        this.body.eachShape(function (shape) {
+        this.body.eachShape(function eachShape(shape) {
             shape.collision_type = c.COLLIDE_PLAYER;
             shape.setLayers(c.LAYER_SPRITE | c.LAYER_WALL);
         });
@@ -101,7 +101,7 @@ game.RachelEntity = game.Sprite.extend({
         }
 
         // Walking controls.
-        c.DIR_NAMES.forEach(function (dir_name, i) {
+        c.DIR_NAMES.forEach(function forEach(dir_name, i) {
             if (me.input.isKeyPressed(dir_name)) {
                 self.held[i] = true;
                 self.standing = false;
@@ -183,7 +183,7 @@ game.RachelEntity = game.Sprite.extend({
                 self.body.p.y - v[1] - self.body.shapeList[0].data.offset.y
             );
             var sensor = cm.bbNewForCircle(p, 3);
-            cm.getSpace().bbQuery(sensor, c.LAYER_INTERACTIVE, 0, function (shape) {
+            cm.getSpace().bbQuery(sensor, c.LAYER_INTERACTIVE, 0, function onBBQuery(shape) {
                 // DO SOMETHING!
                 me.game.getEntityByGUID(shape.data.GUID).interact(self.interactionCallback);
             });
