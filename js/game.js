@@ -32,7 +32,13 @@ var game = {
 
         // Set a callback to run when loading is complete.
         me.loader.onload = this.loaded.bind(this);
+        this.loadResources();
 
+        // Initialize melonJS and display a loading screen.
+        me.state.change(me.state.LOADING);
+    },
+
+    loadResources : function loadResources() {
         // Set all resources to be loaded.
         var resources = [];
 
@@ -76,9 +82,6 @@ var game = {
 
         // Load the resources.
         me.loader.preload(resources);
-
-        // Initialize melonJS and display a loading screen.
-        me.state.change(me.state.LOADING);
     },
 
     // Run on game resources loaded.
