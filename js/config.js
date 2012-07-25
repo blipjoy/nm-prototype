@@ -41,6 +41,15 @@ if (document.location.hash === "#debug") {
     c.DEBUG = true;
 }
 
+window.addEventListener("hashchange", function onHashChange(e) {
+    var debug = (document.location.hash === "#debug");
+    me.sys.pauseOnBlur = !debug;
+    cm.setDebug(debug);
+    c.__defineGetter__("DEBUG", function () {
+        return debug;
+    });
+});
+
 // Turn the `c` object into a hash of constants.
 try {
     Object.keys(c).forEach(function eachKey(key) {
