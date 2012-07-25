@@ -64,6 +64,10 @@ game.HUD = function HUD() {
             // Note we only need to use one font, because the only difference is color.
             this.backbuffer = bufferForFont(me.video.getScreenFrameBuffer(), this.gold_font);
             this.backmask   = bufferForFont(me.video.getScreenFrameBuffer(), this.gold_font);
+
+            // Create a cache for the coin counter, so we don't redraw it unnecessarily.
+            this.cache      = bufferForFont(me.video.getScreenFrameBuffer(), this.gold_font);
+            this.preValue   = NaN;
         },
 
         request_update : function request_update() {
@@ -72,15 +76,6 @@ game.HUD = function HUD() {
 
         draw : function draw(context, x, y) {
             var self = this;
-
-            // Draw animated coin.
-            context.drawImage(
-                self.image.image,
-                self.image.offset.x, self.image.offset.y,
-                self.image.width, self.image.height,
-                self.pos.x + x + 2, self.pos.y + y + 2,
-                self.image.width, self.image.height
-            );
 
             function insetShadowText(context, str, x, y, color, shadowColor, offsetX, offsetY) {
                 var width = self.backbuffer.width;
@@ -118,35 +113,108 @@ game.HUD = function HUD() {
                 context.drawImage(self.backbuffer, x, y);
             }
 
+            function roundedBox(context, x, y, w, h, r, color) {
+                context.save();
+                context.fillStyle = color;
+                context.beginPath();
+                context.moveTo(x, y + r);
+
+                // Upper left corner.
+                context.arcTo(
+                    x, y,
+                    x + r, y,
+                    r
+                );
+
+                // Upper right corner.
+                context.arcTo(
+                    x + w, y,
+                    x + w, y + r,
+                    r
+                );
+
+                // Lower right corner.
+                context.arcTo(
+                    x + w, y + h,
+                    x + w - r, y + h,
+                    r
+                );
+
+                // Lower left corner.
+                context.arcTo(
+                    x, y + h,
+                    x, y + h - r,
+                    r
+                );
+
+                context.fill();
+
+                context.restore();
+            }
+
+
+            var tx = self.pos.x + x;
+            var ty = self.pos.y + y;
+
             // Break value into strings.
             var gold_value = Math.floor(self.value / 100) + ".";
             var silver_value = (self.value % 100);
             silver_value = ((silver_value < 10) ? "0" : "") + silver_value;
 
-            // Calculate width of gold part.
+            // Calculate width of each part.
             var gold_width = self.gold_font.measureText(context, gold_value).width;
+            var silver_width = self.silver_font.measureText(context, silver_value).width;
+
+            // Draw background.
+            roundedBox(
+                context,
+                tx + 2,
+                ty + 2,
+                gold_width + silver_width + 26,
+                23,
+                5,
+                "rgba(50, 50, 50, 0.75)"
+            );
+
+            // Draw animated coin.
+            context.drawImage(
+                self.image.image,
+                self.image.offset.x, self.image.offset.y,
+                self.image.width, self.image.height,
+                tx + 4, ty + 3,
+                self.image.width, self.image.height
+            );
 
             // Draw coin counter.
-            insetShadowText(
-                context,
-                gold_value,
-                self.pos.x + x + 25,
-                self.pos.y + y,
-                self.gold_font.color,
-                "#333",
-                1,
-                1
-            );
-            insetShadowText(
-                context,
-                silver_value,
-                self.pos.x + x + 25 + gold_width,
-                self.pos.y + y,
-                self.silver_font.color,
-                "#333",
-                1,
-                1
-            );
+            if (self.preValue != self.value) {
+                self.preValue = self.value;
+                var cache_ctx = self.cache.getContext("2d");
+                cache_ctx.clearRect(0, 0, self.cache.width, self.cache.height);
+
+                // Gold.
+                insetShadowText(
+                    cache_ctx,
+                    gold_value,
+                    tx,
+                    ty,
+                    self.gold_font.color,
+                    "#786600",
+                    -1,
+                    -1
+                );
+                // Silver.
+                insetShadowText(
+                    cache_ctx,
+                    silver_value,
+                    tx + gold_width,
+                    ty,
+                    self.silver_font.color,
+                    "#786f61",
+                    -1,
+                    -1
+                );
+            }
+            context.drawImage(self.cache, tx + 25, ty);
         }
     });
 
