@@ -1,6 +1,6 @@
 game.NPCEntities = {
-    /* Mum */
-    Mum : game.NPC.extend({
+    /* Jessica */
+    Jessica : game.NPC.extend({
         quest_started : false,
         quest_complete : false,
 
@@ -9,16 +9,16 @@ game.NPCEntities = {
 
             if (!self.quest_started) {
                 game.dialog([
-                    "Mum: Hi Rachel! Welcome to Test island!",
-                    "Mum: I seemed to have dropped all of my change. Can you collect it for me?"
+                    "Jessica: Hi Rachel! Welcome to Test island!",
+                    "Jessica: I seemed to have dropped all of my change. Can you collect it for me?"
                 ], function onDialogEnd() {
                     self.quest_started = true;
                     game.quests.add({
-                        "collect coin" : 300 // Mum wants 300 coins.
+                        "collect coin" : 300 // Jessica wants 300 coins.
                     }, function quest_complete() {
                         self.quest_complete = true;
                         game.dialog([
-                            "Congratulations on completing your first quest! Go back and talk to Mum!"
+                            "Congratulations on completing your first quest! Go back and talk to Jessica!"
                         ]);
                     });
 
@@ -48,24 +48,10 @@ game.NPCEntities = {
             }
             else {
                 game.dialog([
-                    "Mum: Thank you, Rachel! You can keep it.",
-                    "Mum: You should try the chest on the right."
+                    "Jessica: Thank you, Rachel! You can keep it.",
+                    "Jessica: You should try the chest on the right."
                 ]);
             }
-        }
-    }),
-
-
-    /* Jessica */
-    Jessica : game.NPC.extend({
-        init : function init(x, y, settings) {
-            this.parent(x, y, settings);
-        },
-
-        interact : function interact() {
-            game.dialog([
-                "Jessica: Hellooooo!"
-            ]);
         }
     })
 };

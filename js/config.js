@@ -22,18 +22,43 @@ var c = {
     WIDTH                   : 640,
     HEIGHT                  : 480,
 
+/*
+ *              COLLISION TRUTH TABLE
+ *          rachel  npc     coin    chest   wall    exit
+ *  rachel  -       1       2       1       3       4
+ *  npc     -       -               1       3
+ *  coin    -       -       -       2       3
+ *  chest   -       -       -       -
+ *  wall    -       -       -       -       -
+ *  exit    -       -       -       -       -       -
+ *
+ * Hyphen means redundant space.
+ * Number specifies collision layers.
+ *
+ * 1 = NO COIN
+ * 2 = NO NPC
+ * 3 = NO CHEST
+ * 4 = EXIT
+ */
+
     // Chipmunk shape layers
     LAYER_NONE              : 0x00000000,
-    LAYER_SPRITE            : 0x00000001,
-    LAYER_INTERACTIVE       : 0x00000002,
-    LAYER_WALL              : 0x00000004,
+    LAYER_NO_COIN           : 0x00000001,
+    LAYER_NO_NPC            : 0x00000002,
+    LAYER_NO_CHEST          : 0x00000004,
+    LAYER_EXIT              : 0x00000008,
+
+    // INTERACTIVE is a special layer for doing bb queries when `action` is pressed.
+    // Any shapes in this layer will collide! :(
+    LAYER_INTERACTIVE       : 0x80000000,
+
     LAYER_ALL               : 0xFFFFFFFF,
 
     // Chipmunk collision types
     COLLIDE_PLAYER          : 0x00000001,
     COLLIDE_COLLECTIBLE     : 0x00000002,
     COLLIDE_EXIT            : 0x00000003,
-    COLLIDE_PAINFUL         : 0x00000004
+    COLLIDE_PAINFUL         : 0x00000004,
 };
 
 // Helper to enable debug by setting a special hash in the URL.

@@ -130,6 +130,7 @@ game.PlayScreen = game.AnimatedScreen.extend({
 
         // Initialize some stuff.
         game.HUD();
+        game.installCoinHandler();
         game.installExitHandler();
 
         // Load the level.

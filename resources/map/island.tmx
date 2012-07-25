@@ -50,13 +50,6 @@
     <property name="spritewidth" value="36"/>
    </properties>
   </object>
-  <object name="mum" x="704" y="192" width="32" height="32">
-   <properties>
-    <property name="image" value="mum"/>
-    <property name="spriteheight" value="49"/>
-    <property name="spritewidth" value="28"/>
-   </properties>
-  </object>
   <object name="coin_silver" x="992" y="224" width="32" height="32">
    <properties>
     <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;coin_shadow&quot;,&quot;spritewidth&quot;:10,&quot;spriteheight&quot;:5},{&quot;name&quot;:&quot;coin_silver&quot;}]"/>
@@ -107,7 +100,7 @@
     <property name="which" value="0"/>
    </properties>
   </object>
-  <object name="jessica" x="192" y="256" width="32" height="32">
+  <object name="jessica" x="704" y="192" width="32" height="32">
    <properties>
     <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;char_shadow&quot;,&quot;spritewidth&quot;:18,&quot;spriteheight&quot;:9},{&quot;name&quot;:&quot;jessica&quot;},{&quot;name&quot;:&quot;eyes&quot;,&quot;class&quot;:&quot;game.BlinkingEyes&quot;,&quot;image&quot;:&quot;jessica_eyes&quot;,&quot;spritewidth&quot;:17,&quot;spriteheight&quot;:6,&quot;offsetx&quot;:10,&quot;offsety&quot;:18}]"/>
     <property name="image" value="jessica"/>

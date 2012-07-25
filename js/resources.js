@@ -13,7 +13,6 @@ game.resources = {
         "jessica",
         "jessica_eyes",
         "char_shadow",
-        "mum",
 
         // Collectibles
         "coin_gold",

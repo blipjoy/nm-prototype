@@ -16,7 +16,7 @@
   <image source="../img/inside.png" width="320" height="320"/>
  </tileset>
  <tileset firstgid="211" name="stairs" tilewidth="32" tileheight="32">
-  <image source="../img/stairs.png" width="256" height="448"/>
+  <image source="../img/stairs.png" width="256" height="544"/>
  </tileset>
  <tileset firstgid="347" name="victoria" tilewidth="32" tileheight="32">
   <image source="../img/victoria.png" width="352" height="160"/>
@@ -25,7 +25,7 @@
   <image source="../img/house.png" width="320" height="224"/>
  </tileset>
  <tileset firstgid="472" name="accessories" tilewidth="32" tileheight="32">
-  <image source="../img/accessories.png" width="64" height="64"/>
+  <image source="../img/accessories.png" width="128" height="128"/>
  </tileset>
  <layer name="floor" width="10" height="9">
   <data encoding="base64">

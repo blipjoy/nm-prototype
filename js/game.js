@@ -94,7 +94,6 @@ var game = {
         me.entityPool.add("rachel", game.RachelEntity);
 
         // NPCs.
-        me.entityPool.add("mum", game.NPCEntities.Mum);
         me.entityPool.add("jessica", game.NPCEntities.Jessica);
 
         // Collectibles.

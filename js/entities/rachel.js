@@ -7,9 +7,6 @@ game.RachelEntity = game.NPC.extend({
     held : [ false, false, false, false ],
     last_held : [ false, false, false, false ],
 
-    // A helper constant
-    walk_angle : Math.sin((45).degToRad()),
-
     init : function init(x, y, settings) {
         // Call the constructor.
         this.parent(x, y, settings);
@@ -23,13 +20,8 @@ game.RachelEntity = game.NPC.extend({
         // Register Chipmunk collision handlers.
         this.body.eachShape(function eachShape(shape) {
             shape.collision_type = c.COLLIDE_PLAYER;
-            shape.setLayers(c.LAYER_SPRITE | c.LAYER_WALL);
+            shape.setLayers(c.LAYER_NO_COIN | c.LAYER_NO_NPC | c.LAYER_NO_CHEST | c.LAYER_EXIT);
         });
-        cm.getSpace().addCollisionHandler(
-            c.COLLIDE_PLAYER,
-            c.COLLIDE_COLLECTIBLE,
-            this.collect
-        );
 
         // Set the display to follow our position on both axis.
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
@@ -85,17 +77,16 @@ game.RachelEntity = game.NPC.extend({
             x : 0,
             y : 0
         };
-        var velocity;
+        var velocity = self.velocity;
 
         // Set the movement speed.
         if (!me.input.keyStatus("shift")) {
             // Walk.
-            velocity = 2.5;
             self.animationspeed = 6;
         }
         else {
             // Run.
-            velocity = 5;
+            velocity *= 2;
             self.animationspeed = 3;
         }
 
@@ -136,7 +127,7 @@ game.RachelEntity = game.NPC.extend({
         });
 
         // Move body and detect collisions.
-        self.body.applyForce(cp.v(force.x * 600, force.y * -600), cp.vzero);
+        self.body.applyForce(cp.v(force.x * self.forceConstant, force.y * -self.forceConstant), cp.vzero);
 
         if (~~self.body.vy !== 0) {
             game.wantsResort = true;

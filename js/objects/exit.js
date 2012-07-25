@@ -22,7 +22,7 @@ game.Exit = me.InvisibleEntity.extend({
 
         // Create and configure a static shape.
         var shape = cm.staticBox(x, y, settings.width, settings.height);
-        shape.setLayers(c.LAYER_SPRITE);
+        shape.setLayers(c.LAYER_EXIT);
         shape.collision_type = c.COLLIDE_EXIT;
         shape.data = settings;
     }

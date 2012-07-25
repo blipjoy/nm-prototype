@@ -14,7 +14,7 @@ game.ChestEntity = game.Sprite.extend({
 
         // Set shape layers.
         this.body.eachShape(function eachShape(shape) {
-            shape.setLayers(c.LAYER_SPRITE | c.LAYER_INTERACTIVE);
+            shape.setLayers(c.LAYER_NO_COIN | c.LAYER_NO_NPC | c.LAYER_INTERACTIVE);
         });
 
         // Chests cannot be moved.
