@@ -44,7 +44,7 @@ game.ChestEntity = game.Sprite.extend({
         }
     },
 
-    interact : function interact(callback) {
+    interact : function interact(actor, callback) {
         if (this.open || !this.animationpause) {
             return;
         }

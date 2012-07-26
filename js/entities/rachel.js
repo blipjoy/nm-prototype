@@ -161,7 +161,7 @@ game.RachelEntity = game.NPC.extend({
             var sensor = cm.bbNewForCircle(p, 3);
             cm.getSpace().bbQuery(sensor, c.LAYER_INTERACTIVE, 0, function onBBQuery(shape) {
                 // DO SOMETHING!
-                me.game.getEntityByGUID(shape.data.GUID).interact(self.interactionCallback);
+                me.game.getEntityByGUID(shape.data.GUID).interact(self, self.interactionCallback);
             });
         }
     }

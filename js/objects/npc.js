@@ -150,6 +150,16 @@ game.NPC = game.Sprite.extend({
         // TODO: NPC AI.
     },
 
+    // Turn NPC clockwise by a certain number of clicks, with optional starting direction.
+    // 1 click == 90 degrees.
+    turn : function turn(clicks, dir) {
+        dir = dir || this.dir_name;
+        this.dir_name = c.DIR_NAMES[(c[dir.toUpperCase()] + clicks) % 4];
+
+        this.setCurrentAnimation((this.standing ? "stand_" : "walk_") + this.dir_name);
+        this.isDirty = true;
+    },
+
     update : function update() {
         this.isDirty = false;
         this.body.resetForces();

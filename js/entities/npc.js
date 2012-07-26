@@ -4,8 +4,11 @@ game.NPCEntities = {
         quest_started : false,
         quest_complete : false,
 
-        interact : function interact() {
+        interact : function interact(actor, callback) {
             var self = this;
+
+            // Turn 2 clicks (180 degrees) from actor's direction.
+            self.turn(2, actor.dir_name);
 
             if (!self.quest_started) {
                 game.dialog([
