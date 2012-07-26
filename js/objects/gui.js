@@ -214,7 +214,8 @@ game.HUD = function HUD() {
                     -1
                 );
             }
-            context.drawImage(self.cache, tx + 25, ty);
+            // Webkit has a bug where the "top" baseline draws 5 pixels too low?!
+            context.drawImage(self.cache, tx + 25, ty + (me.sys.ua.indexOf("webkit") >= 0 ? 0 : 5));
         }
     });
 
