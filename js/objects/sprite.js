@@ -1,17 +1,44 @@
 /* A Chipmunk-controlled entity */
 game.Chipmunk = me.AnimationSheet.extend({
     init : function init(x, y, settings) {
+        var shape;
+        var space = cm.getSpace();
+
         this.hWidth = ~~(settings.spritewidth / 2);
         this.hHeight = ~~(settings.spriteheight / 2);
 
-        this.body = cm.getSpace().addBody(new cp.Body(1, Infinity));
+        this.body = space.addBody(new cp.Body(1, Infinity));
         this.body.setPos(cp.v(x + this.hWidth, c.HEIGHT - y - this.hHeight));
-        var shape = cm.getSpace().addShape(cp.BoxShape(this.body, settings.spritewidth, settings.spriteheight));
+
+        if (settings.shape) {
+            switch (settings.shape.type) {
+                case "polygon":
+                case "segment":
+                    throw "Error: Unimplemented shape `" + setting.shape.type + "`";
+
+                case "circle":
+                    shape = space.addShape(new cp.CircleShape(this.body, settings.shape.radius, settings.shape.offset));
+                    break;
+
+                default:
+                    throw "Error: Unknown shape `" + setting.shape.type + "`";
+            }
+        }
+        else {
+            shape = space.addShape(cp.BoxShape(this.body, settings.spritewidth, settings.spriteheight));
+        }
 
         shape.data = {
             GUID : settings.GUID,
             name : settings.name
         };
+        if (settings.shape && settings.shape.offset) {
+            shape.data.offset = {
+                x : settings.shape.offset.x,
+                y : settings.shape.offset.y
+            };
+        }
+
         shape.setLayers(c.LAYER_SPRITE | c.LAYER_WALL);
 
         this.parent(
@@ -26,11 +53,11 @@ game.Chipmunk = me.AnimationSheet.extend({
     adjustBoxShape : function adjustBoxShape(x, y, w, h) {
         this.body.shapeList[0].data.offset = {
             x : x,
-            y : y
+            y : -y
         };
         this.body.shapeList[0].setVerts(cm.bb2verts(
             -(~~(w / 2) - x),
-            ~~(h / 2) - y,
+            ~~(h / 2) + y,
             w,
             h
         ), cp.vzero);

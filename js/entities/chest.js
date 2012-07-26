@@ -10,7 +10,7 @@ game.ChestEntity = game.Sprite.extend({
         this.parent(x, y, settings);
 
         // Adjust collision bounding box.
-        this.adjustBoxShape(0, 0, 46, 32);
+        this.adjustBoxShape(0, 0, 42, 32);
 
         // Set shape layers.
         this.body.eachShape(function eachShape(shape) {

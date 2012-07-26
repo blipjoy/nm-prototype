@@ -8,11 +8,15 @@ game.RachelEntity = game.NPC.extend({
     last_held : [ false, false, false, false ],
 
     init : function init(x, y, settings) {
+        // Request a circle for Rachel's collision shape.
+        settings.shape = {
+            "type"      : "circle",
+            "radius"    : 10,
+            "offset"    : cp.v(0, -10)
+        };
+
         // Call the constructor.
         this.parent(x, y, settings);
-
-        // Adjust collision bounding box.
-        this.adjustBoxShape(-1, 10, 15, 20);
 
         // Rachel's mass is always 1.
         this.body.setMass(1);
@@ -156,7 +160,7 @@ game.RachelEntity = game.NPC.extend({
             ];
             var p = cp.v(
                 self.body.p.x + v[0] + self.body.shapeList[0].data.offset.x,
-                self.body.p.y - v[1] - self.body.shapeList[0].data.offset.y
+                self.body.p.y - v[1] + self.body.shapeList[0].data.offset.y
             );
             var sensor = cm.bbNewForCircle(p, 3);
             cm.getSpace().bbQuery(sensor, c.LAYER_INTERACTIVE, 0, function onBBQuery(shape) {

@@ -4,6 +4,13 @@ game.NPCEntities = {
         quest_started : false,
         quest_complete : false,
 
+        init : function init(x, y, settings) {
+            this.parent(x, y, settings);
+
+            // Adjust collision bounding box.
+            this.adjustBoxShape(0, -10, 25, 20);
+        },
+
         interact : function interact(actor, callback) {
             var self = this;
 
