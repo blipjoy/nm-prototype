@@ -178,7 +178,7 @@ game.Sprite = game.Chipmunk.extend({
             });
 
             // Render this object first, if it is not referenced in the composition list.
-            if (!(self.name in self.composition)) {
+            if (self.composition.indexOf(self.name) === -1) {
                 self.composition.unshift(self.name);
             }
         }
