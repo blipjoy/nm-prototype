@@ -1,13 +1,13 @@
 /* Game namespace */
 var game = {
     // Whether a dialog box is waiting for input.
-    modal : false,
+    "modal" : false,
 
     // `true` when an object's y-coordinate changes to put it at the proper Z-order.
-    wantsResort : false,
+    "wantsResort" : false,
 
     // Run on page load.
-    onload : function onload() {
+    "onload" : function onload() {
         // Initialize the video.
         if (!me.video.init("screen", c.WIDTH, c.HEIGHT)) {
             alert("Your browser does not support HTML5 canvas.");
@@ -38,45 +38,45 @@ var game = {
         me.state.change(me.state.LOADING);
     },
 
-    loadResources : function loadResources() {
+    "loadResources" : function loadResources() {
         // Set all resources to be loaded.
         var resources = [];
 
         // Graphics.
         this.resources["img"].forEach(function forEach(value) {
             resources.push({
-                name : value,
-                type : "image",
-                src  : "resources/img/" + value + ".png"
+                "name"  : value,
+                "type"  : "image",
+                "src"   : "resources/img/" + value + ".png"
             })
         });
 
         // Maps.
         this.resources["map"].forEach(function forEach(value) {
             resources.push({
-                name : value,
-                type : "tmx",
-                src  : "resources/map/" + value + ".tmx"
+                "name"  : value,
+                "type"  : "tmx",
+                "src"   : "resources/map/" + value + ".tmx"
             })
         });
 
         // Sound effects.
         this.resources["sfx"].forEach(function forEach(value) {
             resources.push({
-                name    : value,
-                type    : "audio",
-                src     : "resources/sfx/",
-                channel : 1
+                "name"      : value,
+                "type"      : "audio",
+                "src"       : "resources/sfx/",
+                "channel"   : 1
             })
         });
 
         // Music.
-        this.resources["music"].forEach(function forEach(value) {
+        this.resources["bgm"].forEach(function forEach(value) {
             resources.push({
-                name    : value,
-                type    : "audio",
-                src     : "resources/bgm/",
-                channel : 2
+                "name"      : value,
+                "type"      : "audio",
+                "src"       : "resources/bgm/",
+                "channel"   : 2
             })
         });
 
@@ -85,7 +85,7 @@ var game = {
     },
 
     // Run on game resources loaded.
-    loaded : function loaded() {
+    "loaded" : function loaded() {
         // Set the "Play" ScreenObject.
         game.state = new game.PlayScreen(20);
         me.state.set(me.state.PLAY, game.state);
@@ -112,7 +112,7 @@ var game = {
     },
 
     // Helper function to determine if a variable is an Object.
-    isObject : function isObject(object) {
+    "isObject" : function isObject(object) {
         try {
             return (!Array.isArray(object) && Object.keys(object));
         }
@@ -122,13 +122,13 @@ var game = {
     },
 
     // Helper function to sort objects by `z` property, then `y` property.
-    sort : function sort(a, b) {
+    "sort" : function sort(a, b) {
         var result = (b.z - a.z);
         return (result ? result : ((b.pos && b.pos.y) - (a.pos && a.pos.y)) || 0);
     },
 
     // Helper function to get an image with error checking.
-    getImage : function getImage(name) {
+    "getImage" : function getImage(name) {
         var result = me.loader.getImage(name);
         if (!result) {
             throw "Error: No image named `" + name + "` (Did you forget to include the resource?)";
@@ -137,7 +137,7 @@ var game = {
     },
 
     // Simple quests make the game interesting!
-    quests : (function quests() {
+    "quests" : (function quests() {
         var all = [];
         var subscribed = [];
 
@@ -184,7 +184,7 @@ var game = {
              * @param {Function}
              *      callback Called when all events have been received.
              */
-            add : function add_quest(list, callback) {
+            "add" : function add_quest(list, callback) {
                 // Add this quest to the queue.
                 all.push({
                     "list"      : list,
@@ -212,7 +212,7 @@ var game = {
              * @return {Array}
              *      Complete list of active quests.
              */
-            getAll : function get_quests() {
+            "getAll" : function get_quests() {
                 // Return a copy; don't let callers modify internal state.
                 return all.slice(0);
             }

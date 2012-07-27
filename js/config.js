@@ -1,6 +1,6 @@
 /* Constants */
 var c = {
-    DEBUG                   : false,
+    "DEBUG"                 : false,
 
     /*
      * To convert between numeric and named directions:
@@ -9,18 +9,18 @@ var c = {
      */
 
     // Directions a sprite can face
-    RESET_DIR               : -1,
-    LEFT                    : 0,
-    UP                      : 1,
-    RIGHT                   : 2,
-    DOWN                    : 3,
+    "RESET_DIR"             : -1,
+    "LEFT"                  : 0,
+    "UP"                    : 1,
+    "RIGHT"                 : 2,
+    "DOWN"                  : 3,
 
     // Available directions, in a *VERY* specific order.
-    DIR_NAMES               : [ "left", "up", "right", "down" ],
+    "DIR_NAMES"             : [ "left", "up", "right", "down" ],
 
     // Screen resolution
-    WIDTH                   : 640,
-    HEIGHT                  : 480,
+    "WIDTH"                 : 640,
+    "HEIGHT"                : 480,
 
 /*
  *              COLLISION TRUTH TABLE
@@ -42,23 +42,23 @@ var c = {
  */
 
     // Chipmunk shape layers
-    LAYER_NONE              : 0x00000000,
-    LAYER_NO_COIN           : 0x00000001,
-    LAYER_NO_NPC            : 0x00000002,
-    LAYER_NO_CHEST          : 0x00000004,
-    LAYER_EXIT              : 0x00000008,
+    "LAYER_NONE"            : 0x00000000,
+    "LAYER_NO_COIN"         : 0x00000001,
+    "LAYER_NO_NPC"          : 0x00000002,
+    "LAYER_NO_CHEST"        : 0x00000004,
+    "LAYER_EXIT"            : 0x00000008,
 
     // INTERACTIVE is a special layer for doing bb queries when `action` is pressed.
     // Any shapes in this layer will collide! :(
-    LAYER_INTERACTIVE       : 0x80000000,
+    "LAYER_INTERACTIVE"     : 0x80000000,
 
-    LAYER_ALL               : 0xFFFFFFFF,
+    "LAYER_ALL"             : 0xFFFFFFFF,
 
     // Chipmunk collision types
-    COLLIDE_PLAYER          : 0x00000001,
-    COLLIDE_COLLECTIBLE     : 0x00000002,
-    COLLIDE_EXIT            : 0x00000003,
-    COLLIDE_PAINFUL         : 0x00000004,
+    "COLLIDE_PLAYER"        : 0x00000001,
+    "COLLIDE_COLLECTIBLE"   : 0x00000002,
+    "COLLIDE_EXIT"          : 0x00000003,
+    "COLLIDE_PAINFUL"       : 0x00000004,
 };
 
 // Helper to enable debug by setting a special hash in the URL.

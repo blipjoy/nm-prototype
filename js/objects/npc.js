@@ -1,39 +1,39 @@
 /* NPCs */
 game.NPC = game.Sprite.extend({
     // NPC will move toward this vector.
-    destination : null,
+    "destination" : null,
 
     // Direction facing.
-    dir_name : "down",
+    "dir_name" : "down",
 
     // Re-render when true.
-    isDirty : false,
+    "isDirty" : false,
 
     // Standing or walking?
-    standing : true,
+    "standing" : true,
 
     // Sleep time when standing.
-    sleep : 0,
+    "sleep" : 0,
 
     // Maximum distance to walk while roaming.
-    maxDistance : 200,
+    "maxDistance" : 200,
 
     // How much force to apply when walking.
-    forceConstant : 600,
+    "forceConstant" : 600,
 
     // How far away from destination is "good enough".
     // A low tolerance will cause the NPC to "bounce" around its destination.
     // A high tolerance will cause the NPC to stop short of its destination.
     // This tolerance will cause just enough "bounciness" to look "realistic".
-    destTolerance : 8,
+    "destTolerance" : 8,
 
     // Walking speed. (forceConstant is multiplied by velocity for the final force applied.)
-    velocity : 2,
+    "velocity" : 2,
 
     // A helper constant.
-    walk_angle : Math.sin((45).degToRad()),
+    "walk_angle" : Math.sin((45).degToRad()),
 
-    init : function init(x, y, settings) {
+    "init" : function init(x, y, settings) {
         this.parent(x, y, settings);
 
         // Adjust collision bounding box.
@@ -67,7 +67,7 @@ game.NPC = game.Sprite.extend({
         this.destination = new cp.v(0, 0);
     },
 
-    resetRoam : function resetRoam() {
+    "resetRoam" : function resetRoam() {
         if (this.sleep <= 0) {
             // Sleep for a random period between 0 - 5 seconds.
             this.sleep = Math.random() * 5 * me.sys.fps;
@@ -77,14 +77,14 @@ game.NPC = game.Sprite.extend({
         }
     },
 
-    stand : function stand() {
+    "stand" : function stand() {
         // Force standing animation.
         this.isDirty = true;
         this.standing = true;
         this.setCurrentAnimation("stand_" + this.dir_name);
     },
 
-    checkMovement : function checkMovement() {
+    "checkMovement" : function checkMovement() {
         if (--this.sleep > 0) {
             return;
         }
@@ -108,8 +108,8 @@ game.NPC = game.Sprite.extend({
 
         // Decide direction to destination.
         var force = {
-            x : this.destination.x - x,
-            y : this.destination.y - y
+            "x" : this.destination.x - x,
+            "y" : this.destination.y - y
         };
 
         // Decide distance based on destTolerance.
@@ -146,13 +146,13 @@ game.NPC = game.Sprite.extend({
         }
     },
 
-    checkInteraction : function checkInteraction() {
+    "checkInteraction" : function checkInteraction() {
         // TODO: NPC AI.
     },
 
     // Turn NPC clockwise by a certain number of clicks, with optional starting direction.
     // 1 click == 90 degrees.
-    turn : function turn(clicks, dir) {
+    "turn" : function turn(clicks, dir) {
         dir = dir || this.dir_name;
         this.dir_name = c.DIR_NAMES[(c[dir.toUpperCase()] + clicks) % 4];
 
@@ -160,7 +160,7 @@ game.NPC = game.Sprite.extend({
         this.isDirty = true;
     },
 
-    update : function update() {
+    "update" : function update() {
         this.isDirty = false;
         this.body.resetForces();
         if (!game.modal) {
@@ -174,7 +174,7 @@ game.NPC = game.Sprite.extend({
         return this.parent() || this.isDirty;
     },
 
-    draw : function draw(context, x, y) {
+    "draw" : function draw(context, x, y) {
         this.parent(context, x, y);
 
         // Draw a line to the destination.

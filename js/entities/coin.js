@@ -13,7 +13,7 @@ game.installCoinHandler = function installCoinHandler() {
 
 /* Coins */
 game.CoinEntity = game.Sprite.extend({
-    init : function init(x, y, settings) {
+    "init" : function init(x, y, settings) {
         // Call the constructor.
         this.parent(x, y, settings);
 
@@ -26,7 +26,7 @@ game.CoinEntity = game.Sprite.extend({
         this.animationspeed = 4;
     },
 
-    update : function update() {
+    "update" : function update() {
         return this.parent();
     }
 });

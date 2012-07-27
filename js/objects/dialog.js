@@ -57,10 +57,8 @@ game.dialog = function dialog(script, callback) {
  * @example
  * dialog = new DialogObject(10, 10, background, dialog, background.width - OFFSET_SIZE_TEXT_X, background.width - OFFSET_SIZE_TEXT_Y, OFFSET_DIALOG_X, OFFSET_DIALOG_Y, new me.Font("acmesa",20,"#880D0D", "center"), "enter", activateControls);
  */
-game.DialogObject = me.SpriteObject.extend(
-{
-    init: function(x, y, background, dialog, widthText, heightText, offsetTextX, offsetTextY, font, tagKey, callback)
-    {
+game.DialogObject = me.SpriteObject.extend({
+    "init" : function init(x, y, background, dialog, widthText, heightText, offsetTextX, offsetTextY, font, tagKey, callback) {
         this.parent(x, y, background);
         this.background = background;
         this.font = font;
@@ -78,32 +76,26 @@ game.DialogObject = me.SpriteObject.extend(
         this.z = 1000;
     },
 
-    getWords : function(text)
-    {
+    "getWords" : function getWords(text) {
         var totalSize = 0;
         var wordSize = 0;
         var substrings = [];
         var substringsCounter = 0;
         var counter = 0;
         var words = text.split(" ");
-        while(typeof(words[counter]) !== 'undefined')
-        {
+        while (typeof(words[counter]) !== 'undefined') {
             wordSize = this.font.measureText(me.video.getScreenFrameBuffer(), words[counter] + " ").width;
-            if(counter != 0 && wordSize + totalSize > this.widthText)
-            {
+            if (counter != 0 && wordSize + totalSize > this.widthText) {
                 totalSize = wordSize;
                 substringsCounter++;
                 substrings[substringsCounter] = words[counter];
             }
-            else
-            {
+            else {
                 totalSize += wordSize;
-                if(typeof(substrings[substringsCounter]) === 'undefined')
-                {
+                if (typeof(substrings[substringsCounter]) === 'undefined') {
                     substrings[substringsCounter] = words[counter];
                 }
-                else
-                {
+                else {
                     substrings[substringsCounter] += " " + words[counter];
                 }
             }
@@ -112,36 +104,28 @@ game.DialogObject = me.SpriteObject.extend(
         return substrings;
     },
 
-    update : function()
-    {
-        if (me.input.isKeyPressed(this.tagKey))
-        {
-            if(typeof(this.rows[this.counter][this.currentRow + this.rowCount]) !== 'undefined')
-            {
+    "update" : function update() {
+        if (me.input.isKeyPressed(this.tagKey)) {
+            if (typeof(this.rows[this.counter][this.currentRow + this.rowCount]) !== 'undefined') {
                 this.currentRow += this.rowCount;
             }
-            else
-            {
+            else {
                 this.currentRow = 0;
                 this.counter++;
-                if(typeof(this.dialog[this.counter]) === 'undefined')
-                {
+                if (typeof(this.dialog[this.counter]) === 'undefined') {
                     game.modal = false;
-                    if(typeof(this.callback) !== 'undefined' && this.callback != null)
-                    {
+                    if (typeof(this.callback) !== 'undefined' && this.callback != null) {
                         this.callback();
                     }
                     me.game.remove.defer(this);
                 }
-                else
-                {
+                else  {
                     this.rows[this.counter] = this.getWords(this.dialog[this.counter]);
                 }
             }
             return true;
         }
-        else
-        {
+        else {
             return false;
         }
     },
@@ -151,16 +135,12 @@ game.DialogObject = me.SpriteObject.extend(
     draw the dialog
 
     ------ */
-    draw: function(context)
-    {
-        if(typeof(this.dialog[this.counter]) !== 'undefined')
-        {
+    "draw" : function draw(context) {
+        if (typeof(this.dialog[this.counter]) !== 'undefined') {
             context.drawImage(this.background, this.pos.x, this.pos.y);
             var offset = 0;
-            for(var i = 0; i < this.rowCount; i++)
-            {
-                if(typeof(this.rows[this.counter][this.currentRow + i]) !== 'undefined')
-                {
+            for (var i = 0; i < this.rowCount; i++) {
+                if (typeof(this.rows[this.counter][this.currentRow + i]) !== 'undefined') {
                     this.font.draw(context, this.rows[this.counter][this.currentRow + i], this.pos.x + this.offsetTextX, this.pos.y + this.offsetTextY + offset);
                     offset += (this.font.height * 1.1);
                 }

@@ -4,12 +4,12 @@ game.HUD = function HUD() {
 
     // Override the HUD.update method to perform animation.
     var HUD = me.HUD_Object.extend({
-        init : function init() {
+        "init" : function init() {
             this.parent.apply(this, arguments);
             this.persist = true; // FIXME: https://github.com/obiot/melonJS/issues/75
         },
 
-        update : function update() {
+        "update" : function update() {
             var result = [];
             Object.keys(items).forEach(function eachKey(key) {
                 result.push(items[key].request_update());
@@ -23,14 +23,14 @@ game.HUD = function HUD() {
     });
 
     var HUD_Item = me.HUD_Item.extend({
-        request_update : function request_update() {
+        "request_update" : function request_update() {
             return false;
         }
     });
 
     // Coins counter.
     var coins = HUD_Item.extend({
-        init : function init(x, y, value) {
+        "init" : function init(x, y, value) {
             this.parent(x, y, value);
 
             // Fonts.
@@ -70,11 +70,11 @@ game.HUD = function HUD() {
             this.preValue   = NaN;
         },
 
-        request_update : function request_update() {
+        "request_update" : function request_update() {
             return this.image.update();
         },
 
-        draw : function draw(context, x, y) {
+        "draw" : function draw(context, x, y) {
             var self = this;
 
             function insetShadowText(context, str, x, y, color, shadowColor, offsetX, offsetY) {
@@ -221,7 +221,7 @@ game.HUD = function HUD() {
 
     // Health display.
     var hearts = HUD_Item.extend({
-        init : function init(x, y, value) {
+        "init" : function init(x, y, value) {
             var self = this;
             self.parent(x, y, value);
             self.hearts = [];
@@ -230,11 +230,11 @@ game.HUD = function HUD() {
             });
         },
 
-        request_update : function request_update() {
+        "request_update" : function request_update() {
             return items.containers.updated;
         },
 
-        draw : function draw(context, x, y) {
+        "draw" : function draw(context, x, y) {
             var image;
             var count = items.containers.value
             var value = this.value;
@@ -266,9 +266,9 @@ game.HUD = function HUD() {
 
     // Create a list of items to add to the HUD.
     items = {
-        coins : new coins(0, 0),
-        containers : new HUD_Item(0, 25, 3),
-        hearts : new hearts(2, 25, 3)
+        "coins"         : new coins(0, 0),
+        "containers"    : new HUD_Item(0, 25, 3),
+        "hearts"        : new hearts(2, 25, 3)
     };
 
     // Add them all.

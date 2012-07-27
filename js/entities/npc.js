@@ -1,17 +1,17 @@
 game.NPCEntities = {
     /* Jessica */
-    Jessica : game.NPC.extend({
-        quest_started : false,
-        quest_complete : false,
+    "Jessica" : game.NPC.extend({
+        "quest_started" : false,
+        "quest_complete" : false,
 
-        init : function init(x, y, settings) {
+        "init" : function init(x, y, settings) {
             this.parent(x, y, settings);
 
             // Adjust collision bounding box.
             this.adjustBoxShape(0, -10, 25, 20);
         },
 
-        interact : function interact(actor, callback) {
+        "interact" : function interact(actor, callback) {
             var self = this;
 
             // Turn 2 clicks (180 degrees) from actor's direction.
@@ -34,18 +34,18 @@ game.NPCEntities = {
 
                     // Create 3 coins
                     [
-                        { x : 28, y : 6 },
-                        { x : 25, y : 7 },
-                        { x : 27, y : 4 }
+                        { "x" : 28, "y" : 6 },
+                        { "x" : 25, "y" : 7 },
+                        { "x" : 27, "y" : 4 }
                     ].forEach(function forEach(pos) {
                         var x = pos.x * 32;
                         var y = pos.y * 32;
                         me.game.add(new game.CoinEntity(x, y, {
-                            name            : "coin_gold",
-                            image           : "coin_gold",
-                            compose         : '[{"name":"shadow","class":"game.Shadow","image":"coin_shadow","spritewidth":10,"spriteheight":5},{"name":"coin_gold"}]',
-                            spritewidth     : 18,
-                            spriteheight    : 21
+                            "name"          : "coin_gold",
+                            "image"         : "coin_gold",
+                            "compose"       : '[{"name":"shadow","class":"game.Shadow","image":"coin_shadow","spritewidth":10,"spriteheight":5},{"name":"coin_gold"}]',
+                            "spritewidth"   : 18,
+                            "spriteheight"  : 21
                         }), self.z);
                     });
                     me.game.sort(game.sort);

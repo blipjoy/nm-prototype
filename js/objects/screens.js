@@ -1,20 +1,20 @@
 /* Screen object supporting layer-animation */
 game.AnimatedScreen = me.ScreenObject.extend({
-    layers : [],
+    "layers" : [],
 
-    animationspeed : me.sys.fps / 10,
+    "animationspeed" : me.sys.fps / 10,
 
-    framecount : 0,
+    "framecount" : 0,
 
-    frameidx : 0,
+    "frameidx" : 0,
 
-    init : function init(animationspeed) {
+    "init" : function init(animationspeed) {
         this.parent(true);
         this.persist = true; // FIXME: https://github.com/obiot/melonJS/issues/75
         this.animationspeed = animationspeed || this.animationspeed;
     },
 
-    update : function update() {
+    "update" : function update() {
         if (game.wantsResort) {
             game.wantsResort = false;
             me.game.sort.defer(game.sort);
@@ -41,7 +41,7 @@ game.AnimatedScreen = me.ScreenObject.extend({
         return false;
     },
 
-    onLevelLoaded : function onLevelLoaded() {
+    "onLevelLoaded" : function onLevelLoaded() {
         var self = this;
         self.layers = [];
 
@@ -59,9 +59,9 @@ game.AnimatedScreen = me.ScreenObject.extend({
 
 /* Main game */
 game.PlayScreen = game.AnimatedScreen.extend({
-    loading : false,
+    "loading" : false,
 
-    onLevelLoaded : function onLevelLoaded(settings) {
+    "onLevelLoaded" : function onLevelLoaded(settings) {
         var self = this;
 
         self.parent();
@@ -87,7 +87,7 @@ game.PlayScreen = game.AnimatedScreen.extend({
         }
     },
 
-    loadLevel : function loadLevel(settings) {
+    "loadLevel" : function loadLevel(settings) {
         var fade;
         var self = this;
 
@@ -125,7 +125,7 @@ game.PlayScreen = game.AnimatedScreen.extend({
         }
     },
 
-    onResetEvent : function onResetEvent() {
+    "onResetEvent" : function onResetEvent() {
         this.parent();
 
         // Initialize some stuff.
@@ -135,14 +135,14 @@ game.PlayScreen = game.AnimatedScreen.extend({
 
         // Load the level.
         this.loadLevel({
-            to          : "island",
-            music       : "pink_and_lively",
-            fadeOut     : "black",
-            duration    : 250
+            "to"        : "island",
+            "music"     : "pink_and_lively",
+            "fadeOut"   : "black",
+            "duration"  : 250
         });
     },
 
-    onDestroyEvent : function onDestroyEvent() {
+    "onDestroyEvent" : function onDestroyEvent() {
         // Remove the HUD.
         me.game.remove(game.HUD);
     }

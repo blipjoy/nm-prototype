@@ -1,13 +1,13 @@
 /* Rachel */
 game.RachelEntity = game.NPC.extend({
     // Keep track of the last direction key pressed.
-    dir : c.RESET_DIR,
+    "dir" : c.RESET_DIR,
 
     // Keys being held: [ "left", "up", "right", "down" ]
-    held : [ false, false, false, false ],
-    last_held : [ false, false, false, false ],
+    "held" : [ false, false, false, false ],
+    "last_held" : [ false, false, false, false ],
 
-    init : function init(x, y, settings) {
+    "init" : function init(x, y, settings) {
         // Request a circle for Rachel's collision shape.
         settings.shape = {
             "type"      : "circle",
@@ -31,7 +31,7 @@ game.RachelEntity = game.NPC.extend({
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
     },
 
-    collect : function collect(arbiter, space) {
+    "collect" : function collect(arbiter, space) {
         switch (arbiter.b.data.name) {
             case "coin_gold":
                 game.HUD.updateItemValue("coins", 100);
@@ -60,26 +60,26 @@ game.RachelEntity = game.NPC.extend({
         return false;
     },
 
-    interactionCallback : function interactionCallback(data) {
+    "interactionCallback" : function interactionCallback(data) {
         console.log(data);
 
         // DEBUG
         if (data.indexOf("still") >= 0) {
             game.state.loadLevel({
-                to          : "rachels_room",
-                music       : "bells",
-                fade        : "black",
-                duration    : 250
+                "to"        : "rachels_room",
+                "music"     : "bells",
+                "fade"      : "black",
+                "duration"  : 250
             });
         }
     },
 
-    checkMovement : function checkMovement() {
+    "checkMovement" : function checkMovement() {
         var self = this;
 
         var force = {
-            x : 0,
-            y : 0
+            "x" : 0,
+            "y" : 0
         };
         var velocity = self.velocity;
 
@@ -145,7 +145,7 @@ game.RachelEntity = game.NPC.extend({
         }
     },
 
-    checkInteraction : function checkInteraction() {
+    "checkInteraction" : function checkInteraction() {
         var self = this;
 
         // Interaction controls.

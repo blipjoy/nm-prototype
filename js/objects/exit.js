@@ -17,7 +17,7 @@ game.installExitHandler = function installExitHandler() {
 
 /* Exits link maps together. */
 game.Exit = me.InvisibleEntity.extend({
-    init : function init(x, y, settings) {
+    "init" : function init(x, y, settings) {
         this.parent(x, y, settings);
 
         // Create and configure a static shape.

@@ -1,6 +1,6 @@
 /* A Chipmunk-controlled entity */
 game.Chipmunk = me.AnimationSheet.extend({
-    init : function init(x, y, settings) {
+    "init" : function init(x, y, settings) {
         var shape;
         var space = cm.getSpace();
 
@@ -29,13 +29,13 @@ game.Chipmunk = me.AnimationSheet.extend({
         }
 
         shape.data = {
-            GUID : settings.GUID,
-            name : settings.name
+            "GUID" : settings.GUID,
+            "name" : settings.name
         };
         if (settings.shape && settings.shape.offset) {
             shape.data.offset = {
-                x : settings.shape.offset.x,
-                y : settings.shape.offset.y
+                "x" : settings.shape.offset.x,
+                "y" : settings.shape.offset.y
             };
         }
 
@@ -50,10 +50,10 @@ game.Chipmunk = me.AnimationSheet.extend({
         );
     },
 
-    adjustBoxShape : function adjustBoxShape(x, y, w, h) {
+    "adjustBoxShape" : function adjustBoxShape(x, y, w, h) {
         this.body.shapeList[0].data.offset = {
-            x : x,
-            y : -y
+            "x" : x,
+            "y" : -y
         };
         this.body.shapeList[0].setVerts(cm.bb2verts(
             -(~~(w / 2) - x),
@@ -63,7 +63,7 @@ game.Chipmunk = me.AnimationSheet.extend({
         ), cp.vzero);
     },
 
-    update : function update() {
+    "update" : function update() {
         // Update melonJS state with Chipmunk body state.
         this.pos.x = ~~(this.body.p.x - this.hWidth);
         this.pos.y = ~~(c.HEIGHT - this.body.p.y - this.hHeight);
@@ -103,7 +103,7 @@ game.Chipmunk = me.AnimationSheet.extend({
  * MUST reference this object's name within the composition list.
  */
 game.Sprite = game.Chipmunk.extend({
-    init : function init(x, y, settings) {
+    "init" : function init(x, y, settings) {
         var self = this;
         var GUID = me.utils.createGUID();
 
@@ -184,11 +184,11 @@ game.Sprite = game.Chipmunk.extend({
         }
     },
 
-    interact : function interact() {
+    "interact" : function interact() {
         console.warn("Missing interaction for " + this.name);
     },
 
-    update : function update() {
+    "update" : function update() {
         var self = this;
         var results = [];
 
@@ -210,7 +210,7 @@ game.Sprite = game.Chipmunk.extend({
         });
     },
 
-    draw : function draw(context) {
+    "draw" : function draw(context) {
         if (!this.composition) {
             this.parent(context);
             return;

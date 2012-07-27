@@ -1,12 +1,12 @@
 /* Chests */
 game.ChestEntity = game.Sprite.extend({
     // Whether the chest has been opened.
-    open : false,
+    "open" : false,
 
     // Do something when the chest has opened.
-    callback: null,
+    "callback" : null,
 
-    init : function init(x, y, settings) {
+    "init" : function init(x, y, settings) {
         this.parent(x, y, settings);
 
         // Adjust collision bounding box.
@@ -35,7 +35,7 @@ game.ChestEntity = game.Sprite.extend({
         this.animationpause = true;
     },
 
-    resetAnimation : function resetAnimation() {
+    "resetAnimation" : function resetAnimation() {
         this.animationpause = true;
         this.open = true;
         this.setAnimationFrame(2);
@@ -44,7 +44,7 @@ game.ChestEntity = game.Sprite.extend({
         }
     },
 
-    interact : function interact(actor, callback) {
+    "interact" : function interact(actor, callback) {
         if (this.open || !this.animationpause) {
             return;
         }

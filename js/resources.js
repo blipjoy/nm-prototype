@@ -1,6 +1,6 @@
 game.resources = {
     /* Graphics. */
-    img : [
+    "img" : [
         // UI
         "dialog",
         "heart_empty",
@@ -45,20 +45,20 @@ game.resources = {
     ],
 
     /* Maps from Tiled. */
-    map : [
+    "map" : [
         "island",
         "rachels_room",
         "rachels_house"
     ],
 
     /* 1-channel audio. Usually sound effects. */
-    sfx : [
+    "sfx" : [
         "chests",
         "collect_coin"
     ],
 
     /* 2-channel audio. Usually music. */
-    music : [
+    "bgm" : [
         "bells",
         "pink_and_lively"
     ]
