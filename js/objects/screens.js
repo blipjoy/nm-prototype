@@ -10,7 +10,7 @@ game.AnimatedScreen = me.ScreenObject.extend({
 
     "init" : function init(animationspeed) {
         this.parent(true);
-        this.persist = true; // FIXME: https://github.com/obiot/melonJS/issues/75
+        this.isPersistent = true;
         this.animationspeed = animationspeed || this.animationspeed;
     },
 

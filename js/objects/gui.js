@@ -6,7 +6,7 @@ game.HUD = function HUD() {
     var HUD = me.HUD_Object.extend({
         "init" : function init() {
             this.parent.apply(this, arguments);
-            this.persist = true; // FIXME: https://github.com/obiot/melonJS/issues/75
+            this.isPersistent = true;
         },
 
         "update" : function update() {
