@@ -20,21 +20,17 @@ game.AnimatedScreen = me.ScreenObject.extend({
             me.game.sort.defer(game.sort);
         }
 
-        if (!this.layers) {
+        if (!this.layers.length) {
             return false;
         }
 
         if (++this.framecount > this.animationspeed) {
             this.framecount = 0;
 
-            if (this.frameidx < this.layers.length) {
-                this.layers[this.frameidx].visible = false;
-            }
+            this.layers[this.frameidx].visible = false;
             ++this.frameidx;
-            this.frameidx %= (this.layers.length + 1);
-            if (this.frameidx < this.layers.length) {
-                this.layers[this.frameidx].visible = true;
-            }
+            this.frameidx %= this.layers.length;
+            this.layers[this.frameidx].visible = true;
 
             return true;
         }
@@ -48,7 +44,7 @@ game.AnimatedScreen = me.ScreenObject.extend({
         var layers = me.game.currentLevel.getLayers();
         layers.forEach(function forEach(layer, idx) {
             if (layer.name.toLowerCase().indexOf("animated") >= 0) {
-                if (self.layers) {
+                if (self.layers.length) {
                     layer.visible = false;
                 }
                 self.layers.push(layer);
@@ -62,10 +58,8 @@ game.PlayScreen = game.AnimatedScreen.extend({
     "loading" : false,
 
     "onLevelLoaded" : function onLevelLoaded(settings) {
-        var self = this;
-
-        self.parent();
-        self.loading = false;
+        this.parent();
+        this.loading = false;
 
         game.rachel = me.game.getEntityByName("rachel")[0];
 
@@ -84,6 +78,11 @@ game.PlayScreen = game.AnimatedScreen.extend({
         if (settings.music) {
             me.audio.stopTrack();
             me.audio.playTrack(settings.music);
+        }
+
+        // Use `in` operator, so we can use 0, if we want. ;)
+        if ("animationspeed" in me.game.currentLevel) {
+            this.animationspeed = me.game.currentLevel.animationspeed;
         }
     },
 
