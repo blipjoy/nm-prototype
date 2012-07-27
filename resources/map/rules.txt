@@ -1,0 +1,5 @@
+./rules/grass_edges.tmx
+./rules/grass_corners.tmx
+./rules/grass_patches.tmx
+./rules/dirt_edges.tmx
+./rules/dirt_corners.tmx

@@ -41,14 +41,21 @@ game.resources = {
         "victoria",
 
         /* rachels_house */
-        "kitchen"
+        "kitchen",
+
+        /* earth */
+        "dirt",
+        "dirt2",
+        "grassalt_flowers",
+        "mountains"
     ],
 
     /* Maps from Tiled. */
     "map" : [
         "island",
         "rachels_room",
-        "rachels_house"
+        "rachels_house",
+        "earth"
     ],
 
     /* 1-channel audio. Usually sound effects. */

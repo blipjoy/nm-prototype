@@ -68,6 +68,14 @@
     <property name="to" value="rachels_room"/>
    </properties>
   </object>
+  <object name="exit" x="68" y="292" width="24" height="24">
+   <properties>
+    <property name="dir" value="down"/>
+    <property name="duration" value="250"/>
+    <property name="fade" value="black"/>
+    <property name="to" value="earth"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="overlayer" width="12" height="10">
   <data encoding="base64">
