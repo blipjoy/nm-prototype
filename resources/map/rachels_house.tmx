@@ -64,7 +64,7 @@
     <property name="dir" value="right"/>
     <property name="duration" value="250"/>
     <property name="fade" value="black"/>
-    <property name="location" value="224, 96"/>
+    <property name="location" value="240, 96"/>
     <property name="to" value="rachels_room"/>
    </properties>
   </object>

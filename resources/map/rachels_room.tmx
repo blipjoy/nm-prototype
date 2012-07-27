@@ -80,9 +80,9 @@
    <polyline points="0,0 0,-64 24,-64 24,-96 56,-96 56,-160 128,-160 128,-128 192,-128"/>
   </object>
   <object x="160" y="96">
-   <polyline points="0,0 128,0 128,64 104,64 104,160 -128,160"/>
+   <polyline points="0,24 48,0 128,0 128,64 104,64 104,160 -128,160"/>
   </object>
-  <object name="exit" x="180" y="101" width="24" height="24">
+  <object name="exit" x="195" y="99" width="24" height="24">
    <properties>
     <property name="dir" value="left"/>
     <property name="duration" value="250"/>
