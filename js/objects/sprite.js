@@ -130,7 +130,7 @@ game.Sprite = game.Chipmunk.extend({
             self.children = {};
 
             if (!Array.isArray(compose)) {
-                throw "Composition setting error. NOT AN ARRAY: " + JSON.stringify(item);
+                throw "Composition setting error. NOT AN ARRAY: " + JSON.stringify(compose);
             }
 
             self.compose = compose;
