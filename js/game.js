@@ -90,6 +90,9 @@ var game = {
         game.play = new game.PlayScreen(20);
         me.state.set(me.state.PLAY, game.play);
 
+        // Set the TitleScreen ScreenObject.
+        me.state.set(me.state.MENU, new game.TitleScreen());
+
         // Player entity.
         me.entityPool.add("rachel", game.RachelEntity);
 
@@ -107,6 +110,7 @@ var game = {
         me.entityPool.add("exit", game.Exit);
         me.entityPool.add("static", game.Static);
 
+        // Display warning if audio is not available.
         if (!me.audio.isAudioEnable()) {
             me.state.set(c.STATE_INFO, new game.InfoScreen([
                 "Your browser does not support Ogg-Vorbis audio.",
@@ -118,7 +122,7 @@ var game = {
         }
         else {
             // Start the game.
-            me.state.change(me.state.PLAY);
+            me.state.change(me.state.MENU);
         }
     },
 

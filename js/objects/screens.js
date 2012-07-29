@@ -65,7 +65,7 @@ game.InfoScreen = me.ScreenObject.extend({
 
     "update" : function update() {
         if (me.input.isKeyPressed("action")) {
-            me.state.change(me.state.PLAY);
+            me.state.change(me.state.TITLE);
         }
 
         if (this.invalidate === true) {
@@ -102,7 +102,6 @@ game.PlayScreen = game.AnimatedScreen.extend({
     "loading" : false,
 
     "onLevelLoaded" : function onLevelLoaded(settings) {
-        this.parent();
         this.loading = false;
 
         game.rachel = me.game.getEntityByName("rachel")[0];
@@ -169,8 +168,6 @@ game.PlayScreen = game.AnimatedScreen.extend({
     },
 
     "onResetEvent" : function onResetEvent() {
-        this.parent();
-
         // Initialize some stuff.
         game.HUD();
         game.installCoinHandler();
@@ -181,12 +178,193 @@ game.PlayScreen = game.AnimatedScreen.extend({
             "to"        : "island",
             "music"     : "pink_and_lively",
             "fadeOut"   : "black",
-            "duration"  : 250
+            "duration"  : 1000
         });
     },
 
     "onDestroyEvent" : function onDestroyEvent() {
         // Remove the HUD.
         me.game.remove(game.HUD);
+    }
+});
+
+/* Title screen */
+game.TitleScreen = game.PlayScreen.extend({
+    "fader" : -1,
+
+    "init" : function init() {
+        this.parent(true);
+        this.isPersistent = true;
+
+        this.logo = game.getImage("logo");
+        this.font = new me.Font("bold Tahoma", 20, "#fff");
+    },
+
+    "onLevelLoaded" : function onLevelLoaded(settings) {
+        var self = this;
+
+        self.loading = false;
+
+        // Remove Rachel; no player control during title screen.
+        var rachel = me.game.getEntityByName("rachel")[0];
+        var space = cm.getSpace();
+        rachel.body.eachShape(function remove_shape(shape) {
+            space.removeShape(shape);
+        });
+        space.removeBody(rachel.body);
+        me.game.remove(rachel);
+
+        // Choose a random starting position.
+        var w = me.game.currentLevel.width * me.game.currentLevel.tilewidth - c.WIDTH;
+        var h = me.game.currentLevel.height * me.game.currentLevel.tileheight - c.HEIGHT;
+
+        var x = ~~(Math.random() * w);
+        var y = ~~(Math.random() * h);
+        me.game.viewport.reset(x, y);
+
+        // Choose a random destination position.
+        self.to_x = new me.Tween(me.game.viewport.pos).to({
+            "x" : ~~(x + (Math.random() * 800) - 400)
+        }, 15000);
+        self.to_x.easing(me.Tween.Easing.Quadratic.EaseInOut);
+        self.to_x.start();
+
+        self.to_y = new me.Tween(me.game.viewport.pos).to({
+            "y" : ~~(y + (Math.random() * 800) - 400)
+        }, 15000).onComplete(function () {
+            // LET'S DO IT AGAIN!
+            self.loadLevel({
+                "to"        : "earth",
+                "fade"      : "black",
+                "duration"  : 1000
+            });
+        });
+        self.to_y.easing(me.Tween.Easing.Quadratic.EaseInOut);
+        self.to_y.start();
+
+        // Make happy noises.
+        if (settings.music) {
+            me.audio.stopTrack();
+            me.audio.playTrack(settings.music);
+        }
+    },
+
+    "loadLevel" : function loadLevel(settings) {
+        var fade;
+        var self = this;
+
+        if (self.loading) {
+            return;
+        }
+        self.loading = true;
+
+        self.fader = -1;
+
+        // Handle outbound transitions.
+        fade = settings.fade || settings.fadeIn;
+        if (fade) {
+            // Don't reuse me.viewport.fade* : We want the logo to remain visible.
+            self.fadeColor = fade;
+            self.fader = 0;
+            var tween = new me.Tween(self).to({
+                "fader" : 1
+            }, settings.duration).onComplete(fadeComplete);
+            tween.easing(me.Tween.Easing.Sinusoidal.EaseIn);
+            tween.start();
+        }
+        else {
+            fadeComplete();
+        }
+
+        function fadeComplete() {
+            self.fader = -1;
+
+            // Remove all Chipmunk bodies and shapes.
+            cm.removeAll();
+
+            // When level loads, start music and move Rachel to the proper location.
+            me.game.onLevelLoaded = function onLevelLoaded() {
+                self.onLevelLoaded(settings);
+            };
+
+            // Load the first level.
+            me.levelDirector.loadLevel(settings.to);
+
+            // Handle transitions.
+            fade = settings.fade || settings.fadeOut;
+            if (fade) {
+                self.fadeColor = fade;
+                self.fader = 1;
+
+                function fadeOut() {
+                    // Don't reuse me.viewport.fade* : We want the logo to remain visible.
+                    var tween = new me.Tween(self).to({
+                        "fader": 0
+                    }, settings.duration).onComplete(function () {
+                        self.fader = -1;
+                    });
+                    tween.easing(me.Tween.Easing.Sinusoidal.EaseIn);
+                    tween.start();
+                }
+
+                if (settings.vp) {
+                    // Use viewport fade here to fade the logo.
+                    me.game.viewport.fadeOut(fade, settings.vp, fadeOut);
+                }
+                else {
+                    fadeOut();
+                }
+            }
+        }
+    },
+
+    "onResetEvent" : function onResetEvent() {
+        // Load the level.
+        this.loadLevel({
+            "to"        : "earth",
+            "music"     : "del_erad",
+            "fadeOut"   : "black",
+            "duration"  : 5000,
+            "vp"        : 1000
+        });
+    },
+
+    "update" : function update() {
+        if (me.input.isKeyPressed("action") && (this.fader === -1)) {
+            this.to_x.stop();
+            this.to_y.stop();
+            me.game.viewport.fadeIn("black", 1000, function () {
+                me.state.change(me.state.PLAY);
+            });
+        }
+        return this.parent() || (this.fader !== -1);
+    },
+
+    "draw" : function draw(context) {
+        this.parent(context);
+
+        if (this.fader !== -1) {
+            context.fillStyle = this.fadeColor;
+            context.globalAlpha = this.fader;
+            context.fillRect(0, 0, c.WIDTH, c.HEIGHT);
+            context.globalAlpha = 1.0;
+        }
+
+        var x = (c.WIDTH - this.logo.width) / 2;
+        var y = (c.HEIGHT - this.logo.height - 80) / 2;
+        context.drawImage(this.logo, x, y);
+
+        var message = "Press [Enter] or [Space]";
+        var w = Math.min(this.font.measureText(context, message).width, c.WIDTH);
+
+        if (this.fader === -1) {
+            context.save();
+            context.shadowColor = "#000";
+            context.shadowBlur = 2;
+            context.shadowOffsetX = 2;
+            context.shadowOffsetY = 2;
+            this.font.draw(context, message, (c.WIDTH - w) / 2, (c.HEIGHT + this.logo.height) / 2);
+            context.restore();
+        }
     }
 });

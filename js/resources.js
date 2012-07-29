@@ -6,6 +6,7 @@ game.resources = {
         "heart_empty",
         "heart_half",
         "heart_full",
+        "logo",
 
         // Characters
         "rachel",
@@ -67,6 +68,7 @@ game.resources = {
     /* 2-channel audio. Usually music. */
     "bgm" : [
         "bells",
+        "del_erad",
         "pink_and_lively"
     ]
 };
