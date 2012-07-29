@@ -4,8 +4,8 @@
   <property name="AutomappingRadius" value="1"/>
   <property name="DeleteTiles" value="true"/>
  </properties>
- <tileset firstgid="1" name="dirt" tilewidth="32" tileheight="32">
-  <image source="../../img/dirt.png" width="96" height="192"/>
+ <tileset firstgid="1" name="sandwater" tilewidth="32" tileheight="32">
+  <image source="../../img/sandwater.png" width="96" height="192"/>
  </tileset>
  <layer name="regions" width="8" height="5">
   <data encoding="base64">
@@ -17,7 +17,7 @@
    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
   </data>
  </layer>
- <layer name="output_dirt" width="8" height="5">
+ <layer name="output_sand" width="8" height="5">
   <data encoding="base64">
    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
   </data>

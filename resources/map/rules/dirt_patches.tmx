@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="3" height="3" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="grass" tilewidth="32" tileheight="32">
-  <image source="../../img/grass.png" width="96" height="192"/>
+ <tileset firstgid="1" name="dirt" tilewidth="32" tileheight="32">
+  <image source="../../img/dirt.png" width="96" height="192"/>
  </tileset>
  <layer name="regions" width="3" height="3">
   <data encoding="base64">
@@ -13,24 +13,24 @@
    AAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAA
   </data>
  </layer>
- <layer name="output_grass" width="3" height="3">
+ <layer name="output_dirt" width="3" height="3">
   <data encoding="base64">
    AAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAA
   </data>
  </layer>
- <layer name="output2_grass" width="3" height="3">
+ <layer name="output2_dirt" width="3" height="3">
   <data encoding="base64">
    AAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAA
   </data>
  </layer>
- <layer name="output3_grass" width="3" height="3">
+ <layer name="output3_dirt" width="3" height="3">
   <data encoding="base64">
    AAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAA
   </data>
  </layer>
- <layer name="output4_grass" width="3" height="3">
+ <layer name="output4_dirt" width="3" height="3">
   <data encoding="base64">
-   AAAAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAAAAAAAAAAAA
+   AAAAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAAAA
   </data>
  </layer>
 </map>

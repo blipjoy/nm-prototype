@@ -3,3 +3,7 @@
 ./rules/grass_patches.tmx
 ./rules/dirt_edges.tmx
 ./rules/dirt_corners.tmx
+./rules/dirt_patches.tmx
+./rules/sand_edges.tmx
+./rules/sand_corners.tmx
+./rules/sand_patches.tmx
