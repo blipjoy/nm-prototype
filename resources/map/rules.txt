@@ -7,3 +7,6 @@
 ./rules/sand_edges.tmx
 ./rules/sand_corners.tmx
 ./rules/sand_patches.tmx
+./rules/tree.tmx
+./rules/tree_forest.tmx
+./rules/tree_forest_shadow.tmx
