@@ -224,13 +224,13 @@ game.TitleScreen = game.PlayScreen.extend({
 
         // Choose a random destination position.
         self.to_x = new me.Tween(me.game.viewport.pos).to({
-            "x" : ~~(x + (Math.random() * 800) - 400)
+            "x" : ~~(x + (Math.random() * 800) - 400).clamp(0, w)
         }, 15000);
         self.to_x.easing(me.Tween.Easing.Quadratic.EaseInOut);
         self.to_x.start();
 
         self.to_y = new me.Tween(me.game.viewport.pos).to({
-            "y" : ~~(y + (Math.random() * 800) - 400)
+            "y" : ~~(y + (Math.random() * 800) - 400).clamp(0, h)
         }, 15000).onComplete(function () {
             // LET'S DO IT AGAIN!
             self.loadLevel({
