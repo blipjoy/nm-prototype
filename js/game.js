@@ -87,8 +87,8 @@ var game = {
     // Run on game resources loaded.
     "loaded" : function loaded() {
         // Set the "Play" ScreenObject.
-        game.state = new game.PlayScreen(20);
-        me.state.set(me.state.PLAY, game.state);
+        game.play = new game.PlayScreen(20);
+        me.state.set(me.state.PLAY, game.play);
 
         // Player entity.
         me.entityPool.add("rachel", game.RachelEntity);
@@ -107,8 +107,19 @@ var game = {
         me.entityPool.add("exit", game.Exit);
         me.entityPool.add("static", game.Static);
 
-        // Start the game.
-        me.state.change(me.state.PLAY);
+        if (!me.audio.isAudioEnable()) {
+            me.state.set(c.STATE_INFO, new game.InfoScreen([
+                "Your browser does not support Ogg-Vorbis audio.",
+                "Sounds have been disabled.",
+                "",
+                "Press [Enter] or [Space] to continue."
+            ]));
+            me.state.change(c.STATE_INFO);
+        }
+        else {
+            // Start the game.
+            me.state.change(me.state.PLAY);
+        }
     },
 
     // Helper function to determine if a variable is an Object.

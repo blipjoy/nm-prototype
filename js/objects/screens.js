@@ -53,6 +53,50 @@ game.AnimatedScreen = me.ScreenObject.extend({
     }
 });
 
+/* Informational screen */
+game.InfoScreen = me.ScreenObject.extend({
+    "invalidate" : true,
+
+    "init" : function init(messages) {
+        this.parent(true);
+        this.messages = messages;
+        this.font = new me.Font("bold Tahoma", 20, "#fff");
+    },
+
+    "update" : function update() {
+        if (me.input.isKeyPressed("action")) {
+            me.state.change(me.state.PLAY);
+        }
+
+        if (this.invalidate === true) {
+            this.invalidate = false;
+            return true;
+        }
+
+        return false;
+    },
+
+    "draw" : function draw(context) {
+        var self = this;
+
+        context.fillStyle = "#000";
+        context.fillRect(0, 0, c.WIDTH, c.HEIGHT);
+
+        var w = 0;
+        self.messages.forEach(function forEach(message) {
+            w = Math.min(Math.max(w, self.font.measureText(context, message).width), c.WIDTH);
+        });
+
+        var x = (c.WIDTH - w) / 2;
+        var y = (c.HEIGHT - self.messages.length * 20) / 2;
+
+        self.messages.forEach(function forEach(message) {
+            self.font.draw(context, message, x, y);
+            y += 20;
+        });
+    }
+});
+
 /* Main game */
 game.PlayScreen = game.AnimatedScreen.extend({
     "loading" : false,

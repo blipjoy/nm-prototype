@@ -65,7 +65,7 @@ game.RachelEntity = game.NPC.extend({
 
         // DEBUG
         if (data.indexOf("still") >= 0) {
-            game.state.loadLevel({
+            game.play.loadLevel({
                 "to"        : "rachels_room",
                 "music"     : "bells",
                 "fade"      : "black",

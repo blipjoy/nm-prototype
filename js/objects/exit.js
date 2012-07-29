@@ -6,7 +6,7 @@ game.installExitHandler = function installExitHandler() {
         c.COLLIDE_EXIT,
         function exit_level(arbiter, space) {
             space.addPostStepCallback(function onPostSteppCallback() {
-                game.state.loadLevel(arbiter.b.data);
+                game.play.loadLevel(arbiter.b.data);
             });
 
             // Return false so collision does not assert a force.

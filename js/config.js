@@ -22,6 +22,9 @@ var c = {
     "WIDTH"                 : 640,
     "HEIGHT"                : 480,
 
+    // States
+    "STATE_INFO"            : 100, // FIXME: melonJS should have a `me.state.USER` for these.
+
 /*
  *              COLLISION TRUTH TABLE
  *          rachel  npc     coin    chest   wall    exit
@@ -104,6 +107,7 @@ me.sys.gravity = 0;
 //cm.setSync(false); // Be fastest!
 //me.debug.renderHitBox = true;
 //me.debug.renderCollisionMap = true;
+me.sys.stopOnAudioError = false;
 
 if (c.DEBUG) {
     me.sys.pauseOnBlur = false;
