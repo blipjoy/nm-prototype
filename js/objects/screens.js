@@ -114,6 +114,7 @@ game.PlayScreen = game.AnimatedScreen.extend({
 
     "onLevelLoaded" : function onLevelLoaded(settings) {
         this.loading = false;
+        this.parent();
 
         game.rachel = me.game.getEntityByName("rachel")[0];
 
