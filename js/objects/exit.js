@@ -1,18 +1,22 @@
 /* Create a Chipmunk collision handler for ExitEntity. */
 game.installExitHandler = function installExitHandler() {
     /* Player<->ExitEntity collisions */
-    cm.getSpace().addCollisionHandler(
-        c.COLLIDE_PLAYER,
-        c.COLLIDE_EXIT,
-        function exit_level(arbiter, space) {
-            space.addPostStepCallback(function onPostSteppCallback() {
-                game.play.loadLevel(arbiter.b.data);
-            });
+    if (!game.exitHandlerInstalled) {
+        game.exitHandlerInstalled = true;
 
-            // Return false so collision does not assert a force.
-            return false;
-        }
-    );
+        cm.getSpace().addCollisionHandler(
+            c.COLLIDE_PLAYER,
+            c.COLLIDE_EXIT,
+            function exit_level(arbiter, space) {
+                space.addPostStepCallback(function onPostSteppCallback() {
+                    game.play.loadLevel(arbiter.b.data);
+                });
+
+                // Return false so collision does not assert a force.
+                return false;
+            }
+        );
+    }
 }
 
 /* Exits link maps together. */

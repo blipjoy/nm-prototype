@@ -27,13 +27,14 @@ var c = {
 
 /*
  *              COLLISION TRUTH TABLE
- *          rachel  npc     coin    chest   wall    exit
- *  rachel  -       1       2       1       3       4
- *  npc     -       -               1       3
+ *          rachel  npc     coin    chest   wall    exit    baddie
+ *  rachel  -       1       2       1       3       4       5
+ *  npc     -       -               1       3               5
  *  coin    -       -       -       2       3
  *  chest   -       -       -       -
  *  wall    -       -       -       -       -
  *  exit    -       -       -       -       -       -
+ *  baddie  -       -       -       -       -       -       -
  *
  * Hyphen means redundant space.
  * Number specifies collision layers.
@@ -42,6 +43,7 @@ var c = {
  * 2 = NO NPC
  * 3 = NO CHEST
  * 4 = EXIT
+ * 5 = LIVING
  */
 
     // Chipmunk shape layers
@@ -50,6 +52,7 @@ var c = {
     "LAYER_NO_NPC"          : 0x00000002,
     "LAYER_NO_CHEST"        : 0x00000004,
     "LAYER_EXIT"            : 0x00000008,
+    "LAYER_LIVING"          : 0x00000010,
 
     // INTERACTIVE is a special layer for doing bb queries when `action` is pressed.
     // Any shapes in this layer will collide! :(
@@ -61,7 +64,8 @@ var c = {
     "COLLIDE_PLAYER"        : 0x00000001,
     "COLLIDE_COLLECTIBLE"   : 0x00000002,
     "COLLIDE_EXIT"          : 0x00000003,
-    "COLLIDE_PAINFUL"       : 0x00000004,
+    "COLLIDE_BADDIE"        : 0x00000004,
+    "COLLIDE_GOODIE"        : 0x00000005,
 };
 
 // Helper to enable debug by setting a special hash in the URL.

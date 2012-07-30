@@ -55,25 +55,36 @@ game.AnimatedScreen = me.ScreenObject.extend({
 
 /* Informational screen */
 game.InfoScreen = me.ScreenObject.extend({
-    "invalidate" : true,
-
-    "init" : function init(messages) {
+    "init" : function init(messages, state, fade, duration) {
         this.parent(true);
         this.messages = messages;
         this.font = new me.Font("bold Tahoma", 20, "#fff");
+        this.state = state || me.state.TITLE;
+        this.fade = fade;
+        this.duration = duration || 250;
+    },
+
+    "onResetEvent" : function onResetEvent() {
+        if (this.fade) {
+            me.game.viewport.fadeOut(this.fade, this.duration);
+        }
     },
 
     "update" : function update() {
+        var self = this;
+
         if (me.input.isKeyPressed("action")) {
-            me.state.change(me.state.TITLE);
+            if (self.fade) {
+                me.game.viewport.fadeIn(self.fade, self.duration, function fadeInComplete() {
+                    me.state.change(self.state);
+                });
+            }
+            else {
+                me.state.change(self.state);
+            }
         }
 
-        if (this.invalidate === true) {
-            this.invalidate = false;
-            return true;
-        }
-
-        return false;
+        return true;
     },
 
     "draw" : function draw(context) {
@@ -169,9 +180,10 @@ game.PlayScreen = game.AnimatedScreen.extend({
 
     "onResetEvent" : function onResetEvent() {
         // Initialize some stuff.
-        game.HUD();
+        game.installHUD();
         game.installCoinHandler();
         game.installExitHandler();
+        game.installBaddieHandler();
 
         // Load the level.
         this.loadLevel({
@@ -184,7 +196,9 @@ game.PlayScreen = game.AnimatedScreen.extend({
 
     "onDestroyEvent" : function onDestroyEvent() {
         // Remove the HUD.
-        me.game.remove(game.HUD);
+        if (game.HUD) {
+            me.game.remove(game.HUD);
+        }
     }
 });
 
@@ -207,12 +221,12 @@ game.TitleScreen = game.PlayScreen.extend({
 
         // Remove Rachel; no player control during title screen.
         var rachel = me.game.getEntityByName("rachel")[0];
+        me.game.remove(rachel, true);
         var space = cm.getSpace();
         rachel.body.eachShape(function remove_shape(shape) {
             space.removeShape(shape);
         });
         space.removeBody(rachel.body);
-        me.game.remove(rachel);
 
         // Choose a random starting position.
         var w = me.game.currentLevel.width * me.game.currentLevel.tilewidth - c.WIDTH;

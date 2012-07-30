@@ -1,5 +1,14 @@
 /* NPCs */
 game.NPC = game.Sprite.extend({
+    // Angry NPCs are baddies.
+    "angry" : false,
+
+    // Bounding Box where this NPC can see.
+    "vision" : null,
+
+    // Angry, alerted, and tracking prey!
+    "tracking" : null,
+
     // NPC will move toward this vector.
     "destination" : null,
 
@@ -33,38 +42,72 @@ game.NPC = game.Sprite.extend({
     // A helper constant.
     "walk_angle" : Math.sin((45).degToRad()),
 
+    // Health.
+    "hearts" : 3,
+
+    // Attack strength.
+    "power" : 1,
+
     "init" : function init(x, y, settings) {
-        this.parent(x, y, settings);
+        var self = this;
+        self.parent(x, y, settings);
 
         // Adjust collision bounding box.
-        //this.adjustBoxShape(-1, 10, 15, 20); // FIXME
+        //self.adjustBoxShape(-1, 10, 15, 20); // FIXME
 
-        this.body.eachShape(function eachShape(shape) {
-            shape.setLayers(c.LAYER_NO_COIN | c.LAYER_NO_CHEST | c.LAYER_INTERACTIVE);
+        self.body.eachShape(function eachShape(shape) {
+            shape.collision_type = c.COLLIDE_GOODIE;
+            shape.setLayers(c.LAYER_NO_COIN | c.LAYER_NO_CHEST | c.LAYER_INTERACTIVE | c.LAYER_LIVING);
+            shape.data.power = self.power;
         });
 
         // Rachel is defined with a mass of 1. give NPCs a higher mass so Rachel
         // can't push them around as easily. May also want to handle this as a
         // special case in a collision handler, such that Player<->Sprite
         // collisions do not cause them to push one another.
-        //this.body.setMass(3);
+        //self.body.setMass(3);
 
         // Set animations.
-        this.addAnimation("walk_down",   [ 0, 4,  8, 12 ]);
-        this.addAnimation("walk_left",   [ 1, 5,  9, 13 ]);
-        this.addAnimation("walk_up",     [ 2, 6, 10, 14 ]);
-        this.addAnimation("walk_right",  [ 3, 7, 11, 15 ]);
+        self.addAnimation("walk_down",   [ 0, 4,  8, 12 ]);
+        self.addAnimation("walk_left",   [ 1, 5,  9, 13 ]);
+        self.addAnimation("walk_up",     [ 2, 6, 10, 14 ]);
+        self.addAnimation("walk_right",  [ 3, 7, 11, 15 ]);
 
-        this.addAnimation("stand_down",  [ 0 ]);
-        this.addAnimation("stand_left",  [ 1 ]);
-        this.addAnimation("stand_up",    [ 2 ]);
-        this.addAnimation("stand_right", [ 3 ]);
+        self.addAnimation("stand_down",  [ 0 ]);
+        self.addAnimation("stand_left",  [ 1 ]);
+        self.addAnimation("stand_up",    [ 2 ]);
+        self.addAnimation("stand_right", [ 3 ]);
 
-        this.setCurrentAnimation("stand_down");
-        this.animationspeed = 10;
+        self.setCurrentAnimation("stand_down");
+        self.animationspeed = 10;
 
         // AI initialization.
-        this.destination = new cp.v(0, 0);
+        self.destination = new cp.v(0, 0);
+
+        var bb = self.body.shapeList[0];
+        self.vision = cp.bb(bb.bb_l, bb.bb_b, bb.bb_r, bb.bb_t);
+    },
+
+    "hit" : function hit(power) {
+        var self = this;
+
+        // FIXME: "pain" sound.
+
+        self.hearts -= power;
+        if (self.hearts <= 0) {
+            // Dead.
+
+            me.game.remove(self, true);
+
+            // FIXME: "die" sound.
+            var space = cm.getSpace();
+            space.addPostStepCallback(function post_hit() {
+                self.body.eachShape(function remove_shape(shape) {
+                    space.removeShape(shape);
+                });
+                space.removeBody(self.body);
+            });
+        }
     },
 
     "resetRoam" : function resetRoam() {
@@ -72,6 +115,8 @@ game.NPC = game.Sprite.extend({
             // Sleep for a random period between 0 - 5 seconds.
             this.sleep = Math.random() * 5 * me.sys.fps;
             this.destination.x = this.destination.y = 0;
+
+            this.tracking = null;
 
             this.stand();
         }
@@ -84,65 +129,98 @@ game.NPC = game.Sprite.extend({
         this.setCurrentAnimation("stand_" + this.dir_name);
     },
 
+    "updateVision" : function updateVision() {
+        var shape = this.body.shapeList[0];
+        var dir = c[this.dir_name.toUpperCase()];
+        var w = shape.bb_l - shape.bb_r - 1;
+        var h = shape.bb_b - shape.bb_t - 1;
+        this.vision.l = shape.bb_l - (dir == c.LEFT     ? 150 : (dir == c.RIGHT ? w : 75));
+        this.vision.b = shape.bb_b - (dir == c.DOWN     ? 150 : (dir == c.UP    ? h : 75));
+        this.vision.r = shape.bb_r + (dir == c.RIGHT    ? 150 : (dir == c.LEFT  ? w : 75));
+        this.vision.t = shape.bb_t + (dir == c.UP       ? 150 : (dir == c.DOWN  ? h : 75));
+    },
+
     "checkMovement" : function checkMovement() {
-        if (--this.sleep > 0) {
+        var self = this;
+
+        if (self.angry) {
+            var space = cm.getSpace();
+            space.bbQuery(self.vision, c.LAYER_LIVING, 0, function (shape) {
+                obj = me.game.getEntityByGUID(shape.data.GUID);
+                if (!self.tracking || (self.tracking == obj)) {
+                    // Acquire target.
+                    self.tracking = obj;
+                    self.destination.x = shape.body.p.x;
+                    self.destination.y = c.HEIGHT - shape.body.p.y;
+
+                    // Wake up.
+                    self.sleep = 0;
+                }
+            });
+        }
+
+        if (--self.sleep > 0) {
             return;
         }
 
-        this.standing = false;
+        self.standing = false;
 
-        var x = this.body.p.x;
-        var y = c.HEIGHT - this.body.p.y;
+        var x = self.body.p.x;
+        var y = c.HEIGHT - self.body.p.y;
 
         // Choose a nearby random point
-        if (!this.destination.x || !this.destination.y) {
+        if (!self.destination.x || !self.destination.y) {
             // FIXME: Use a bounding box to set the NPC roaming zone, and
             // cp.bbContainsBB() to validate position!
 
-            var max = this.maxDistance * 2;
-            var hMax = this.maxDistance;
+            var max = self.maxDistance * 2;
+            var hMax = self.maxDistance;
 
-            this.destination.x = x + ~~(Math.random() * max - hMax);
-            this.destination.y = y + ~~(Math.random() * max - hMax);
+            self.destination.x = x + ~~(Math.random() * max - hMax);
+            self.destination.y = y + ~~(Math.random() * max - hMax);
         }
 
         // Decide direction to destination.
         var force = {
-            "x" : this.destination.x - x,
-            "y" : this.destination.y - y
+            "x" : self.destination.x - x,
+            "y" : self.destination.y - y
         };
 
         // Decide distance based on destTolerance.
-        force.x = (Math.abs(force.x) < this.destTolerance) ? 0 : force.x.clamp(-1, 1);
-        force.y = (Math.abs(force.y) < this.destTolerance) ? 0 : force.y.clamp(-1, 1);
+        force.x = (Math.abs(force.x) < self.destTolerance) ? 0 : force.x.clamp(-1, 1);
+        force.y = (Math.abs(force.y) < self.destTolerance) ? 0 : force.y.clamp(-1, 1);
 
         // Set direction, favoring X-axis.
         if (force.y) {
-            this.dir_name = (force.y < 0 ? "up" : "down");
+            self.dir_name = (force.y < 0 ? "up" : "down");
         }
         if (force.x) {
-            this.dir_name = (force.x < 0 ? "left" : "right");
+            self.dir_name = (force.x < 0 ? "left" : "right");
         }
 
         // Set animation.
-        this.setCurrentAnimation("walk_" + this.dir_name);
+        self.setCurrentAnimation("walk_" + self.dir_name);
 
 
         // Calculate directional velocity.
-        force.x *= this.velocity * me.timer.tick;
-        force.y *= this.velocity * me.timer.tick;
+        force.x *= self.velocity * me.timer.tick;
+        force.y *= self.velocity * me.timer.tick;
         if (force.x && force.y) {
-            force.x *= this.walk_angle;
-            force.y *= this.walk_angle;
+            force.x *= self.walk_angle;
+            force.y *= self.walk_angle;
         }
 
-        if ((this.sleep < -10) && !~~this.body.vx && !~~this.body.vy) {
-            this.resetRoam();
+        if ((self.sleep < -10) && !~~self.body.vx && !~~self.body.vy) {
+            self.resetRoam();
         }
         else {
             // Walk toward the destination.
-            this.isDirty = true;
-            this.body.applyForce(cp.v(force.x * this.forceConstant, force.y * -this.forceConstant), cp.vzero);
+            self.isDirty = true;
+            self.body.applyForce(cp.v(force.x * self.forceConstant, force.y * -self.forceConstant), cp.vzero);
+        }
+
+        if (~~self.body.vy !== 0) {
+            game.wantsResort = true;
         }
     },
 
@@ -164,6 +242,7 @@ game.NPC = game.Sprite.extend({
         this.isDirty = false;
         this.body.resetForces();
         if (!game.modal) {
+            this.updateVision();
             this.checkMovement();
             this.checkInteraction();
         }
@@ -177,15 +256,33 @@ game.NPC = game.Sprite.extend({
     "draw" : function draw(context, x, y) {
         this.parent(context, x, y);
 
-        // Draw a line to the destination.
-        if (c.DEBUG && (this.destination.x || this.destination.y)) {
-            var viewport = me.game.viewport.pos;
+        var viewport = me.game.viewport.pos;
+
+        if (c.DEBUG) {
             context.save();
 
-            context.strokeStyle = "red";
-            context.moveTo(this.body.p.x - viewport.x, c.HEIGHT - this.body.p.y - viewport.y);
-            context.lineTo(this.destination.x - viewport.x, this.destination.y - viewport.y);
-            context.stroke();
+            // Draw a line to the destination.
+            if (this.destination.x || this.destination.y) {
+                context.strokeStyle = "red";
+                context.moveTo(this.body.p.x - viewport.x, c.HEIGHT - this.body.p.y - viewport.y);
+                context.lineTo(this.destination.x - viewport.x, this.destination.y - viewport.y);
+                context.stroke();
+            }
+
+            // Draw the vision box.
+            if (this.angry) {
+                context.lineWidth = 2;
+                context.strokeStyle = (this.tracking ? "red" : "orange");
+            }
+            else {
+                context.strokeStyle = "green";
+            }
+            context.strokeRect(
+                this.vision.l - viewport.x,
+                c.HEIGHT - this.vision.t - viewport.y,
+                this.vision.r - this.vision.l,
+                this.vision.t - this.vision.b
+            );
 
             context.restore();
         }

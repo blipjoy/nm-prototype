@@ -1,5 +1,5 @@
 /* The almighty HUD. Keeps track of stats; not just a renderer! */
-game.HUD = function HUD() {
+game.installHUD = function HUD() {
     var items;
 
     // Override the HUD.update method to perform animation.
@@ -242,12 +242,12 @@ game.HUD = function HUD() {
             x += this.pos.x;
             y += this.pos.y;
             for (var i = 0; i < count; i++) {
-                if (i < value) {
+                if (i < ~~value) {
                     image = 2;
                 }
                 else if (value % 1) {
                     image = 1;
-                    value = Math.floor(value);
+                    value = ~~value;
                 }
                 else {
                     image = 0;

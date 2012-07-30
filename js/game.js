@@ -93,11 +93,27 @@ var game = {
         // Set the TitleScreen ScreenObject.
         me.state.set(me.state.MENU, new game.TitleScreen());
 
+        // Set the GameOver ScreenObject.
+        me.state.set(me.state.GAMEOVER, new game.InfoScreen([
+            "Rachel ... Rachel? Is that you, Rachel?",
+            "It isn't your time yet ...",
+            "",
+            "You're going back, now, Rachel.",
+            "This will all seem like just a dream ...",
+            "Good luck, Rachel.",
+            "I love you ...",
+            "",
+            "Press [Enter] or [Space] to continue."
+        ], me.state.PLAY, "black", 1000));
+
         // Player entity.
         me.entityPool.add("rachel", game.RachelEntity);
 
         // NPCs.
         me.entityPool.add("jessica", game.NPCEntities.Jessica);
+
+        // Baddies.
+        me.entityPool.add("snake", game.BaddieEntities.Snake);
 
         // Collectibles.
         me.entityPool.add("coin_gold", game.CoinEntity);
@@ -110,8 +126,11 @@ var game = {
         me.entityPool.add("exit", game.Exit);
         me.entityPool.add("static", game.Static);
 
+        if (c.DEBUG) {
+            me.state.change(me.state.PLAY);
+        }
         // Display warning if audio is not available.
-        if (!me.audio.isAudioEnable()) {
+        else if (!me.audio.isAudioEnable()) {
             me.state.set(c.STATE_INFO, new game.InfoScreen([
                 "Your browser does not support Ogg-Vorbis audio.",
                 "Sounds have been disabled.",

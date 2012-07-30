@@ -15,6 +15,9 @@ game.resources = {
         "jessica_eyes",
         "char_shadow",
 
+        // Baddies
+        "snake",
+
         // Collectibles
         "coin_gold",
         "coin_silver",

@@ -1,14 +1,20 @@
 /* Create a Chipmunk collision handler for CoinEntity. */
 game.installCoinHandler = function installCoinHandler() {
     /* Player<->CoinEntity collisions */
-    cm.getSpace().addCollisionHandler(
-        c.COLLIDE_PLAYER,
-        c.COLLIDE_COLLECTIBLE,
-        function exitCollision() {
-            // Wrapped because game.rachel does not exist when the handler is installed.
-            game.rachel.collect.apply(game.rachel, arguments);
-        }
-    );
+    if (!game.coinHandlerInstalled) {
+        game.coinHandlerInstalled = true;
+        cm.getSpace().addCollisionHandler(
+            c.COLLIDE_PLAYER,
+            c.COLLIDE_COLLECTIBLE,
+            function exitCollision(arbiter, space) {
+                // Wrapped because game.rachel does not exist when the handler is installed.
+                game.rachel.collect.apply(game.rachel, arguments);
+
+                // Return false so collision does not assert a force.
+                return false;
+            }
+        );
+    }
 };
 
 /* Coins */

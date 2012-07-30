@@ -24,11 +24,30 @@ game.RachelEntity = game.NPC.extend({
         // Register Chipmunk collision handlers.
         this.body.eachShape(function eachShape(shape) {
             shape.collision_type = c.COLLIDE_PLAYER;
-            shape.setLayers(c.LAYER_NO_COIN | c.LAYER_NO_NPC | c.LAYER_NO_CHEST | c.LAYER_EXIT);
+            shape.setLayers(c.LAYER_NO_COIN | c.LAYER_NO_NPC | c.LAYER_NO_CHEST | c.LAYER_EXIT | c.LAYER_LIVING);
         });
 
         // Set the display to follow our position on both axis.
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
+    },
+
+    "hit" : function hit(power) {
+        // FIXME: "pain" sound.
+
+        game.HUD.HUDItems.hearts.update(-power);
+        if (game.HUD.HUDItems.hearts.value <= 0) {
+            // Dead.
+
+            // FIXME: "die" sound.
+            game.modal = true;
+
+            me.game.viewport.fadeIn("black", 3000, function fadeInComplete() {
+                me.game.removeAll();
+                cm.removeAll();
+                me.state.change(me.state.GAMEOVER);
+                game.modal = false;
+            });
+        }
     },
 
     "collect" : function collect(arbiter, space) {
