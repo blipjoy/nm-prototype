@@ -76,6 +76,7 @@ game.resources = {
     "sfx" : [
         "chests",
         "collect_coin",
+        "fanfare",
         "hammer1",
         "hammer2"
     ],

@@ -95,7 +95,12 @@ game.RachelEntity = game.NPC.extend({
                 break;
 
             case "weapon":
+                me.audio.pauseTrack();
+                me.audio.play("fanfare");
                 game.HUD.HUDItems.inventory.addWeapon(message.data);
+                game.dialog([ message.data.description ], function dialogClose() {
+                    me.audio.resumeTrack();
+                });
                 break;
 
             case "coins":
