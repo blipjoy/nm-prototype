@@ -112,7 +112,10 @@ var game = {
         me.entityPool.add("rachel", game.RachelEntity);
 
         // NPCs.
+        me.entityPool.add("abi", game.NPCEntities.Abi);
+        me.entityPool.add("george", game.NPCEntities.George);
         me.entityPool.add("jessica", game.NPCEntities.Jessica);
+        me.entityPool.add("whitey", game.NPCEntities.Whitey);
 
         // Baddies.
         me.entityPool.add("snake", game.BaddieEntities.Snake);

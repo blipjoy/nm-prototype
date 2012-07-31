@@ -11,8 +11,14 @@ game.resources = {
         // Characters
         "rachel",
         "rachel_eyes",
+        "abi",
+        "abi_eyes",
+        "george",
+        "george_eyes",
         "jessica",
         "jessica_eyes",
+        "whitey",
+        "whitey_eyes",
         "char_shadow",
 
         // Baddies
