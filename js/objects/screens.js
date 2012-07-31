@@ -62,7 +62,7 @@ game.InfoScreen = me.ScreenObject.extend({
         this.parent(true);
         this.messages = messages;
         this.font = new me.Font("bold Tahoma", 20, "#fff");
-        this.state = state || me.state.TITLE;
+        this.state = state || me.state.MENU;
         this.fade = fade;
         this.duration = duration || 250;
     },
@@ -93,7 +93,7 @@ game.InfoScreen = me.ScreenObject.extend({
             }
         }
 
-        return true;
+        return self.fading;
     },
 
     "draw" : function draw(context) {
