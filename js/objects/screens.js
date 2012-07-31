@@ -55,6 +55,9 @@ game.AnimatedScreen = me.ScreenObject.extend({
 
 /* Informational screen */
 game.InfoScreen = me.ScreenObject.extend({
+    // True when fading.
+    "fading" : false,
+
     "init" : function init(messages, state, fade, duration) {
         this.parent(true);
         this.messages = messages;
@@ -65,16 +68,22 @@ game.InfoScreen = me.ScreenObject.extend({
     },
 
     "onResetEvent" : function onResetEvent() {
-        if (this.fade) {
-            me.game.viewport.fadeOut(this.fade, this.duration);
+        var self = this;
+
+        if (self.fade) {
+            self.fading = true;
+            me.game.viewport.fadeOut(self.fade, self.duration, function fadeComplete() {
+                self.fading = false;
+            });
         }
     },
 
     "update" : function update() {
         var self = this;
 
-        if (me.input.isKeyPressed("action")) {
+        if (me.input.isKeyPressed("action") && !self.fading) {
             if (self.fade) {
+                self.fading = true;
                 me.game.viewport.fadeIn(self.fade, self.duration, function fadeInComplete() {
                     me.state.change(self.state);
                 });
