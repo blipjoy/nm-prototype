@@ -38,14 +38,13 @@ game.BaddieEntities = {
     /* Snake */
     "Snake" : game.NPC.extend({
         "init" : function init(x, y, settings) {
-            this.power = 0.5; // Snakes are weak.
+            // Snakes are weak.
+            this.power = 0.5;
+            this.hearts = 1;
+
             this.parent(x, y, settings);
 
-            this.angry = true;
-
-            this.body.eachShape(function eachShape(shape) {
-                shape.collision_type = c.COLLIDE_BADDIE;
-            });
+            this.makeAngry(true);
 
             // Adjust collision bounding box.
             this.adjustBoxShape(0, 0, 22, 22);

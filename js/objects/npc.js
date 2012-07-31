@@ -88,6 +88,13 @@ game.NPC = game.Sprite.extend({
         self.vision = cp.bb(shape.bb_l, shape.bb_b, shape.bb_r, shape.bb_t);
     },
 
+    "makeAngry" : function makeAngry(angry) {
+        this.angry = angry;
+        this.body.eachShape(function eachShape(shape) {
+            shape.collision_type = (angry ? c.COLLIDE_BADDIE : c.COLLIDE_GOODIE);
+        });
+    },
+
     "hit" : function hit(power) {
         var self = this;
 
@@ -147,7 +154,7 @@ game.NPC = game.Sprite.extend({
             var space = cm.getSpace();
             space.bbQuery(self.vision, c.LAYER_LIVING, 0, function (shape) {
                 obj = me.game.getEntityByGUID(shape.data.GUID);
-                if (!self.tracking || (self.tracking == obj)) {
+                if ((!self.tracking || (self.tracking == obj)) && !obj.angry) {
                     // Acquire target.
                     self.tracking = obj;
                     self.destination.x = shape.body.p.x;

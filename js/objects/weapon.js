@@ -187,6 +187,10 @@ game.Weapon = me.AnimationSheet.extend({
                     };
                     obj.body.applyImpulse(cp.v(impulse.x, impulse.y), cp.vzero);
                     obj.hit(self.owner.power);
+
+                    // Make the NPC angry, and turn it toward the attacker to retaliate!
+                    obj.makeAngry(true);
+                    obj.turn(2, self.owner.dir_name);
                 });
 
                 // FIXME: "hit cloud" animation
