@@ -33,7 +33,7 @@ game.BlinkingEyes = me.AnimationSheet.extend({
         this.setAnimationFrame(idx);
 
         // Awesome random blinking action!
-        if (this.animationpause && !Math.floor(Math.random() * 100)) {
+        if ((this.owner.hearts > 0) && this.animationpause && !Math.floor(Math.random() * 100)) {
             // About 1% of of all frames rendered will cause blinking eyes!
             this.animationpause = false;
         }
