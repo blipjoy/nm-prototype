@@ -49,7 +49,7 @@
  <objectgroup name="objects" width="40" height="15">
   <object name="rachel" x="160" y="320" width="32" height="32">
    <properties>
-    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;char_shadow&quot;,&quot;spritewidth&quot;:18,&quot;spriteheight&quot;:9},{&quot;name&quot;:&quot;hammer&quot;,&quot;class&quot;:&quot;game.Weapon&quot;,&quot;image&quot;:&quot;hammer&quot;,&quot;spritewidth&quot;:64,&quot;spriteheight&quot;:64,&quot;sfx&quot;:[&quot;hammer1&quot;, &quot;hammer2&quot;]},{&quot;name&quot;:&quot;rachel&quot;},{&quot;name&quot;:&quot;eyes&quot;,&quot;class&quot;:&quot;game.BlinkingEyes&quot;,&quot;image&quot;:&quot;rachel_eyes&quot;,&quot;spritewidth&quot;:17,&quot;spriteheight&quot;:6,&quot;offsetx&quot;:9,&quot;offsety&quot;:18}]"/>
+    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;char_shadow&quot;,&quot;spritewidth&quot;:18,&quot;spriteheight&quot;:9},{&quot;name&quot;:&quot;rachel&quot;},{&quot;name&quot;:&quot;eyes&quot;,&quot;class&quot;:&quot;game.BlinkingEyes&quot;,&quot;image&quot;:&quot;rachel_eyes&quot;,&quot;spritewidth&quot;:17,&quot;spriteheight&quot;:6,&quot;offsetx&quot;:9,&quot;offsety&quot;:18}]"/>
     <property name="image" value="rachel"/>
     <property name="spriteheight" value="36"/>
     <property name="spritewidth" value="36"/>
@@ -89,8 +89,8 @@
   </object>
   <object name="chest" x="928" y="96" width="32" height="32">
    <properties>
+    <property name="contents" value="{&quot;type&quot;:&quot;warp&quot;,&quot;data&quot;:{&quot;to&quot;:&quot;rachels_room&quot;,&quot;music&quot;:&quot;bells&quot;,&quot;fade&quot;:&quot;black&quot;}}"/>
     <property name="image" value="chests"/>
-    <property name="item" value="It's still a secret to everybody."/>
     <property name="spriteheight" value="32"/>
     <property name="spritewidth" value="32"/>
     <property name="which" value="1"/>
@@ -98,8 +98,8 @@
   </object>
   <object name="chest" x="800" y="96" width="32" height="32">
    <properties>
+    <property name="contents" value="{&quot;type&quot;:&quot;weapon&quot;,&quot;data&quot;:{&quot;name&quot;:&quot;hammer&quot;,&quot;class&quot;:&quot;game.Weapon&quot;,&quot;image&quot;:&quot;hammer&quot;,&quot;spritewidth&quot;:64,&quot;spriteheight&quot;:64,&quot;sfx&quot;:[&quot;hammer1&quot;, &quot;hammer2&quot;]}}"/>
     <property name="image" value="chests"/>
-    <property name="item" value="It's a secret to everybody."/>
     <property name="spriteheight" value="32"/>
     <property name="spritewidth" value="32"/>
     <property name="which" value="0"/>

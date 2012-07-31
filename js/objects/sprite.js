@@ -135,46 +135,7 @@ game.Sprite = game.Chipmunk.extend({
 
             self.compose = compose;
             self.compose.forEach(function forEach(item) {
-                // Validate composition item format.
-                if (!game.isObject(item)) {
-                    throw "Composition setting error. NOT AN OBJECT: " + JSON.stringify(item);
-                }
-
-                // Special case for defining rendering order.
-                if (item.name === self.name) {
-                    self.composition.push(item.name);
-                    return;
-                }
-
-                // Require keys.
-                [ "name", "class", "image", "spritewidth", "spriteheight" ].forEach(function forEach(key) {
-                    if (!item.hasOwnProperty(key)) {
-                        throw "Composition setting error. MISSING KEY `" + key + "`: " + JSON.stringify(item);
-                    }
-                });
-
-                function getClass(str) {
-                    var node = window;
-                    var tokens = str.split(".");
-                    tokens.forEach(function forEach(token) {
-                        if (typeof(node) !== "undefined") {
-                            node = node[token];
-                        }
-                    });
-                    return node;
-                }
-
-                // `class` should usually be "me.AnimationSheet", but can be anything.
-                self.children[item.name] = new (getClass(item.class))(
-                    x,
-                    y,
-                    game.getImage(item.image),
-                    item.spritewidth,
-                    item.spriteheight,
-                    self,
-                    item
-                );
-                self.composition.push(item.name);
+                self.addCompositionItem(item);
             });
 
             // Render this object first, if it is not referenced in the composition list.
@@ -182,6 +143,51 @@ game.Sprite = game.Chipmunk.extend({
                 self.composition.unshift(self.name);
             }
         }
+    },
+
+    "addCompositionItem" : function addCompositionItem(item) {
+        var self = this;
+
+        // Validate composition item format.
+        if (!game.isObject(item)) {
+            throw "Composition setting error. NOT AN OBJECT: " + JSON.stringify(item);
+        }
+
+        // Special case for defining rendering order.
+        if (item.name === self.name) {
+            self.composition.push(item.name);
+            return;
+        }
+
+        // Require keys.
+        [ "name", "class", "image", "spritewidth", "spriteheight" ].forEach(function forEach(key) {
+            if (!item.hasOwnProperty(key)) {
+                throw "Composition setting error. MISSING KEY `" + key + "`: " + JSON.stringify(item);
+            }
+        });
+
+        function getClass(str) {
+            var node = window;
+            var tokens = str.split(".");
+            tokens.forEach(function forEach(token) {
+                if (typeof(node) !== "undefined") {
+                    node = node[token];
+                }
+            });
+            return node;
+        }
+
+        // `class` should usually be "me.AnimationSheet", but can be anything.
+        self.children[item.name] = new (getClass(item.class))(
+            self.pos.x,
+            self.pos.y,
+            game.getImage(item.image),
+            item.spritewidth,
+            item.spriteheight,
+            self,
+            item
+        );
+        self.composition.push(item.name);
     },
 
     "setCompositionOrder" : function setCompositionOrder(name, target, after) {

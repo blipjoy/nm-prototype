@@ -168,8 +168,8 @@ game.installHUD = function HUD() {
             // Draw background.
             roundedBox(
                 context,
-                tx + 2,
-                ty + 2,
+                tx,
+                ty,
                 gold_width + silver_width + 26,
                 23,
                 5,
@@ -181,7 +181,7 @@ game.installHUD = function HUD() {
                 self.image.image,
                 self.image.offset.x, self.image.offset.y,
                 self.image.width, self.image.height,
-                tx + 4, ty + 3,
+                tx + 2, ty + 1,
                 self.image.width, self.image.height
             );
 
@@ -195,8 +195,8 @@ game.installHUD = function HUD() {
                 insetShadowText(
                     cache_ctx,
                     gold_value,
-                    tx,
-                    ty,
+                    0,
+                    0,
                     self.gold_font.color,
                     "#786600",
                     -1,
@@ -206,8 +206,8 @@ game.installHUD = function HUD() {
                 insetShadowText(
                     cache_ctx,
                     silver_value,
-                    tx + gold_width,
-                    ty,
+                    gold_width,
+                    0,
                     self.silver_font.color,
                     "#786f61",
                     -1,
@@ -215,7 +215,7 @@ game.installHUD = function HUD() {
                 );
             }
             // Webkit has a bug where the "top" baseline draws 5 pixels too low?!
-            context.drawImage(self.cache, tx + 25, ty + (me.sys.ua.indexOf("webkit") >= 0 ? 0 : 5));
+            context.drawImage(self.cache, tx + 25, ty + (me.sys.ua.indexOf("webkit") >= 0 ? -2 : 3));
         }
     });
 
@@ -239,6 +239,8 @@ game.installHUD = function HUD() {
             var count = items.containers.value
             var value = this.value;
 
+            // FIXME: Blink when low!
+
             x += this.pos.x;
             y += this.pos.y;
             for (var i = 0; i < count; i++) {
@@ -257,7 +259,80 @@ game.installHUD = function HUD() {
                 x += this.hearts[image].width + 2;
             }
         }
-    })
+    });
+
+    var inventory = HUD_Item.extend({
+        // What this inventory contains.
+        "contents" : [],
+
+        "init" : function init(x, y, contents) {
+            var self = this;
+            self.parent(x, y, 0);
+            contents.forEach(function forEach(item) {
+                self.addItem(item);
+            })
+        },
+
+        "addWeapon" : function addWeapon(item) {
+            this.contents[7] = item;
+
+            // Create weapon sprite.
+            game.rachel.addCompositionItem(item);
+            game.rachel.setCompositionOrder(item.name, "rachel");
+        },
+
+        "addItem" : function addItem(item) {
+            if (this.contents.length >= 7) {
+                console.log("Error: Inventory overflow while adding: " + JSON.stringify(item));
+                return;
+            }
+
+            this.contents.push(item);
+        },
+
+        "getItem" : function getItem(idx) {
+            return this.contents[idx];
+        },
+
+        "request_update" : function request_update() {
+            // FIXME
+            return true;
+        },
+
+        "draw" : function draw(context, x, y) {
+            x += this.pos.x;
+            y += this.pos.y;
+
+            function drawBorder(x, y) {
+                // Shadow.
+                context.strokeStyle = "#000";
+                context.strokeRect(x + 1, y + 1, 36, 36);
+
+                // Box
+                context.strokeStyle = "#fff";
+                context.strokeRect(x, y, 36, 36);
+            }
+
+            context.save();
+            context.lineWidth = 1;
+            for (var i = 0; i < 7 * 40; i += 40) {
+                drawBorder(x + i, y);
+                // FIXME: Draw dummy item.
+                if (this.contents[i]) {
+                    context.fillStyle = "red";
+                    context.fillRect(x + i + 2, y + 2, 32, 32);
+                }
+            }
+            drawBorder(x + 9 * 40, y);
+            // FIXME: Draw dummy item.
+            if (this.contents[7]) {
+                context.fillStyle = "red";
+                context.fillRect(x + 9 * 40 + 2, y + 2, 32, 32);
+            }
+
+            context.restore();
+        }
+    });
 
     // Create a HUD container.
     // NOTE: This turns game.HUD into a singleton!
@@ -266,9 +341,10 @@ game.installHUD = function HUD() {
 
     // Create a list of items to add to the HUD.
     items = {
-        "coins"         : new coins(0, 0),
-        "containers"    : new HUD_Item(0, 25, 3),
-        "hearts"        : new hearts(2, 25, 3)
+        "coins"         : new coins(2, 2),
+        "containers"    : new HUD_Item(0, 0, 3),
+        "hearts"        : new hearts(2, 25, 3),
+        "inventory"     : new inventory(~~(c.WIDTH / 4), 2, [])
     };
 
     // Add them all.

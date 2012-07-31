@@ -3,8 +3,14 @@ game.ChestEntity = game.Sprite.extend({
     // Whether the chest has been opened.
     "open" : false,
 
+    // Who opened the chest.
+    "actor" : null,
+
     // Do something when the chest has opened.
     "callback" : null,
+
+    // What this chest contains.
+    "contents" : null,
 
     "init" : function init(x, y, settings) {
         this.parent(x, y, settings);
@@ -21,7 +27,12 @@ game.ChestEntity = game.Sprite.extend({
         this.body.setMass(Infinity);
 
         // What item do we get?
-        this.item = settings.item;
+        try {
+            this.contents = JSON.parse(settings.contents);
+        }
+        catch (e) {
+            throw "Chest setting error. JSON PARSE: " + e + " in " + settings.contents;
+        }
 
         // Which chest to display.
         // 0 = Square
@@ -40,7 +51,7 @@ game.ChestEntity = game.Sprite.extend({
         this.open = true;
         this.setAnimationFrame(2);
         if (typeof(this.callback) === "function") {
-            this.callback(this.item);
+            this.callback.call(this.actor, this.contents);
         }
     },
 
@@ -50,6 +61,7 @@ game.ChestEntity = game.Sprite.extend({
         }
 
         me.audio.play("chests");
+        this.actor = actor;
         this.callback = callback;
         this.animationpause = false;
     }

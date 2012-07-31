@@ -18,6 +18,13 @@ game.RachelEntity = game.NPC.extend({
         // Call the constructor.
         this.parent(x, y, settings);
 
+        // Add weapon, if any.
+        var item = game.HUD.HUDItems.inventory.getItem(7);
+        if (item) {
+            this.addCompositionItem(item);
+            this.setCompositionOrder(item.name, "rachel");
+        }
+
         // Rachel's mass is always 1.
         this.body.setMass(1);
 
@@ -79,17 +86,34 @@ game.RachelEntity = game.NPC.extend({
         return false;
     },
 
-    "interactionCallback" : function interactionCallback(data) {
-        console.log(data);
+    "interactionCallback" : function interactionCallback(message) {
+        switch (message.type) {
+            case "item":
+                game.HUD.HUDItems.inventory.addItem(message.data);
+                break;
 
-        // DEBUG
-        if (data.indexOf("still") >= 0) {
-            game.play.loadLevel({
-                "to"        : "rachels_room",
-                "music"     : "bells",
-                "fade"      : "black",
-                "duration"  : 250
-            });
+            case "weapon":
+                game.HUD.HUDItems.inventory.addWeapon(message.data);
+                break;
+
+            case "coins":
+                game.HUD.updateItemValue("coins", message.data);
+                publish("collect coin", [ message.data ]);
+                me.audio.play("collect_coin");
+                break;
+
+            case "warp":
+                game.play.loadLevel(message.data);
+                break;
+
+            default:
+                console.error(
+                    "Unknown message type in interactionCallback: " +
+                    message.type +
+                    " ... " +
+                    JSON.stringify(message)
+                );
+                break;
         }
     },
 
