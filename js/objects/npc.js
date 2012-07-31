@@ -103,10 +103,10 @@ game.NPC = game.Sprite.extend({
         self.hearts -= power;
         if (self.hearts <= 0) {
             // Dead.
+            me.audio.play("dying");
 
             me.game.remove(self, true);
 
-            // FIXME: "die" sound.
             var space = cm.getSpace();
             space.addPostStepCallback(function post_hit() {
                 self.body.eachShape(function remove_shape(shape) {

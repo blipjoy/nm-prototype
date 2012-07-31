@@ -76,6 +76,7 @@ game.resources = {
     "sfx" : [
         "chests",
         "collect_coin",
+        "dying",
         "fanfare",
         "hammer1",
         "hammer2"
@@ -85,6 +86,7 @@ game.resources = {
     "bgm" : [
         "bells",
         "del_erad",
-        "pink_and_lively"
+        "pink_and_lively",
+        "random_and_cheap"
     ]
 };

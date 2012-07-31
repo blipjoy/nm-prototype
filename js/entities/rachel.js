@@ -46,11 +46,13 @@ game.RachelEntity = game.NPC.extend({
         game.HUD.HUDItems.hearts.update(-power);
         if (game.HUD.HUDItems.hearts.value <= 0) {
             // Dead.
+            me.audio.stopTrack();
+            me.audio.play("dying");
 
-            // FIXME: "die" sound.
             game.modal = true;
 
             me.game.viewport.fadeIn("black", 3000, function fadeInComplete() {
+                me.audio.playTrack("random_and_cheap");
                 me.game.removeAll();
                 cm.removeAll();
                 me.state.change(me.state.GAMEOVER);
@@ -91,23 +93,17 @@ game.RachelEntity = game.NPC.extend({
     "interactionCallback" : function interactionCallback(message) {
         switch (message.type) {
             case "item":
-                me.audio.pauseTrack();
                 me.audio.play("fanfare");
                 publish("acquire item", [ message.data.name ]);
                 game.HUD.HUDItems.inventory.addItem(message.data);
-                game.dialog([ message.data.description ], function dialogClose() {
-                    me.audio.resumeTrack();
-                });
+                game.dialog([ message.data.description ]);
                 break;
 
             case "weapon":
-                me.audio.pauseTrack();
                 me.audio.play("fanfare");
                 publish("acquire weapon", [ message.data.name ]);
                 game.HUD.HUDItems.inventory.addWeapon(message.data);
-                game.dialog([ message.data.description ], function dialogClose() {
-                    me.audio.resumeTrack();
-                });
+                game.dialog([ message.data.description ]);
                 break;
 
             case "coins":
