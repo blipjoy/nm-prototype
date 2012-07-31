@@ -196,12 +196,22 @@ game.PlayScreen = game.AnimatedScreen.extend({
         game.installBaddieHandler();
 
         // Load the level.
-        this.loadLevel({
-            "to"        : "island",
-            "music"     : "pink_and_lively",
-            "fadeOut"   : "black",
-            "duration"  : 1000
-        });
+        if (c.DEBUG) {
+            this.loadLevel({
+                "to"        : "island",
+                "music"     : "pink_and_lively",
+                "fadeOut"   : "black",
+                "duration"  : 1000
+            });
+        }
+        else {
+            this.loadLevel({
+                "to"        : "rachels_room",
+                "music"     : "bells",
+                "fadeOut"   : "black",
+                "duration"  : 1000
+            });
+        }
     },
 
     "onDestroyEvent" : function onDestroyEvent() {
