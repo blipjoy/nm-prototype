@@ -41,7 +41,7 @@ game.RachelEntity = game.NPC.extend({
     },
 
     "hit" : function hit(power) {
-        // FIXME: "pain" sound.
+        me.audio.play("hurt");
 
         this.hearts -= power;
         game.HUD.HUDItems.hearts.update(-power);
@@ -52,7 +52,7 @@ game.RachelEntity = game.NPC.extend({
 
             game.modal = true;
 
-            me.game.viewport.fadeIn("black", 3000, function fadeInComplete() {
+            me.game.viewport.fadeIn("black", 2000, function fadeInComplete() {
                 me.audio.playTrack("random_and_cheap");
                 me.game.removeAll();
                 cm.removeAll();

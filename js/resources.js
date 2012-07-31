@@ -79,7 +79,8 @@ game.resources = {
         "dying",
         "fanfare",
         "hammer1",
-        "hammer2"
+        "hammer2",
+        "hurt"
     ],
 
     /* 2-channel audio. Usually music. */
