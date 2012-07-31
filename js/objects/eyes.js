@@ -10,7 +10,7 @@ game.BlinkingEyes = me.AnimationSheet.extend({
         this.addAnimation("walk_down",  [ 0, 1 ]);
         this.addAnimation("walk_right", [ 2, 3 ]);
         this.addAnimation("walk_left",  [ 4, 5 ]);
-        this.addAnimation("walk_up",    [ 6, 7 ]);
+        this.addAnimation("walk_up",    [ 6, 6 ]);
         this.setCurrentAnimation("walk_down", this.resetAnimation);
         this.animationspeed = 4;
         this.resetAnimation();

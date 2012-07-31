@@ -41,21 +41,21 @@ game.Weapon = me.AnimationSheet.extend({
         // FIXME: Numbers should be based on owner's and this sizes!
         this.positions = {
             "x" : {
-                "swing_left"    : [ 64, 44, 10 ],
-                "swing_up"      : [-24,-24,-18 ],
-                "swing_right"   : [-38,-21, 14 ],
-                "swing_down"    : [-3,  -6,-14 ],
+                "swing_left"    : [ 59, 42, 7 ],
+                "swing_up"      : [-24,-24,-22 ],
+                "swing_right"   : [-41,-24, 10 ],
+                "swing_down"    : [-6,  -9,-17 ],
 
                 "stand_left"    : [ 52 ],
                 "stand_up"      : [-24 ],
-                "stand_right"   : [-28 ],
-                "stand_down"    : [-3 ]
+                "stand_right"   : [-36 ],
+                "stand_down"    : [-6 ]
             },
             "y" : {
-                "swing_left"    : [-2, -30,-1 ],
-                "swing_up"      : [-4, -24,-24 ],
+                "swing_left"    : [-2, -28, 0 ],
+                "swing_up"      : [-4, -26,-24 ],
                 "swing_right"   : [-2, -28,-3 ],
-                "swing_down"    : [-22,-23, 16 ],
+                "swing_down"    : [-22,-23, 14 ],
 
                 "stand_left"    : [-28 ],
                 "stand_up"      : [-4 ],
@@ -158,17 +158,17 @@ game.Weapon = me.AnimationSheet.extend({
                         break;
 
                     case "right":
-                        offset.x = ~~(shape.bb_r - shape.bb_l) + 24;
+                        offset.x = ~~(shape.bb_r - shape.bb_l) + 23;
+                        offset.y = 1;
                         break;
 
                     case "up":
-                        offset.x = 1;
-                        offset.y = ~~(shape.bb_t - shape.bb_b) + 14;
+                        offset.y = ~~(shape.bb_t - shape.bb_b) + 13;
                         break;
 
                     case "down":
                         offset.x = -2;
-                        offset.y = -(~~(shape.bb_t - shape.bb_b) + 16);
+                        offset.y = -(~~(shape.bb_t - shape.bb_b) + 12);
                         break;
                 }
 
