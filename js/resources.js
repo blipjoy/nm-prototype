@@ -24,6 +24,9 @@ game.resources = {
         "coin_shadow",
         "hammer",
 
+        // Inventory
+        "inventory_hammer",
+
         // Interactive objects
         "chests",
 

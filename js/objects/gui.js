@@ -300,8 +300,10 @@ game.installHUD = function HUD() {
         },
 
         "draw" : function draw(context, x, y) {
-            x += this.pos.x;
-            y += this.pos.y;
+            var self = this;
+
+            x += self.pos.x;
+            y += self.pos.y;
 
             function drawBorder(x, y) {
                 // Shadow.
@@ -313,22 +315,27 @@ game.installHUD = function HUD() {
                 context.strokeRect(x, y, 36, 36);
             }
 
-            context.save();
-            context.lineWidth = 1;
-            for (var i = 0; i < 7 * 40; i += 40) {
-                drawBorder(x + i, y);
-                // FIXME: Draw dummy item.
-                if (this.contents[i]) {
-                    context.fillStyle = "red";
-                    context.fillRect(x + i + 2, y + 2, 32, 32);
+            function drawItem(idx) {
+                var item = self.contents[idx];
+                if (item) {
+                    var image = game.getImage("inventory_" + item.name);
+                    context.drawImage(image, x + 2, y + 2);
                 }
             }
-            drawBorder(x + 9 * 40, y);
-            // FIXME: Draw dummy item.
-            if (this.contents[7]) {
-                context.fillStyle = "red";
-                context.fillRect(x + 9 * 40 + 2, y + 2, 32, 32);
+
+            context.save();
+            context.lineWidth = 1;
+            for (var i = 0; i < 7; i++, x += 40) {
+                drawBorder(x, y);
+                drawItem(i);
             }
+
+            // Skip a spot.
+            x += 40;
+
+            // Draw weapon icon.
+            drawBorder(x, y);
+            drawItem(7);
 
             context.restore();
         }
