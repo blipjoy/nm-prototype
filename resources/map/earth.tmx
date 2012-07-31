@@ -243,6 +243,15 @@
     <property name="spritewidth" value="32"/>
    </properties>
   </object>
+  <object name="chest" x="1184" y="2976" width="32" height="32">
+   <properties>
+    <property name="contents" value="{&quot;type&quot;:&quot;weapon&quot;,&quot;data&quot;:{&quot;name&quot;:&quot;hammer&quot;,&quot;class&quot;:&quot;game.Weapon&quot;,&quot;image&quot;:&quot;hammer&quot;,&quot;spritewidth&quot;:64,&quot;spriteheight&quot;:64,&quot;sfx&quot;:[&quot;hammer1&quot;, &quot;hammer2&quot;]}}"/>
+    <property name="image" value="chests"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+    <property name="which" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="air" width="128" height="128">
   <data encoding="base64">

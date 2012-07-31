@@ -278,6 +278,7 @@ game.installHUD = function HUD() {
             this.contents[7] = item;
 
             // Create weapon sprite.
+            // FIXME: Remove old sprite if a weapon was already loaded.
             game.rachel.addCompositionItem(item);
             game.rachel.setCompositionOrder(item.name, "rachel");
         },
