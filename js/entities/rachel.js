@@ -43,6 +43,7 @@ game.RachelEntity = game.NPC.extend({
     "hit" : function hit(power) {
         // FIXME: "pain" sound.
 
+        this.hearts -= power;
         game.HUD.HUDItems.hearts.update(-power);
         if (game.HUD.HUDItems.hearts.value <= 0) {
             // Dead.
