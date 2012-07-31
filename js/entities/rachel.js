@@ -19,10 +19,12 @@ game.RachelEntity = game.NPC.extend({
         this.parent(x, y, settings);
 
         // Add weapon, if any.
-        var item = game.HUD.HUDItems.inventory.getItem(7);
-        if (item) {
-            this.addCompositionItem(item);
-            this.setCompositionOrder(item.name, "rachel");
+        if (game.HUD) {
+            var item = game.HUD.HUDItems.inventory.getItem(7);
+            if (item) {
+                this.addCompositionItem(item);
+                this.setCompositionOrder(item.name, "rachel");
+            }
         }
 
         // Rachel's mass is always 1.
