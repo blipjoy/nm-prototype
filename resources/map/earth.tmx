@@ -96,6 +96,153 @@
     <property name="spritewidth" value="29"/>
    </properties>
   </object>
+  <object name="snake" x="2176" y="2272" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="2080" y="2528" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="1888" y="2656" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="2304" y="2624" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="2432" y="2656" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="2240" y="2816" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="2528" y="2944" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="1696" y="2880" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="1376" y="2752" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="1088" y="2656" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="1376" y="2464" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="1056" y="2272" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="960" y="2464" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="640" y="2464" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="736" y="1888" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="768" y="1664" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="1056" y="1568" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="1408" y="1792" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="1888" y="1856" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="2240" y="1984" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
+  <object name="snake" x="1152" y="3040" width="32" height="32">
+   <properties>
+    <property name="image" value="snake"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="air" width="128" height="128">
   <data encoding="base64">
