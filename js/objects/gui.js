@@ -231,7 +231,7 @@ game.installHUD = function HUD() {
         },
 
         "request_update" : function request_update() {
-            return items.containers.updated;
+            return this.updated || items.containers.updated;
         },
 
         "draw" : function draw(context, x, y) {
@@ -274,6 +274,7 @@ game.installHUD = function HUD() {
         },
 
         "addWeapon" : function addWeapon(item) {
+            this.updated = true;
             this.contents[7] = item;
 
             // Create weapon sprite.
@@ -287,6 +288,7 @@ game.installHUD = function HUD() {
                 return;
             }
 
+            this.updated = true;
             this.contents.push(item);
         },
 
@@ -295,8 +297,7 @@ game.installHUD = function HUD() {
         },
 
         "request_update" : function request_update() {
-            // FIXME
-            return true;
+            return this.updated;
         },
 
         "draw" : function draw(context, x, y) {
