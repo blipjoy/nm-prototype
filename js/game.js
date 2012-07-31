@@ -18,17 +18,19 @@ var game = {
         me.audio.init("ogg");
 
         // Key bindings.
-        me.input.bindKey(me.input.KEY.UP,    "up");
-        me.input.bindKey(me.input.KEY.LEFT,  "left");
-        me.input.bindKey(me.input.KEY.DOWN,  "down");
-        me.input.bindKey(me.input.KEY.RIGHT, "right");
-        me.input.bindKey(me.input.KEY.W,     "up");
-        me.input.bindKey(me.input.KEY.A,     "left");
-        me.input.bindKey(me.input.KEY.S,     "down");
-        me.input.bindKey(me.input.KEY.D,     "right");
-        me.input.bindKey(me.input.KEY.ENTER, "action", true);
-        me.input.bindKey(me.input.KEY.SPACE, "action", true);
-        me.input.bindKey(me.input.KEY.SHIFT, "shift");
+        me.input.bindKey(me.input.KEY.UP,       "up");
+        me.input.bindKey(me.input.KEY.LEFT,     "left");
+        me.input.bindKey(me.input.KEY.DOWN,     "down");
+        me.input.bindKey(me.input.KEY.RIGHT,    "right");
+        me.input.bindKey(me.input.KEY.W,        "up");
+        me.input.bindKey(me.input.KEY.A,        "left");
+        me.input.bindKey(me.input.KEY.S,        "down");
+        me.input.bindKey(me.input.KEY.D,        "right");
+        me.input.bindKey(me.input.KEY.ENTER,    "action", true);
+        me.input.bindKey(me.input.KEY.SPACE,    "action", true);
+        me.input.bindKey(me.input.KEY.SHIFT,    "shift");
+        me.input.bindKey(me.input.KEY.Z,        "attack", true);
+        me.input.bindKey(c.KEY_APOS,            "attack", true);
 
         // Set a callback to run when loading is complete.
         me.loader.onload = this.loaded.bind(this);

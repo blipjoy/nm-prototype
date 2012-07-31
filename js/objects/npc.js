@@ -48,12 +48,12 @@ game.NPC = game.Sprite.extend({
     // Attack strength.
     "power" : 1,
 
+    // True during weapon attack animation.
+    "attacking" : false,
+
     "init" : function init(x, y, settings) {
         var self = this;
         self.parent(x, y, settings);
-
-        // Adjust collision bounding box.
-        //self.adjustBoxShape(-1, 10, 15, 20); // FIXME
 
         self.body.eachShape(function eachShape(shape) {
             shape.collision_type = c.COLLIDE_GOODIE;
@@ -84,8 +84,8 @@ game.NPC = game.Sprite.extend({
         // AI initialization.
         self.destination = new cp.v(0, 0);
 
-        var bb = self.body.shapeList[0];
-        self.vision = cp.bb(bb.bb_l, bb.bb_b, bb.bb_r, bb.bb_t);
+        var shape = self.body.shapeList[0];
+        self.vision = cp.bb(shape.bb_l, shape.bb_b, shape.bb_r, shape.bb_t);
     },
 
     "hit" : function hit(power) {
@@ -130,7 +130,7 @@ game.NPC = game.Sprite.extend({
     },
 
     "updateVision" : function updateVision() {
-        var shape = this.body.shapeList[0];
+        var shape = this.body.shapeList[0]; // FIXME! May not always have a shape! :(
         var dir = c[this.dir_name.toUpperCase()];
         var w = shape.bb_l - shape.bb_r - 1;
         var h = shape.bb_b - shape.bb_t - 1;
@@ -241,7 +241,7 @@ game.NPC = game.Sprite.extend({
     "update" : function update() {
         this.isDirty = false;
         this.body.resetForces();
-        if (!game.modal) {
+        if (!game.modal && !this.attacking) {
             this.updateVision();
             this.checkMovement();
             this.checkInteraction();
@@ -275,6 +275,7 @@ game.NPC = game.Sprite.extend({
                 context.strokeStyle = (this.tracking ? "red" : "orange");
             }
             else {
+                context.lineWidth = 1;
                 context.strokeStyle = "green";
             }
             context.strokeRect(

@@ -184,6 +184,36 @@ game.Sprite = game.Chipmunk.extend({
         }
     },
 
+    "setCompositionOrder" : function setCompositionOrder(name, target, after) {
+        after = (after ? 1 : -1);
+
+        var current_idx = this.composition.indexOf(name);
+
+        if (typeof(target) === "number") {
+            this.composition.splice(current_idx, 1);
+            if (target === -1) {
+                this.composition.push(name);
+            }
+            else {
+                this.composition.splice(target + +(target < 0), 0, name);
+            }
+        }
+        else {
+            var target_idx = this.composition.indexOf(target);
+
+            if (current_idx !== (target_idx + after)) {
+                if (current_idx > target_idx) {
+                    this.composition.splice(current_idx, 1);
+                    this.composition.splice(target_idx, 0, name);
+                }
+                else {
+                    this.composition.splice(target_idx + 1, 0, name);
+                    this.composition.splice(current_idx, 1);
+                }
+            }
+        }
+    },
+
     "interact" : function interact() {
         console.warn("Missing interaction for " + this.name);
     },

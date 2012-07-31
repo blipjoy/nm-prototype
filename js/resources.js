@@ -22,6 +22,7 @@ game.resources = {
         "coin_gold",
         "coin_silver",
         "coin_shadow",
+        "hammer",
 
         // Interactive objects
         "chests",
@@ -65,7 +66,9 @@ game.resources = {
     /* 1-channel audio. Usually sound effects. */
     "sfx" : [
         "chests",
-        "collect_coin"
+        "collect_coin",
+        "hammer1",
+        "hammer2"
     ],
 
     /* 2-channel audio. Usually music. */

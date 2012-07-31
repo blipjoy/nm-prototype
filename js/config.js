@@ -25,6 +25,9 @@ var c = {
     // States
     "STATE_INFO"            : 100, // FIXME: melonJS should have a `me.state.USER` for these.
 
+    // Keys
+    "KEY_APOS"              : 222, // Apostrophe (aka single-quote)
+
 /*
  *              COLLISION TRUTH TABLE
  *          rachel  npc     coin    chest   wall    exit    baddie
@@ -65,7 +68,7 @@ var c = {
     "COLLIDE_COLLECTIBLE"   : 0x00000002,
     "COLLIDE_EXIT"          : 0x00000003,
     "COLLIDE_BADDIE"        : 0x00000004,
-    "COLLIDE_GOODIE"        : 0x00000005,
+    "COLLIDE_GOODIE"        : 0x00000005
 };
 
 // Helper to enable debug by setting a special hash in the URL.
