@@ -91,12 +91,14 @@ game.RachelEntity = game.NPC.extend({
     "interactionCallback" : function interactionCallback(message) {
         switch (message.type) {
             case "item":
+                publish("acquire item", [ message.data.name ]);
                 game.HUD.HUDItems.inventory.addItem(message.data);
                 break;
 
             case "weapon":
                 me.audio.pauseTrack();
                 me.audio.play("fanfare");
+                publish("acquire weapon", [ message.data.name ]);
                 game.HUD.HUDItems.inventory.addWeapon(message.data);
                 game.dialog([ message.data.description ], function dialogClose() {
                     me.audio.resumeTrack();
