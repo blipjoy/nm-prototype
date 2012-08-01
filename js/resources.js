@@ -74,7 +74,8 @@ game.resources = {
         "stonepattern",
         "town_buildings",
         "tree_stump",
-        "victorian_house"
+        "victorian_house",
+        "windmill"
     ],
 
     /* Maps from Tiled. */

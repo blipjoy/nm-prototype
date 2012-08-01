@@ -1,12 +1,7 @@
 /* Screen object supporting layer-animation */
 game.AnimatedScreen = me.ScreenObject.extend({
-    "layers" : [],
-
-    "animationspeed" : me.sys.fps / 10,
-
-    "framecount" : 0,
-
-    "frameidx" : 0,
+    "animations" : {},
+    "keys" : [],
 
     "init" : function init(animationspeed) {
         this.parent(true);
@@ -15,39 +10,63 @@ game.AnimatedScreen = me.ScreenObject.extend({
     },
 
     "update" : function update() {
+        var isDirty = false;
+        var self = this;
+
         if (game.wantsResort) {
             game.wantsResort = false;
             me.game.sort.defer(game.sort);
         }
 
-        if (!this.layers.length) {
+        if (!self.keys.length) {
             return false;
         }
 
-        if (++this.framecount > this.animationspeed) {
-            this.framecount = 0;
+        self.keys.forEach(function forEach(key) {
+            var animation = self.animations[key];
+            if (++animation.count > animation.speed) {
+                animation.count = 0;
 
-            this.layers[this.frameidx].visible = false;
-            ++this.frameidx;
-            this.frameidx %= this.layers.length;
-            this.layers[this.frameidx].visible = true;
+                animation.layers[animation.idx].visible = false;
+                ++animation.idx;
+                animation.idx %= animation.layers.length;
+                animation.layers[animation.idx].visible = true;
 
-            return true;
-        }
-        return false;
+                isDirty = true;
+            }
+        });
+
+        return isDirty;
     },
 
     "onLevelLoaded" : function onLevelLoaded() {
         var self = this;
-        self.layers = [];
+        self.animations = {};
+        self.keys = [];
+
+        // Use `in` operator, so we can use 0, if we want. ;)
+        var speed = (("animationspeed" in me.game.currentLevel) ?
+            me.game.currentLevel.animationspeed :
+            (me.sys.fps / 10));
 
         var layers = me.game.currentLevel.getLayers();
         layers.forEach(function forEach(layer, idx) {
-            if (layer.name.toLowerCase().indexOf("animated") >= 0) {
-                if (self.layers.length) {
+            if (layer.name.toLowerCase().indexOf("animated ") === 0) {
+                var key = layer.name.substr(9).replace(/\d+$/, "").trim();
+
+                if (self.animations[key]) {
                     layer.visible = false;
                 }
-                self.layers.push(layer);
+                else {
+                    self.keys.push(key);
+                    self.animations[key] = {
+                        "speed" : me.game.currentLevel[key + " speed"] || speed,
+                        "layers" : [],
+                        "count" : 0,
+                        "idx" : 0
+                    };
+                }
+                self.animations[key].layers.push(layer);
             }
         });
     }
@@ -167,11 +186,6 @@ game.PlayScreen = game.AnimatedScreen.extend({
             me.audio.stopTrack();
             me.audio.playTrack(settings.music);
         }
-
-        // Use `in` operator, so we can use 0, if we want. ;)
-        if ("animationspeed" in me.game.currentLevel) {
-            this.animationspeed = me.game.currentLevel.animationspeed;
-        }
     },
 
     "loadLevel" : function loadLevel(settings) {
@@ -261,6 +275,9 @@ game.TitleScreen = game.PlayScreen.extend({
 
     "onLevelLoaded" : function onLevelLoaded(settings) {
         var self = this;
+        self.parent({
+            "to" : settings.to
+        });
 
         self.loading = false;
 
