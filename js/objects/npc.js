@@ -259,6 +259,11 @@ game.NPC = game.Sprite.extend({
             force.x *= self.walk_angle;
             force.y *= self.walk_angle;
         }
+        // Run when tracking prey.
+        if (self.tracking) {
+            force.x *= 1.5;
+            force.y *= 1.5;
+        }
 
         if ((self.sleep < -10) && !~~self.body.vx && !~~self.body.vy) {
             self.resetRoam();
