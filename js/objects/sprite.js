@@ -177,11 +177,13 @@ game.Sprite = game.Chipmunk.extend({
             return node;
         }
 
+        var image = (typeof(item.image) === "string" ? game.getImage(item.image) : item.image);
+
         // `class` should usually be "me.AnimationSheet", but can be anything.
         self.children[item.name] = new (getClass(item.class))(
             self.pos.x,
             self.pos.y,
-            game.getImage(item.image),
+            image,
             item.spritewidth,
             item.spriteheight,
             self,

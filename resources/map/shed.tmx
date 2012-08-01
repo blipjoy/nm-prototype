@@ -44,7 +44,7 @@
   </object>
   <object name="chest" x="128" y="96" width="32" height="32">
    <properties>
-    <property name="contents" value="{&quot;type&quot;:&quot;weapon&quot;,&quot;data&quot;:{&quot;name&quot;:&quot;hammer&quot;,&quot;class&quot;:&quot;game.Weapon&quot;,&quot;image&quot;:&quot;hammer&quot;,&quot;spritewidth&quot;:64,&quot;spriteheight&quot;:64,&quot;sfx_swing&quot;:[&quot;mallet_swing&quot;],&quot;sfx_whomp&quot;:[&quot;mallet_whomp&quot;],&quot;description&quot;:&quot;Rachel procures a Mighty Mallet with which to smite things and stuff.&quot;}}"/>
+    <property name="contents" value="{&quot;type&quot;:&quot;weapon&quot;,&quot;data&quot;:{&quot;name&quot;:&quot;hammer&quot;,&quot;class&quot;:&quot;game.Weapon&quot;,&quot;image&quot;:&quot;hammer&quot;,&quot;icon&quot;:5,&quot;spritewidth&quot;:64,&quot;spriteheight&quot;:64,&quot;sfx_swing&quot;:[&quot;mallet_swing&quot;],&quot;sfx_whomp&quot;:[&quot;mallet_whomp&quot;],&quot;description&quot;:&quot;Rachel procures a Mighty Mallet with which to smite things and stuff.&quot;}}"/>
     <property name="image" value="chests"/>
     <property name="spriteheight" value="32"/>
     <property name="spritewidth" value="32"/>

@@ -130,6 +130,7 @@ var game = {
 
         // Interactive objects.
         me.entityPool.add("chest", game.ChestEntity);
+        me.entityPool.add("item", game.ItemEntity);
 
         // Static objects.
         me.entityPool.add("exit", game.Exit);

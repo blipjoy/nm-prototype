@@ -70,6 +70,22 @@ game.installHUD = function HUD() {
             this.preValue   = NaN;
         },
 
+        "update" : function update(value) {
+            this.parent(value);
+
+            if (value > 0) {
+                publish("collect coin", [ value ]);
+                me.audio.play("collect_coin");
+            }
+            else {
+                publish("spend coin", [ -value ]);
+                // Play thee sounds quickly in series.
+                me.audio.play("collect_coin");
+                setTimeout(function timeout() { me.audio.play("collect_coin") }, 200);
+                setTimeout(function timeout() { me.audio.play("collect_coin") }, 400);
+            }
+        },
+
         "request_update" : function request_update() {
             return this.image.update();
         },
@@ -264,6 +280,7 @@ game.installHUD = function HUD() {
     var inventory = HUD_Item.extend({
         // What this inventory contains.
         "contents" : [],
+        "weapon" : null,
 
         "init" : function init(x, y, contents) {
             var self = this;
@@ -273,12 +290,27 @@ game.installHUD = function HUD() {
             })
         },
 
+        "cacheIcon" : function cacheIcon(item) {
+            item.image = game.getImage(item.image);
+
+            var count = ~~(item.image.width / item.spritewidth);
+            item.offset = {
+                "x" : (item.icon % count) * item.spritewidth,
+                "y" : ~~(item.icon / count) * item.spriteheight
+            };
+        },
+
         "addWeapon" : function addWeapon(item) {
             this.updated = true;
-            this.contents[7] = item;
+            this.weapon = item;
+
+            me.audio.play("fanfare");
+            publish("acquire weapon", [ item.name ]);
+            game.dialog([ item.description ]);
 
             // Create weapon sprite.
             // FIXME: Remove old sprite if a weapon was already loaded.
+            this.cacheIcon(item);
             game.rachel.addCompositionItem(item);
             game.rachel.setCompositionOrder(item.name, "rachel");
         },
@@ -289,12 +321,17 @@ game.installHUD = function HUD() {
                 return;
             }
 
+            me.audio.play("fanfare");
+            publish("acquire item", [ item.name ]);
+            game.dialog([ item.description ]);
+
+            this.cacheIcon(item);
             this.updated = true;
             this.contents.push(item);
         },
 
         "getItem" : function getItem(idx) {
-            return this.contents[idx];
+            return (idx === 7) ? this.weapon : this.contents[idx];
         },
 
         "request_update" : function request_update() {
@@ -318,10 +355,19 @@ game.installHUD = function HUD() {
             }
 
             function drawItem(idx) {
-                var item = self.contents[idx];
+                var item = (idx === 7) ? self.weapon : self.contents[idx];
                 if (item) {
-                    var image = game.getImage("inventory_" + item.name);
-                    context.drawImage(image, x + 2, y + 2);
+                    context.drawImage(
+                        item.image,
+                        item.offset.x,
+                        item.offset.y,
+                        32,
+                        32,
+                        x + 2,
+                        y + 2,
+                        32,
+                        32
+                    );
                 }
             }
 

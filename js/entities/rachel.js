@@ -66,14 +66,10 @@ game.RachelEntity = game.NPC.extend({
         switch (arbiter.b.data.name) {
             case "coin_gold":
                 game.HUD.updateItemValue("coins", 100);
-                publish("collect coin", [ 100 ]);
-                me.audio.play("collect_coin");
                 break;
 
             case "coin_silver":
                 game.HUD.updateItemValue("coins", 1);
-                publish("collect coin", [ 1 ]);
-                me.audio.play("collect_coin");
                 break;
         }
 
@@ -94,23 +90,15 @@ game.RachelEntity = game.NPC.extend({
     "interactionCallback" : function interactionCallback(message) {
         switch (message.type) {
             case "item":
-                me.audio.play("fanfare");
-                publish("acquire item", [ message.data.name ]);
                 game.HUD.HUDItems.inventory.addItem(message.data);
-                game.dialog([ message.data.description ]);
                 break;
 
             case "weapon":
-                me.audio.play("fanfare");
-                publish("acquire weapon", [ message.data.name ]);
                 game.HUD.HUDItems.inventory.addWeapon(message.data);
-                game.dialog([ message.data.description ]);
                 break;
 
             case "coins":
                 game.HUD.updateItemValue("coins", message.data);
-                publish("collect coin", [ message.data ]);
-                me.audio.play("collect_coin");
                 break;
 
             case "warp":
