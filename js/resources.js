@@ -126,7 +126,7 @@ game.story = {
         {
             "image" : null,
             "messages" : [
-                "Poppa used to tell me stories of an island he called Neverwell.",
+                "Papa used to tell me stories of an island he called Neverwell.",
                 "Some of his stories were frightening, but they always",
                 "had a happy ending."
             ]
@@ -150,7 +150,7 @@ game.story = {
         {
             "image" : null,
             "messages" : [
-                "Poppa would talk about about so many things that it seemed",
+                "Papa would talk about about so many things that it seemed",
                 "impossible to put it all on one island. I guess that's why he",
                 "set some of his adventures on smaller islands around",
                 "the mainland."
@@ -160,7 +160,7 @@ game.story = {
             "image" : null,
             "messages" : [
                 "I remember the moor on Neverwell held a special place in",
-                "Poppa's heart. He said it was the most dangerous place he",
+                "Papa's heart. He said it was the most dangerous place he",
                 "ever saw, but that it held some kind of a secret...",
                 "Maybe it was the source of the inhabitant's magic?"
             ]
@@ -168,7 +168,7 @@ game.story = {
         {
             "image" : null,
             "messages" : [
-                "Poppa died 10 years ago, so I'll never know the answer.",
+                "Papa died 10 years ago, so I'll never know the answer.",
                 "I'm 15 now."
             ]
         },
