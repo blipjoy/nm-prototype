@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="8" height="8" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" width="10" height="8" tilewidth="32" tileheight="32">
  <properties>
   <property name="background_color" value="black"/>
  </properties>
@@ -12,23 +12,29 @@
  <tileset firstgid="471" name="cabinets" tilewidth="32" tileheight="32">
   <image source="../img/cabinets.png" width="192" height="416"/>
  </tileset>
- <layer name="floor/walls" width="8" height="8">
+ <tileset firstgid="549" name="doors" tilewidth="32" tileheight="32">
+  <image source="../img/doors.png" width="160" height="128"/>
+ </tileset>
+ <tileset firstgid="569" name="inside" tilewidth="32" tileheight="32">
+  <image source="../img/inside.png" width="320" height="320"/>
+ </tileset>
+ <layer name="floor/walls" width="10" height="8">
   <data encoding="base64">
-   nAEAAJwBAACcAQAAnAEAAJwBAACcAQAAnAEAAJwBAACcAQAAnAEAAJwBAACcAQAAnAEAAJwBAACcAQAAnAEAAJwBAACcAQAAnAEAAJwBAACcAQAAnAEAAJwBAACcAQAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+   YgIAAJwBAACcAQAAnAEAAJwBAACcAQAAnAEAAJwBAACcAQAAYwIAAGICAACcAQAAnAEAAJwBAACcAQAAnAEAAJwBAACcAQAAnAEAAGMCAABiAgAAnAEAAJwBAACcAQAAnAEAAJwBAACcAQAAnAEAAJwBAABjAgAAYgIAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAYwIAAGICAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAAGMCAABiAgAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAABjAgAAYgIAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAYwIAAGwCAABYAgAAdAAAAFgCAABYAgAAWAIAAFgCAABYAgAAWAIAAG0CAAA=
   </data>
  </layer>
- <layer name="mass" width="8" height="8">
+ <layer name="mass" width="10" height="8">
   <data encoding="base64">
-   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAECAAABAgAAAQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAIAABgCAAARAgAAAAAAACQBAAAlAQAAJgEAACcBAAAAAAAAAAAAAAAAAAAAAAAAOAEAADkBAAA6AQAAOwEAAAAAAAAAAAAAAAAAAAAAAAAkAQAAJQEAACYBAAAnAQAAAAAAAAAAAAAAAAAAAAAAADgBAAA5AQAAOgEAADsBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkAAAAAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQIAAAECAAD7AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgCAAAYAgAAEQIAAAAAAAAkAQAAJQEAACYBAAAnAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAEAADkBAAA6AQAAOwEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQBAAAlAQAAJgEAACcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AQAAOQEAADoBAAA7AQAAAAAAAAAAAABWAgAAAAAAAGACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
   </data>
  </layer>
- <layer name="accessories" width="8" height="8">
+ <layer name="accessories" width="10" height="8">
   <data encoding="base64">
-   AAAAAAAAAAC2AQAAAAAAAAAAAAC2AQAAAAAAAAAAAAAAAAAAAAAAAJgBAAAAAAAAAAAAAJgBAAAAAAAAAAAAAC8AAEAIAABAwAEAAAAAAAAAAAAAwAEAAAAAAAAAAAAAZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+   AAAAAAAAAAC2AQAAAAAAALYBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvAAAAmAEAADEAAACYAQAAAAAAADICAAAxAgCAAAAAAAAAAAAAAAAA6AEAAMABAAAdAABAwAEAAAAAAAA3AgAANgIAgAAAAAAAAAAAAAAAAGYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
   </data>
  </layer>
- <objectgroup name="objects" width="8" height="8">
-  <object name="rachel" x="34" y="177" width="24" height="23">
+ <objectgroup name="objects" width="10" height="8">
+  <object name="rachel" x="68" y="194" width="24" height="23">
    <properties>
     <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;char_shadow&quot;,&quot;spritewidth&quot;:18,&quot;spriteheight&quot;:9},{&quot;name&quot;:&quot;rachel&quot;},{&quot;name&quot;:&quot;eyes&quot;,&quot;class&quot;:&quot;game.BlinkingEyes&quot;,&quot;image&quot;:&quot;rachel_eyes&quot;,&quot;spritewidth&quot;:17,&quot;spriteheight&quot;:6,&quot;offsetx&quot;:6,&quot;offsety&quot;:18}]"/>
     <property name="image" value="rachel"/>
@@ -36,7 +42,7 @@
     <property name="spritewidth" value="31"/>
    </properties>
   </object>
-  <object name="chest" x="96" y="96" width="32" height="32">
+  <object name="chest" x="128" y="96" width="32" height="32">
    <properties>
     <property name="contents" value="{&quot;type&quot;:&quot;weapon&quot;,&quot;data&quot;:{&quot;name&quot;:&quot;hammer&quot;,&quot;class&quot;:&quot;game.Weapon&quot;,&quot;image&quot;:&quot;hammer&quot;,&quot;spritewidth&quot;:64,&quot;spriteheight&quot;:64,&quot;sfx_swing&quot;:[&quot;mallet_swing&quot;],&quot;sfx_whomp&quot;:[&quot;mallet_whomp&quot;],&quot;description&quot;:&quot;Rachel procures a Mighty Mallet with which to smite things and stuff.&quot;}}"/>
     <property name="image" value="chests"/>
@@ -46,16 +52,11 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="overlay" width="8" height="8">
-  <data encoding="base64">
-   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJYBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
-  </data>
- </layer>
- <objectgroup name="collision" width="8" height="8">
-  <object x="0" y="160">
-   <polyline points="0,64 32,64 32,96 64,96 64,64 128,64 128,-64 96,-64 96,-43 32,-43 32,-32 0,-32 0,64"/>
+ <objectgroup name="collision" width="10" height="8">
+  <object x="32" y="160">
+   <polyline points="0,64 32,64 32,96 64,96 64,64 128,64 128,-64 96,-64 96,-43 32,-43 32,0 0,0 0,64"/>
   </object>
-  <object name="exit" x="36" y="229" width="24" height="22">
+  <object name="exit" x="68" y="229" width="24" height="22">
    <properties>
     <property name="fade" value="black"/>
     <property name="location" value="3568, 3680"/>
