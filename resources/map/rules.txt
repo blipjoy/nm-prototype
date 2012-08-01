@@ -4,9 +4,13 @@
 ./rules/dirt_edges.tmx
 ./rules/dirt_corners.tmx
 ./rules/dirt_patches.tmx
+./rules/dirt2_edges.tmx
+./rules/dirt2_corners.tmx
+./rules/dirt2_patches.tmx
 ./rules/sand_edges.tmx
 ./rules/sand_corners.tmx
 ./rules/sand_patches.tmx
+./rules/animated_water.tmx
 ./rules/tree.tmx
 ./rules/tree_forest.tmx
 ./rules/tree_forest_shadow.tmx

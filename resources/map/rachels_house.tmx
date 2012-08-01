@@ -62,7 +62,6 @@
   <object name="exit" x="180" y="5" width="24" height="24">
    <properties>
     <property name="dir" value="right"/>
-    <property name="duration" value="250"/>
     <property name="fade" value="black"/>
     <property name="location" value="240, 96"/>
     <property name="to" value="rachels_room"/>
@@ -70,8 +69,6 @@
   </object>
   <object name="exit" x="68" y="292" width="24" height="24">
    <properties>
-    <property name="dir" value="down"/>
-    <property name="duration" value="250"/>
     <property name="fade" value="black"/>
     <property name="to" value="earth"/>
    </properties>

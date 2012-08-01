@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="3" height="3" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="dirt2" tilewidth="32" tileheight="32">
+  <image source="../../img/dirt2.png" width="96" height="192"/>
+ </tileset>
+ <layer name="regions" width="3" height="3">
+  <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAA
+  </data>
+ </layer>
+ <layer name="input_set" width="3" height="3">
+  <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAA
+  </data>
+ </layer>
+ <layer name="output_dirt2" width="3" height="3">
+  <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAA
+  </data>
+ </layer>
+ <layer name="output2_dirt2" width="3" height="3">
+  <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAA
+  </data>
+ </layer>
+ <layer name="output3_dirt2" width="3" height="3">
+  <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAAAAAAAAAAAA
+  </data>
+ </layer>
+ <layer name="output4_dirt2" width="3" height="3">
+  <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAAAA
+  </data>
+ </layer>
+</map>

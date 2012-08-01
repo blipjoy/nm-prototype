@@ -58,18 +58,35 @@ game.resources = {
         "kitchen",
 
         /* earth */
+        "barrel",
+        "bridges",
+        "buckets",
         "dirt",
         "dirt2",
+        "doors",
+        "farming_fishing",
+        "fence",
+        "fence_alt",
+        "flowers_2",
         "grassalt_flowers",
-        "mountains"
+        "housey",
+        "misc",
+        "mountains",
+        "shadow",
+        "signs",
+        "stonepattern",
+        "town_buildings",
+        "tree_stump",
+        "victorian_house"
     ],
 
     /* Maps from Tiled. */
     "map" : [
         "island",
+        "earth",
         "rachels_room",
         "rachels_house",
-        "earth"
+        "shed"
     ],
 
     /* 1-channel audio. Usually sound effects. */

@@ -58,7 +58,7 @@
   </object>
   <object name="chest" x="32" y="160" width="32" height="32">
    <properties>
-    <property name="contents" value="{&quot;type&quot;:&quot;coins&quot;,&quot;data&quot;:200}"/>
+    <property name="contents" value="{&quot;type&quot;:&quot;coins&quot;,&quot;data&quot;:50}"/>
     <property name="image" value="chests"/>
     <property name="spriteheight" value="32"/>
     <property name="spritewidth" value="32"/>
@@ -90,7 +90,6 @@
   <object name="exit" x="195" y="99" width="24" height="24">
    <properties>
     <property name="dir" value="left"/>
-    <property name="duration" value="250"/>
     <property name="fade" value="black"/>
     <property name="to" value="rachels_house"/>
    </properties>
