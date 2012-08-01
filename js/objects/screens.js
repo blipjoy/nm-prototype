@@ -83,14 +83,15 @@ game.InfoScreen = me.ScreenObject.extend({
 
     "update" : function update() {
         var self = this;
+        var skip = false;
 
         if (!self.fading && (me.input.isKeyPressed("action") || me.input.isKeyPressed("skip"))) {
-            if (me.input.isKeyPressed("skip")) {
-                self.currentPage = self.pages.length;
+            if (me.input.keyStatus("skip")) {
+                skip = true;
             }
 
             function nextPage() {
-                if (++self.currentPage >= self.pages.length) {
+                if (skip || (++self.currentPage >= self.pages.length)) {
                     self.fading = false;
                     me.state.change(self.state);
                 }
