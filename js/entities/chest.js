@@ -44,6 +44,14 @@ game.ChestEntity = game.Sprite.extend({
         this.addAnimation("round",  [ 1, 3, 5 ]);
         this.setCurrentAnimation(which ? "round" : "square", this.resetAnimation);
         this.animationpause = true;
+
+        // Prevent opening this chest more than once.
+        this.stat_key = "chest_" + me.game.currentLevel.name + "_" + this.pos.x + "_" + this.pos.y;
+        if (game.stat.load(this.stat_key)) {
+            // Open the chest. :)
+            this.open = true;
+            this.setAnimationFrame(2);
+        }
     },
 
     "resetAnimation" : function resetAnimation() {
@@ -59,6 +67,9 @@ game.ChestEntity = game.Sprite.extend({
         if (this.open || !this.animationpause) {
             return;
         }
+
+        // Keep this chest open.
+        game.stat.save(this.stat_key, true);
 
         me.audio.play("chests");
         this.actor = actor;

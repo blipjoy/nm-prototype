@@ -68,10 +68,14 @@ game.installHUD = function HUD() {
             // Create a cache for the coin counter, so we don't redraw it unnecessarily.
             this.cache      = bufferForFont(me.video.getScreenFrameBuffer(), this.gold_font);
             this.preValue   = NaN;
+
+            this.value = game.stat.load("coins") || 0;
         },
 
         "update" : function update(value) {
             this.parent(value);
+
+            game.stat.save("coins", this.value);
 
             if (value > 0) {
                 publish("collect coin", [ value ]);
@@ -288,12 +292,21 @@ game.installHUD = function HUD() {
             contents.forEach(function forEach(item) {
                 self.addItem(item);
             })
+
+            this.contents = (game.stat.load("inventory_contents") || []).map(function map(item) {
+                self.cacheIcon(item);
+                return item;
+            });
+            this.weapon = game.stat.load("inventory_weapon") || null;
+            if (this.weapon) {
+                this.cacheIcon(this.weapon);
+            }
         },
 
         "cacheIcon" : function cacheIcon(item) {
-            item.image = game.getImage(item.image);
+            item.cached_icon = game.getImage(item.image);
 
-            var count = ~~(item.image.width / item.spritewidth);
+            var count = ~~(item.cached_icon.width / item.spritewidth);
             item.offset = {
                 "x" : (item.icon % count) * item.spritewidth,
                 "y" : ~~(item.icon / count) * item.spriteheight
@@ -307,6 +320,8 @@ game.installHUD = function HUD() {
             me.audio.play("fanfare");
             publish("acquire weapon", [ item.name ]);
             game.dialog([ item.description ]);
+
+            game.stat.save("inventory_weapon", item);
 
             // Create weapon sprite.
             // FIXME: Remove old sprite if a weapon was already loaded.
@@ -328,10 +343,26 @@ game.installHUD = function HUD() {
             this.cacheIcon(item);
             this.updated = true;
             this.contents.push(item);
+
+            game.stat.save("inventory_contents", this.contents.map(function map(item) {
+                var result = {};
+                Object.keys(item).forEach(function forEach(key) {
+                    if (key !== "cached_icon") {
+                        result[key] = item[key];
+                    }
+                });
+                return result;
+            }));
         },
 
         "getItem" : function getItem(idx) {
             return (idx === 7) ? this.weapon : this.contents[idx];
+        },
+
+        "hasItem" : function hasItem(name) {
+            return this.contents.concat(this.weapon).some(function some(item) {
+                return game.isObject(item) && (item.name === name);
+            });
         },
 
         "request_update" : function request_update() {
@@ -358,7 +389,7 @@ game.installHUD = function HUD() {
                 var item = (idx === 7) ? self.weapon : self.contents[idx];
                 if (item) {
                     context.drawImage(
-                        item.image,
+                        item.cached_icon,
                         item.offset.x,
                         item.offset.y,
                         32,

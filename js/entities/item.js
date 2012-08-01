@@ -26,6 +26,14 @@ game.ItemEntity = game.Sprite.extend({
         this.addAnimation("default", [ settings.spriteindex ]);
         this.setCurrentAnimation("default");
         this.animationpause = true;
+
+        // Prevent collecting this item more than once.
+        this.stat_key = "item_" + this.item.name;
+        if (game.stat.load(this.stat_key)) {
+            // Remove this item from the scene.
+            me.game.remove(this);
+            cm.remove(this.body);
+        }
     },
 
     "interact" : function interact(actor, callback) {
@@ -43,6 +51,8 @@ game.ItemEntity = game.Sprite.extend({
             }
         }
 
+        // Do not pick up this item more than once.
+        game.stat.save(this.stat_key, true);
 
         me.game.remove(this, true);
         cm.remove(this.body);
