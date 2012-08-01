@@ -134,14 +134,18 @@ game.Weapon = me.AnimationSheet.extend({
             self.owner.attacking = true;
             self.animationpause = false;
 
+            // Play a random swing sound effect.
+            var len = self.settings.sfx_swing.length - 1;
+            me.audio.play(self.settings.sfx_swing[Number.prototype.random(0, len)]);
+
             // Make owner stand still.
             self.owner.stand();
 
             // Run the attack animation.
             self.setCurrentAnimation("swing_" + self.dir, function animationComplete() {
                 // Play a random sound effect.
-                var len = self.settings.sfx.length - 1;
-                me.audio.play(self.settings.sfx[Number.prototype.random(0, len)]);
+                var len = self.settings.sfx_whomp.length - 1;
+                me.audio.play(self.settings.sfx_whomp[Number.prototype.random(0, len)]);
 
                 // Create a BB for the whomp.
                 var shape = self.owner.body.shapeList[0]; // FIXME: May not always have a shape!
