@@ -137,11 +137,23 @@ game.DialogObject = me.SpriteObject.extend({
     ------ */
     "draw" : function draw(context) {
         if (typeof(this.dialog[this.counter]) !== 'undefined') {
-            context.drawImage(this.background, this.pos.x, this.pos.y);
+            // Convert screen coordinates to world coordinates.
+            var map_pos = me.game.currentLevel.pos;
+
+            context.drawImage(
+                this.background,
+                this.pos.x - map_pos.x,
+                this.pos.y - map_pos.y
+            );
             var offset = 0;
             for (var i = 0; i < this.rowCount; i++) {
                 if (typeof(this.rows[this.counter][this.currentRow + i]) !== 'undefined') {
-                    this.font.draw(context, this.rows[this.counter][this.currentRow + i], this.pos.x + this.offsetTextX, this.pos.y + this.offsetTextY + offset);
+                    this.font.draw(
+                        context,
+                        this.rows[this.counter][this.currentRow + i],
+                        this.pos.x + this.offsetTextX - map_pos.x,
+                        this.pos.y + this.offsetTextY - map_pos.y + offset
+                    );
                     offset += (this.font.height * 1.1);
                 }
             }
