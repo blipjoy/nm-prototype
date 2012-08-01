@@ -507,7 +507,7 @@
   </object>
   <object name="exit" x="2660" y="2280" width="25" height="21">
    <properties>
-    <property name="to" value="earth"/>
+    <property name="to" value="general_store"/>
    </properties>
   </object>
   <object name="exit" x="3589" y="3205" width="22" height="22">

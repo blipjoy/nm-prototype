@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="12" height="9" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="background_color" value="black"/>
+ </properties>
+ <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32">
+  <image source="../img/floor.png" width="128" height="96"/>
+ </tileset>
+ <tileset firstgid="13" name="town_buildings" tilewidth="32" tileheight="32">
+  <image source="../img/town_buildings.png" width="543" height="128"/>
+ </tileset>
+ <tileset firstgid="77" name="cabinets" tilewidth="32" tileheight="32">
+  <image source="../img/cabinets.png" width="192" height="416"/>
+ </tileset>
+ <tileset firstgid="155" name="accessories" tilewidth="32" tileheight="32">
+  <image source="../img/accessories.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="171" name="farming_fishing" tilewidth="32" tileheight="32">
+  <image source="../img/farming_fishing.png" width="640" height="640"/>
+ </tileset>
+ <tileset firstgid="571" name="inside" tilewidth="32" tileheight="32">
+  <image source="../img/inside.png" width="320" height="320"/>
+ </tileset>
+ <tileset firstgid="671" name="victoria" tilewidth="32" tileheight="32">
+  <image source="../img/victoria.png" width="352" height="160"/>
+ </tileset>
+ <layer name="floor/walls" width="12" height="9">
+  <data encoding="base64">
+   ZAIAACEAAAAhAAAAIQAAACEAAAAhAAAAIQAAACEAAAAhAAAAIQAAACEAAABlAgAAZAIAAC4AAAAuAAAALgAAAC4AAAAuAAAALgAAAC4AAAAuAAAALgAAAC4AAABlAgAAZAIAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAABlAgAAZAIAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAABlAgAAZAIAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAABlAgAAZAIAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAABlAgAAZAIAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAABlAgAAZAIAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAABlAgAAbgIAAFoCAABaAgAAWgIAAFoCAABaAgAAWgIAAGECAABaAgAAWgIAAFoCAABvAgAA
+  </data>
+ </layer>
+ <layer name="mass" width="12" height="9">
+  <data encoding="base64">
+   AAAAAGAAAABOAAAAAAAAAAAAAABQAAAAYwAAAAAAAAAAAAAATwAAAE8AAAAAAAAAAAAAAGYAAABUAAAAAAAAAAAAAABWAAAAaQAAAAAAAAAAAAAAVQAAAFUAAAAAAAAAAAAAAGwAAABaAAAAAAAAAAAAAABcAAAAbwAAAAAAAAAAAAAAWwAAAFsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACYAAAAAAAAAJgAAAAAAAAAmAAAAAAAAACYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAIAAAAAAABiAgAAAAAAAAAAAAAAAAAA
+  </data>
+ </layer>
+ <objectgroup name="objects" width="12" height="9">
+  <object name="exit" x="229" y="262" width="22" height="20">
+   <properties>
+    <property name="fade" value="black"/>
+    <property name="location" value="2672, 2304"/>
+    <property name="to" value="earth"/>
+   </properties>
+  </object>
+  <object name="rachel" x="227" y="223" width="25" height="26">
+   <properties>
+    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;char_shadow&quot;,&quot;spritewidth&quot;:18,&quot;spriteheight&quot;:9},{&quot;name&quot;:&quot;rachel&quot;},{&quot;name&quot;:&quot;eyes&quot;,&quot;class&quot;:&quot;game.BlinkingEyes&quot;,&quot;image&quot;:&quot;rachel_eyes&quot;,&quot;spritewidth&quot;:17,&quot;spriteheight&quot;:6,&quot;offsetx&quot;:6,&quot;offsety&quot;:18}]"/>
+    <property name="image" value="rachel"/>
+    <property name="spriteheight" value="36"/>
+    <property name="spritewidth" value="31"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer name="overlay" width="12" height="9">
+  <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACMAAAAAAAAAIwAAAAAAAAAjAAAAAAAAACMAAAAAAAAAIwAAAAAAAAAAAAAAAAAAACSAAAAAAAAAJIAAAAAAAAAkgAAAAAAAACSAAAAAAAAAIkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIkAAAAAAAAAAAAAAHcAAAB3AAAAdwAAAHcAAACQAAAAAAAAAAAAAAAAAAAAAAAAAIkAAAAAAAAAAAAAAIYAAACHAAAAhgAAAIcAAACSAAAAAAAAAAAAAAAAAAAAAAAAAIkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  </data>
+ </layer>
+ <layer name="accessories" width="12" height="9">
+  <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADFAAAAAAAAAF0AAAAAAAAAUwEAAAAAAABZAQBgAAAAANgBAAAAAAAAAAAAAAAAAACkAAAAAAAAAFcBAAAAAAAAVQEAAAAAAABWAQAAAAAAAL8BAKAAAAAAAAAAAJ0AAACeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJcBAKAAAAAAAAAAAKEAAACiAAAAwQIAAFEAAAClAAAAAAAAAAAAAAAAAAAAAAAAAG8BAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACpAAAAAAAAAAAAAAAAAAAAAAAAAKMAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  </data>
+ </layer>
+ <objectgroup name="collision" width="12" height="9">
+  <object x="164" y="254">
+   <polyline points="-132,-62 -131,-190 -68,-190 -68,-199 -2,-199 -1,-190 59,-190 60,-198 126,-198 126,-190 188,-190 188,-170 164,-170 163,-17 188,-17 188,2 92,2 92,34 60,34 60,2 28,2 28,-62 -132,-62"/>
+  </object>
+  <object x="199" y="85" width="23" height="54"/>
+  <object x="263" y="85" width="23" height="55"/>
+  <object x="135" y="86" width="23" height="54"/>
+  <object x="71" y="85" width="24" height="55"/>
+ </objectgroup>
+</map>

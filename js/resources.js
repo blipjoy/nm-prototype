@@ -84,6 +84,7 @@ game.resources = {
     "map" : [
         "island",
         "earth",
+        "general_store",
         "rachels_room",
         "rachels_house",
         "shed"
