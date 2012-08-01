@@ -72,6 +72,7 @@ game.InfoScreen = me.ScreenObject.extend({
 
     "onResetEvent" : function onResetEvent() {
         var self = this;
+        self.currentPage = 0;
 
         if (self.fade) {
             self.fading = true;
