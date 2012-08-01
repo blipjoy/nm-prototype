@@ -248,6 +248,7 @@ game.PlayScreen = game.AnimatedScreen.extend({
 /* Title screen */
 game.TitleScreen = game.PlayScreen.extend({
     "fader" : -1,
+    "fadeColor" : "black",
 
     "init" : function init() {
         this.parent(true);
@@ -336,7 +337,7 @@ game.TitleScreen = game.PlayScreen.extend({
             me.levelDirector.loadLevel(settings.to);
 
             // Handle transitions.
-            fade = settings.fade || settings.fadeOut;
+            fade = settings.fade || settings.fadeIn;
             if (fade) {
                 self.fadeColor = fade;
                 self.fader = 1;
@@ -384,7 +385,7 @@ game.TitleScreen = game.PlayScreen.extend({
         this.loadLevel({
             "to"        : "earth",
             "music"     : "del_erad",
-            "fadeOut"   : "black",
+            "fade"      : "black",
             "duration"  : 2000,
             "vp"        : 1000
         });
