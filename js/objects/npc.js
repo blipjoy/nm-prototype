@@ -97,6 +97,7 @@ game.NPC = game.Sprite.extend({
 
     "hit" : function hit(power) {
         var self = this;
+        me.audio.play("hurt");
 
         // FIXME: "pain" sound.
 
