@@ -25,7 +25,8 @@ game.CoinEntity = game.Sprite.extend({
 
         // Set shape layers.
         this.body.eachShape(function eachShape(shape) {
-            shape.setLayers(c.LAYER_NO_NPC);
+            shape.setLayers(c.LAYER_NO_NPC | c.LAYER_NO_CHEST);
+            shape.group = c.GROUP_COINS;
             shape.collision_type = c.COLLIDE_COLLECTIBLE;
         });
 

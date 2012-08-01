@@ -2,6 +2,7 @@ game.NPCEntities = {
     /* Abi */
     "Abi" : game.NPC.extend({
         "init" : function init(x, y, settings) {
+            this.value = 1000;
             this.parent(x, y, settings);
 
             // Adjust collision bounding box.
@@ -12,6 +13,7 @@ game.NPCEntities = {
     /* George */
     "George" : game.NPC.extend({
         "init" : function init(x, y, settings) {
+            this.value = 1000;
             this.parent(x, y, settings);
 
             // Adjust collision bounding box.
@@ -25,6 +27,7 @@ game.NPCEntities = {
         "quest_complete" : false,
 
         "init" : function init(x, y, settings) {
+            this.value = 1000;
             this.parent(x, y, settings);
 
             // Adjust collision bounding box.
@@ -91,6 +94,7 @@ game.NPCEntities = {
     /* Whitey */
     "Whitey" : game.NPC.extend({
         "init" : function init(x, y, settings) {
+            this.value = 1000;
             this.parent(x, y, settings);
 
             // Adjust collision bounding box.

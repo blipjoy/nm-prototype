@@ -41,6 +41,7 @@ game.BaddieEntities = {
             // Snakes are weak.
             this.power = 0.5;
             this.hearts = 1;
+            this.value = 50;
 
             this.parent(x, y, settings);
 

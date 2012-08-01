@@ -64,6 +64,9 @@ var c = {
 
     "LAYER_ALL"             : 0xFFFFFFFF,
 
+    // Chipmunk shape groups
+    "GROUP_COINS"           : 1,
+
     // Chipmunk collision types
     "COLLIDE_PLAYER"        : 0x00000001,
     "COLLIDE_COLLECTIBLE"   : 0x00000002,

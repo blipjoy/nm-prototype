@@ -51,6 +51,10 @@ game.NPC = game.Sprite.extend({
     // True during weapon attack animation.
     "attacking" : false,
 
+    // This is what the NPC is worth on average.
+    // Determines the loot dropped when killed.
+    "value" : 100,
+
     "init" : function init(x, y, settings) {
         var self = this;
         self.parent(x, y, settings);
@@ -96,6 +100,7 @@ game.NPC = game.Sprite.extend({
     },
 
     "hit" : function hit(power) {
+        var coin;
         var self = this;
         me.audio.play("hurt");
 
@@ -107,14 +112,51 @@ game.NPC = game.Sprite.extend({
             me.audio.play("dying");
 
             me.game.remove(self, true);
+            cm.remove(self.body);
 
-            var space = cm.getSpace();
-            space.addPostStepCallback(function post_hit() {
-                self.body.eachShape(function remove_shape(shape) {
-                    space.removeShape(shape);
+            // Spawn some loot.
+
+            // First, get a random number that is between self.value +/- 20%.
+            var twenty_percent = self.value * 0.2;
+            var value = Number.prototype.random(self.value - twenty_percent, self.value + twenty_percent);
+
+            // How much gold and silver?
+            var gold = ~~(value / 100);
+            var silver = value % 100;
+
+            // it's not nice to spit out dozens of silver coins...
+            // Just round up and spit out another gold coin.
+            if (silver >= 50) {
+                gold++;
+                silver -= 50;
+            }
+
+            // Make the number of silver coins manageable.
+            silver = ~~(silver / 10);
+
+            // Helper function for spawning a coin.
+            function spawn_coin(type) {
+                coin = new game.CoinEntity(self.pos.x, self.pos.y, {
+                    "name"          : type,
+                    "image"         : type,
+                    "compose"       : '[{"name":"shadow","class":"game.Shadow","image":"coin_shadow","spritewidth":10,"spriteheight":5},{"name":"' + type + '"}]',
+                    "spritewidth"   : 18,
+                    "spriteheight"  : 21
                 });
-                space.removeBody(self.body);
-            });
+                me.game.add(coin, self.z);
+
+                // Send it flying in some random direction.
+                coin.body.applyImpulse(cp.v(Math.random() * 500, Math.random() * 500), cp.vzero);
+            }
+
+            // SHOW ME THE MONEY!
+            for (var i = gold; i !== 0; i--) {
+                spawn_coin.defer("coin_gold");
+            }
+            for (var i = silver; i !== 0; i--) {
+                spawn_coin.defer("coin_silver");
+            }
+            me.game.sort(game.sort);
         }
     },
 
