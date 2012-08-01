@@ -58,9 +58,12 @@ game.InfoScreen = me.ScreenObject.extend({
     // True when fading.
     "fading" : false,
 
-    "init" : function init(messages, state, fade, duration) {
+    // Which page to view.
+    "currentPage" : 0,
+
+    "init" : function init(pages, state, fade, duration) {
         this.parent(true);
-        this.messages = messages;
+        this.pages = pages;
         this.font = new me.Font("bold Tahoma", 20, "#fff");
         this.state = state || me.state.MENU;
         this.fade = fade;
@@ -81,15 +84,30 @@ game.InfoScreen = me.ScreenObject.extend({
     "update" : function update() {
         var self = this;
 
-        if (me.input.isKeyPressed("action") && !self.fading) {
+        if (!self.fading && (me.input.isKeyPressed("action") || me.input.isKeyPressed("skip"))) {
+            if (me.input.isKeyPressed("skip")) {
+                self.currentPage = self.pages.length;
+            }
+
+            function nextPage() {
+                if (++self.currentPage >= self.pages.length) {
+                    self.fading = false;
+                    me.state.change(self.state);
+                }
+                else if (self.fade) {
+                    self.fading = true;
+                    me.game.viewport.fadeOut(self.fade, self.duration, function fadeComplete() {
+                        self.fading = false;
+                    });
+                }
+            }
+
             if (self.fade) {
                 self.fading = true;
-                me.game.viewport.fadeIn(self.fade, self.duration, function fadeInComplete() {
-                    me.state.change(self.state);
-                });
+                me.game.viewport.fadeIn(self.fade, self.duration, nextPage);
             }
             else {
-                me.state.change(self.state);
+                nextPage();
             }
         }
 
@@ -102,18 +120,22 @@ game.InfoScreen = me.ScreenObject.extend({
         context.fillStyle = "#000";
         context.fillRect(0, 0, c.WIDTH, c.HEIGHT);
 
-        var w = 0;
-        self.messages.forEach(function forEach(message) {
-            w = Math.min(Math.max(w, self.font.measureText(context, message).width), c.WIDTH);
-        });
+        if (self.currentPage < self.pages.length) {
+            var page = self.pages[self.currentPage];
 
-        var x = (c.WIDTH - w) / 2;
-        var y = (c.HEIGHT - self.messages.length * 20) / 2;
+            // Calculate the longest text width.
+            var w = 0;
+            page.messages.forEach(function forEach(message) {
+                w = Math.min(Math.max(w, self.font.measureText(context, message).width), c.WIDTH);
+            });
 
-        self.messages.forEach(function forEach(message) {
-            self.font.draw(context, message, x, y);
-            y += 20;
-        });
+            var x = (c.WIDTH - w) / 2;
+            var y = (c.HEIGHT - page.messages.length * 20) / 2;
+            page.messages.forEach(function forEach(message) {
+                self.font.draw(context, message, x, y);
+                y += 20;
+            });
+        }
     }
 });
 
@@ -288,8 +310,8 @@ game.TitleScreen = game.PlayScreen.extend({
     },
 
     "loadLevel" : function loadLevel(settings) {
-        var fade;
         var self = this;
+        var fade = settings.fade || settings.fadeOut;
 
         if (self.loading) {
             return;
@@ -297,22 +319,6 @@ game.TitleScreen = game.PlayScreen.extend({
         self.loading = true;
 
         self.fader = -1;
-
-        // Handle outbound transitions.
-        fade = settings.fade || settings.fadeIn;
-        if (fade) {
-            // Don't reuse me.viewport.fade* : We want the logo to remain visible.
-            self.fadeColor = fade;
-            self.fader = 0;
-            var tween = new me.Tween(self).to({
-                "fader" : 1
-            }, settings.duration).onComplete(fadeComplete);
-            tween.easing(me.Tween.Easing.Sinusoidal.EaseIn);
-            tween.start();
-        }
-        else {
-            fadeComplete();
-        }
 
         function fadeComplete() {
             self.fader = -1;
@@ -334,25 +340,41 @@ game.TitleScreen = game.PlayScreen.extend({
                 self.fadeColor = fade;
                 self.fader = 1;
 
-                function fadeOut() {
-                    // Don't reuse me.viewport.fade* : We want the logo to remain visible.
-                    var tween = new me.Tween(self).to({
-                        "fader": 0
-                    }, settings.duration).onComplete(function () {
-                        self.fader = -1;
-                    });
-                    tween.easing(me.Tween.Easing.Sinusoidal.EaseIn);
-                    tween.start();
-                }
-
-                if (settings.vp) {
-                    // Use viewport fade here to fade the logo.
-                    me.game.viewport.fadeOut(fade, settings.vp, fadeOut);
-                }
-                else {
-                    fadeOut();
-                }
+                // Don't reuse me.viewport.fade* : We want the logo to remain visible.
+                var tween = new me.Tween(self).to({
+                    "fader": 0
+                }, settings.duration).onComplete(function () {
+                    self.fader = -1;
+                });
+                tween.easing(me.Tween.Easing.Sinusoidal.EaseIn);
+                tween.start();
             }
+        }
+
+        function fadeOut() {
+            // Handle outbound transitions.
+            if (fade) {
+                // Don't reuse me.viewport.fade* : We want the logo to remain visible.
+                self.fadeColor = fade;
+                self.fader = 0;
+                var tween = new me.Tween(self).to({
+                    "fader" : 1
+                }, settings.duration).onComplete(fadeComplete);
+                tween.easing(me.Tween.Easing.Sinusoidal.EaseIn);
+                tween.start();
+            }
+            else {
+                fadeComplete();
+            }
+        }
+
+        if (fade && settings.vp) {
+            // Use viewport fade here to fade the logo.
+            self.fader = 0;
+            me.game.viewport.fadeOut(fade, settings.vp, fadeOut);
+        }
+        else {
+            fadeOut();
         }
     },
 
@@ -362,7 +384,7 @@ game.TitleScreen = game.PlayScreen.extend({
             "to"        : "earth",
             "music"     : "del_erad",
             "fadeOut"   : "black",
-            "duration"  : 5000,
+            "duration"  : 2000,
             "vp"        : 1000
         });
     },
@@ -372,7 +394,7 @@ game.TitleScreen = game.PlayScreen.extend({
             this.to_x.stop();
             this.to_y.stop();
             me.game.viewport.fadeIn("black", 1000, function () {
-                me.state.change(me.state.PLAY);
+                me.state.change(c.STATE_INTRO);
             });
         }
         return this.parent() || (this.fader !== -1);
@@ -382,20 +404,21 @@ game.TitleScreen = game.PlayScreen.extend({
         this.parent(context);
 
         if (this.fader !== -1) {
+            context.save();
             context.fillStyle = this.fadeColor;
             context.globalAlpha = this.fader;
             context.fillRect(0, 0, c.WIDTH, c.HEIGHT);
-            context.globalAlpha = 1.0;
+            context.restore();
         }
 
         var x = (c.WIDTH - this.logo.width) / 2;
         var y = (c.HEIGHT - this.logo.height - 80) / 2;
         context.drawImage(this.logo, x, y);
 
-        var message = "Press [Enter] or [Space]";
-        var w = Math.min(this.font.measureText(context, message).width, c.WIDTH);
-
         if (this.fader === -1) {
+            var message = "Press [Enter] or [Space]";
+            var w = Math.min(this.font.measureText(context, message).width, c.WIDTH);
+
             context.save();
             context.shadowColor = "#000";
             context.shadowBlur = 2;

@@ -24,6 +24,7 @@ var c = {
 
     // States
     "STATE_INFO"            : 100, // FIXME: melonJS should have a `me.state.USER` for these.
+    "STATE_INTRO"           : 101,
 
     // Keys
     "KEY_APOS"              : 222, // Apostrophe (aka single-quote)

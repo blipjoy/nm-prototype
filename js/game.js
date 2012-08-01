@@ -31,6 +31,7 @@ var game = {
         me.input.bindKey(me.input.KEY.SHIFT,    "shift");
         me.input.bindKey(me.input.KEY.Z,        "attack", true);
         me.input.bindKey(c.KEY_APOS,            "attack", true);
+        me.input.bindKey(me.input.KEY.ESC,      "skip", true);
 
         // Set a callback to run when loading is complete.
         me.loader.onload = this.loaded.bind(this);
@@ -95,18 +96,21 @@ var game = {
         // Set the TitleScreen ScreenObject.
         me.state.set(me.state.MENU, new game.TitleScreen());
 
+        // Set the Story ScreenObject.
+        me.state.set(c.STATE_INTRO, new game.InfoScreen(
+            game.story.intro,
+            me.state.PLAY,
+            "black",
+            1000
+        ));
+
         // Set the GameOver ScreenObject.
-        me.state.set(me.state.GAMEOVER, new game.InfoScreen([
-            "Rachel ... Rachel? Is that you, Rachel?",
-            "It isn't your time yet ...",
-            "",
-            "You're going back, now, Rachel.",
-            "This will all seem like just a dream ...",
-            "Good luck, Rachel.",
-            "I love you ...",
-            "",
-            "Press [Enter] or [Space] to continue."
-        ], me.state.PLAY, "black", 1000));
+        me.state.set(me.state.GAMEOVER, new game.InfoScreen(
+            game.story.gameover,
+            me.state.PLAY,
+            "black",
+            1000
+        ));
 
         // Player entity.
         me.entityPool.add("rachel", game.RachelEntity);
@@ -136,12 +140,7 @@ var game = {
         }
         // Display warning if audio is not available.
         else if (!me.audio.isAudioEnable()) {
-            me.state.set(c.STATE_INFO, new game.InfoScreen([
-                "Your browser does not support Ogg-Vorbis audio.",
-                "Sounds have been disabled.",
-                "",
-                "Press [Enter] or [Space] to continue."
-            ]));
+            me.state.set(c.STATE_INFO, new game.InfoScreen(game.info.audio_error));
             me.state.change(c.STATE_INFO);
         }
         else {
