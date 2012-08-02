@@ -56,7 +56,9 @@ game.NPCEntities = {
 
         "interact" : function interact(actor, callback) {
             game.dialog([
-                "What's up?"
+                "What's up?",
+                "You should find something to help get rid of all these pesky snakes!",
+                "Maybe you'll find something near the docks..."
             ]);
         }
     }),

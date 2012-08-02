@@ -180,7 +180,7 @@ game.story = {
                 "I remember the moor on Neverwell held a special place in",
                 "Papa's heart. He said it was the most dangerous place he",
                 "ever saw, but that it held some kind of a secret...",
-                "Maybe it was the source of the inhabitant's magic?"
+                "Maybe it was the source of the inhabitants' magic?"
             ]
         },
         {
