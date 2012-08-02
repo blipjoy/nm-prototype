@@ -1,0 +1,129 @@
+Code authors
+============
+
+This program was written by the following people:
+ - Jason Oster
+
+
+Third Part Libraries
+====================
+
+Olivier Biot
+ - melonJS
+
+Scott Lembcke, Joseph Gentle
+ - Chipmunk-js
+
+Daniel Lamb
+ - MinPubSub
+
+
+Asset attribution
+=================
+
+Assets were authored by the following people:
+
+Chris Bellanger
+ - coin_gold.png
+ - coin_silver.png
+ - coin_shadow.png
+
+Guido Bos
+ - flowers_2.png
+ - housey.png
+ - town_buildings.png
+
+Thane Brimhall
+ - accessories.png
+ - dialog.png
+
+Pol Camara
+ - doors.png
+
+Stephen Challener
+ - floor.png
+
+Radomir Dopieralski
+ - abi.png
+ - abi_eyes.png
+ - george.png
+ - george_eyes.png
+ - jessica.png
+ - jessica_eyes.png
+ - rachel.png
+ - rachel_eyes.png
+ - whitey.png
+ - whitey_eyes.png
+
+Daniel Eddeland
+ - sandwater.png
+ - farming_fishing.png
+ - fence.png
+ - fence_alt.png
+
+Etherian
+ - mallet_swing.ogg
+ - mallet_whomp.ogg
+
+Nelson James Gatlin
+ - bells.ogg
+
+Janne Hanhisuanto
+ - del_erad.ogg
+
+Jetrel
+ - accessories.png
+
+jivatma07
+ - fanfare.ogg
+
+Matthew Nash
+ - misc.png
+
+Casper Nilsson
+ - grassalt_flowers.png
+ - heart_empty.png
+ - heart_full.png
+ - heart_half.png
+ - stonepattern.png
+ - victorian_house.png
+ - windmill.png
+
+Lanea Zimmerman
+ - barrel.png
+ - buckets.png
+ - bridges.png
+ - cabinets.png
+ - chests.png
+ - country.png
+ - dirt2.png
+ - dirt.png
+ - grass.png
+ - house.png
+ - inside.png
+ - kitchen.png
+ - mountains.png
+ - shadow.png
+ - signs.png
+ - stairs.png
+ - treetop.png
+ - trunk.png
+ - victoria.png
+ - watergrass.png
+
+Charles Sanchez
+ - snake.png
+
+Jason Oster
+ - char_shadow.png
+ - logo.png
+ - hammer.png
+
+
+
+
+
+
+
+
+
