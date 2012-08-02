@@ -171,12 +171,40 @@
     <property name="which" value="0"/>
    </properties>
   </object>
-  <object name="exit" x="1958" y="1990" width="22" height="19"/>
-  <object name="exit" x="1862" y="2025" width="22" height="22"/>
-  <object name="exit" x="1542" y="2089" width="22" height="23"/>
-  <object name="exit" x="1606" y="1832" width="22" height="22"/>
+  <object name="exit" x="1958" y="1990" width="22" height="19">
+   <properties>
+    <property name="duration" value="5000"/>
+    <property name="fade" value="black"/>
+    <property name="music" value="del_erad"/>
+    <property name="state" value="credits"/>
+   </properties>
+  </object>
+  <object name="exit" x="1862" y="2025" width="21" height="16">
+   <properties>
+    <property name="fade" value="black"/>
+    <property name="location" value="1616, 1856"/>
+    <property name="to" value="earth"/>
+   </properties>
+  </object>
+  <object name="exit" x="1542" y="2089" width="23" height="17">
+   <properties>
+    <property name="fade" value="black"/>
+    <property name="location" value="2832, 1728"/>
+    <property name="to" value="earth"/>
+   </properties>
+  </object>
+  <object name="exit" x="1606" y="1832" width="21" height="17">
+   <properties>
+    <property name="fade" value="black"/>
+    <property name="location" value="1872, 2048"/>
+    <property name="to" value="earth"/>
+   </properties>
+  </object>
   <object name="exit" x="2789" y="1639" width="87" height="47">
    <properties>
+    <property name="dir" value="down"/>
+    <property name="fade" value="black"/>
+    <property name="location" value="1552, 2112"/>
     <property name="to" value="earth"/>
    </properties>
   </object>
@@ -220,7 +248,7 @@
     <property name="spritewidth" value="29"/>
    </properties>
   </object>
-  <object name="george" x="2528" y="2240" width="32" height="32">
+  <object name="george" x="2659" y="2495" width="32" height="32">
    <properties>
     <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;char_shadow&quot;,&quot;spritewidth&quot;:18,&quot;spriteheight&quot;:9},{&quot;name&quot;:&quot;george&quot;},{&quot;name&quot;:&quot;eyes&quot;,&quot;class&quot;:&quot;game.BlinkingEyes&quot;,&quot;image&quot;:&quot;george_eyes&quot;,&quot;spritewidth&quot;:17,&quot;spriteheight&quot;:6,&quot;offsetx&quot;:6,&quot;offsety&quot;:16}]"/>
     <property name="image" value="george"/>
@@ -348,16 +376,11 @@
     <property name="spritewidth" value="32"/>
    </properties>
   </object>
-  <object name="snake" x="2801" y="1711" width="22" height="22">
+  <object name="snake" x="2799" y="1815" width="22" height="22">
    <properties>
     <property name="image" value="snake"/>
     <property name="spriteheight" value="32"/>
     <property name="spritewidth" value="32"/>
-   </properties>
-  </object>
-  <object name="exit" x="3383" y="2408" width="25" height="23">
-   <properties>
-    <property name="to" value="earth"/>
    </properties>
   </object>
  </objectgroup>
@@ -492,7 +515,6 @@
   <object x="2887" y="2282" width="18" height="19"/>
   <object x="2824" y="2122" width="16" height="18"/>
   <object x="2760" y="2058" width="17" height="18"/>
-  <object x="2471" y="2217" width="18" height="18"/>
   <object x="2440" y="2344" width="15" height="13"/>
   <object x="2376" y="2314" width="14" height="13"/>
   <object x="1925" y="2437" width="22" height="19"/>
@@ -575,12 +597,9 @@
   </object>
   <object name="exit" x="2660" y="2280" width="25" height="21">
    <properties>
+    <property name="dir" value="up"/>
+    <property name="fade" value="black"/>
     <property name="to" value="general_store"/>
-   </properties>
-  </object>
-  <object name="exit" x="3589" y="3205" width="22" height="22">
-   <properties>
-    <property name="to" value="earth"/>
    </properties>
   </object>
   <object x="3904" y="2880">

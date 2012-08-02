@@ -112,6 +112,9 @@ var game = {
             1000
         ));
 
+        // Set the Credits ScreenObject.
+        me.state.set(me.state.CREDITS, new game.CreditsScreen());
+
         // Player entity.
         me.entityPool.add("rachel", game.RachelEntity);
 

@@ -449,3 +449,75 @@ game.TitleScreen = game.PlayScreen.extend({
         }
     }
 });
+
+/* Credits screen */
+game.CreditsScreen = me.ScreenObject.extend({
+    "done" : false,
+
+    "y" : 0,
+    "size" : 13,
+
+    "canvas" : null,
+    "buffer" : null,
+
+    "init" : function init(pages, state, fade, duration) {
+        var self = this;
+        self.parent(true);
+        self.font = new me.Font("Monaco, Courier New", this.size, "#aaa");
+
+        // Render text to buffer canvas.
+        self.canvas = document.createElement("canvas");
+        self.buffer = self.canvas.getContext("2d");
+
+        var w = 0;
+        game.credits.forEach(function forEach(line) {
+            w = Math.min(Math.max(w, self.font.measureText(self.buffer, line).width), c.WIDTH);
+        });
+        var h = game.credits.length * this.size;
+        var x = ~~((c.WIDTH - w) / 2);
+        var y = 0;
+
+        self.canvas.width = c.WIDTH;
+        self.canvas.height = h;
+
+        self.buffer.fillStyle = "#222";
+        self.buffer.fillRect(0, 0, c.WIDTH, h);
+
+        game.credits.forEach(function forEach(line) {
+            self.font.draw(self.buffer, line, x, y);
+            y += self.size;
+        });
+    },
+
+    "onResetEvent" : function onResetEvent() {
+        this.done = false;
+        this.y = 0;
+
+        me.audio.stopTrack();
+        me.audio.playTrack("del_erad");
+
+        me.game.viewport.fadeOut("black", 3000);
+    },
+
+    "update" : function update() {
+        this.y += 0.5;
+
+        var max = this.height - c.HEIGHT;
+        if (this.y >= max) {
+            this.done = true;
+            this.y = max;
+        }
+
+        return !this.done;
+    },
+
+    "draw" : function draw(context) {
+        context.drawImage(
+            this.canvas,
+            0, ~~this.y,
+            c.WIDTH, c.HEIGHT,
+            0, 0,
+            c.WIDTH, c.HEIGHT
+        );
+    }
+});

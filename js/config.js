@@ -23,8 +23,8 @@ var c = {
     "HEIGHT"                : 480,
 
     // States
-    "STATE_INFO"            : 100, // FIXME: melonJS should have a `me.state.USER` for these.
-    "STATE_INTRO"           : 101,
+    "STATE_INFO"            : me.state.USER + 0,
+    "STATE_INTRO"           : me.state.USER + 1,
 
     // Keys
     "KEY_APOS"              : 222, // Apostrophe (aka single-quote)

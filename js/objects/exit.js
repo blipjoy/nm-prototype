@@ -9,7 +9,28 @@ game.installExitHandler = function installExitHandler() {
             c.COLLIDE_EXIT,
             function exit_level(arbiter, space) {
                 space.addPostStepCallback(function onPostSteppCallback() {
-                    game.play.loadLevel(arbiter.b.data);
+                    // HACKKKKKK!!!!! :(
+                    if (arbiter.b.data.state) {
+                        var state = arbiter.b.data.state.toUpperCase();
+
+                        game.modal = true;
+
+                        function go() {
+                            me.state.change(me.state[state] || c["STATE_" + state]);
+                        }
+
+                        var fade = arbiter.b.data.fade || arbiter.b.data.fadeIn;
+                        var duration = arbiter.b.data.duration || 250;
+                        if (fade) {
+                            me.game.viewport.fadeIn(fade, duration, go);
+                        }
+                        else {
+                            go();
+                        }
+                    }
+                    else {
+                        game.play.loadLevel(arbiter.b.data);
+                    }
                 });
 
                 // Return false so collision does not assert a force.
