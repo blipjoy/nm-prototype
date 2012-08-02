@@ -25,6 +25,22 @@ game.NPCEntities = {
 
             // Adjust collision bounding box.
             this.adjustBoxShape(0, -10, 25, 20);
+        },
+
+        "interact" : function interact(actor, callback) {
+            if (!game.HUD.HUDItems.inventory.hasItem("clock")) {
+                game.dialog([
+                    "Ermm, do you know what time it is? I'm stuck here at work for a while I think...",
+                ]);
+            }
+            else {
+                game.HUD.HUDItems.inventory.removeItem("clock");
+                game.dialog([
+                    "Wow! Thanks for the clock! This is all I have to give in return."
+                ], function dialogClosed() {
+                    game.HUD.updateItemValue("coins", 1500);
+                });
+            }
         }
     }),
 
@@ -36,6 +52,12 @@ game.NPCEntities = {
 
             // Adjust collision bounding box.
             this.adjustBoxShape(0, -10, 25, 20);
+        },
+
+        "interact" : function interact(actor, callback) {
+            game.dialog([
+                "What's up?"
+            ]);
         }
     }),
 
@@ -57,6 +79,20 @@ game.NPCEntities = {
 
             // Turn 2 clicks (180 degrees) from actor's direction.
             self.turn(2, actor.dir_name);
+
+            if (!game.HUD.HUDItems.inventory.hasItem("book")) {
+                game.dialog([
+                    "Hi Rachel! I'm trying to find a book of famous quotes. Any ideas?",
+                    "Don't ask, I just love literature!"
+                ]);
+            }
+            else {
+                game.dialog([
+                    "That ... book! Rachel, you're a genius!",
+                    "How's this for your trouble? You can get to the island if you follow a hidden path through the woods."
+                ]);
+            }
+
 
             // FIXME ugh!
             if (me.game.currentLevel === "island") {
@@ -117,6 +153,12 @@ game.NPCEntities = {
 
             // Adjust collision bounding box.
             this.adjustBoxShape(0, -10, 25, 20);
+        },
+
+        "interact" : function interact(actor, callback) {
+            game.dialog([
+                "Hi!"
+            ]);
         }
     })
 };

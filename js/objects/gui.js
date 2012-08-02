@@ -378,6 +378,17 @@ game.installHUD = function HUD() {
             }));
         },
 
+        "removeWeapon" : function removeWeapon() {
+            this.weapon = null;
+        },
+
+        "removeItem" : function removeItem(idx) {
+            if (idx === 7) {
+                return this.removeWeapon();
+            }
+            this.contents.splice(idx, 1);
+        },
+
         "getItem" : function getItem(idx) {
             return (idx === 7) ? this.weapon : this.contents[idx];
         },
