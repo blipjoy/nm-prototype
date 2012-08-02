@@ -64,6 +64,14 @@
     <property name="to" value="earth"/>
    </properties>
   </object>
+  <object name="jessica" x="299" y="137" width="32" height="32">
+   <properties>
+    <property name="compose" value="[{&quot;name&quot;:&quot;shadow&quot;,&quot;class&quot;:&quot;game.Shadow&quot;,&quot;image&quot;:&quot;char_shadow&quot;,&quot;spritewidth&quot;:18,&quot;spriteheight&quot;:9},{&quot;name&quot;:&quot;jessica&quot;},{&quot;name&quot;:&quot;eyes&quot;,&quot;class&quot;:&quot;game.BlinkingEyes&quot;,&quot;image&quot;:&quot;jessica_eyes&quot;,&quot;spritewidth&quot;:17,&quot;spriteheight&quot;:6,&quot;offsetx&quot;:10,&quot;offsety&quot;:16}]"/>
+    <property name="image" value="jessica"/>
+    <property name="spriteheight" value="34"/>
+    <property name="spritewidth" value="37"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="overlayer" width="12" height="10">
   <data encoding="base64">
