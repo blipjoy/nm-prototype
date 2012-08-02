@@ -98,18 +98,24 @@ game.InfoScreen = me.ScreenObject.extend({
     // Which page to view.
     "currentPage" : 0,
 
-    "init" : function init(pages, state, fade, duration) {
+    "init" : function init(pages, state, fade, duration, notify) {
         this.parent(true);
         this.pages = pages;
         this.font = new me.Font("bold Tahoma", 20, "#fff");
         this.state = state || me.state.MENU;
         this.fade = fade;
         this.duration = duration || 250;
+        this.notify = notify;
     },
 
     "onResetEvent" : function onResetEvent() {
         var self = this;
         self.currentPage = 0;
+
+        if (this.notify) {
+            publish("notify", [ "Press the action key (Enter or Space) to advance to the next page." ]);
+            publish("notify", [ "Press the skip key (ESC) to skip the story." ]);
+        }
 
         if (self.fade) {
             self.fading = true;
@@ -233,6 +239,31 @@ game.PlayScreen = game.AnimatedScreen.extend({
                 self.onLevelLoaded(settings);
             };
 
+            switch (settings.to) {
+                case "rachels_house":
+                    if (!game.stat.load("tutorial2")) {
+                        publish("notify", [ "That's Jessica. We should say hi using the action key!" ]);
+                        game.stat.save("tutorial2", true);
+                    }
+                    break;
+
+                case "earth":
+                    if (!game.stat.load("tutorial3")) {
+                        publish("notify", [ "We should talk to some more people. Maybe we could help them with something!" ]);
+                        publish("notify", [ "If you hold Shift, I promise to hurry as fast as I can!" ]);
+                        game.stat.save("tutorial3", true);
+                    }
+                    break;
+
+                case "general_store":
+                    if (!game.stat.load("tutorial4")) {
+                        publish("notify", [ "Let's look around a bit; there might be something here we can buy." ]);
+                        game.stat.save("tutorial4", true);
+                    }
+                    break;
+
+            }
+
             // Load the first level.
             me.levelDirector.loadLevel(settings.to);
 
@@ -250,6 +281,13 @@ game.PlayScreen = game.AnimatedScreen.extend({
         game.installCoinHandler();
         game.installExitHandler();
         game.installBaddieHandler();
+
+        if (!game.stat.load("tutorial1")) {
+            publish("notify", [ "Hi, I'm Rachel. You can show me where to go using the arrow keys." ]);
+            publish("notify", [ "Or if you prefer, the WASD keys also work." ]);
+            publish("notify", [ "Open the chest with an action key. There may be something useful inside!" ]);
+            game.stat.save("tutorial1", true);
+        }
 
         // Load the level.
         if (c.DEBUG) {

@@ -341,6 +341,11 @@ game.installHUD = function HUD() {
 
             game.stat.save("inventory_weapon", item);
 
+            if (!game.stat.load("tutorial5")) {
+                publish("notify", [ "At last I can defend myself! Use it with the attack key (Z or APOSTROPHE)" ]);
+                game.stat.save("tutorial5", true);
+            }
+
             // Create weapon sprite.
             // FIXME: Remove old sprite if a weapon was already loaded.
             this.cacheIcon(item);

@@ -107,6 +107,9 @@ var game = {
 
     // Run on game resources loaded.
     "loaded" : function loaded() {
+        // Create a notifier.
+        game.notify = new game.Notify();
+
         // Set the "Play" ScreenObject.
         game.play = new game.PlayScreen(20);
         me.state.set(me.state.PLAY, game.play);
@@ -119,7 +122,8 @@ var game = {
             game.story.intro,
             me.state.PLAY,
             "black",
-            1000
+            1000,
+            true
         ));
 
         // Set the GameOver ScreenObject.

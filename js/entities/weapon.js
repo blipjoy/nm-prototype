@@ -165,6 +165,11 @@ game.Weapon = me.AnimationSheet.extend({
                 var len = self.settings.sfx_whomp.length - 1;
                 me.audio.play(self.settings.sfx_whomp[Number.prototype.random(0, len)]);
 
+                if (!game.stat.load("tutorial6")) {
+                    publish("notify", [ "MOG! This mallet is amerzing!! I should probably be careful where I swing it..." ]);
+                    game.stat.save("tutorial6", true);
+                }
+
                 // Create a BB for the whomp.
                 var shape = self.owner.body.shapeList[0]; // FIXME: May not always have a shape!
                 var offset = {
