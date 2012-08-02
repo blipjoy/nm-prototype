@@ -89,7 +89,7 @@ game.NPCEntities = {
             else {
                 game.dialog([
                     "That ... book! Rachel, you're a genius!",
-                    "How's this for your trouble? You can get to the island if you follow a hidden path through the woods."
+                    "How's this for your trouble? You can get to Dangertooth Peak if you follow a hidden path through the woods."
                 ]);
             }
 
