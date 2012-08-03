@@ -28,7 +28,7 @@ Game Information
 ----------------
 
 Rachel is 15 years old. She grew up hearing stories of a strange island called
-"Neverwell", told by her grandfather ("Poppa" to Rachel). Rachel was 5 at the
+"Neverwell", told by her grandfather ("Papa" to Rachel). Rachel was 5 at the
 time, and the stories were always something adventurous and entertaining. Papa
 would tell her about the inhabitants of the island, and how they could perform
 magic. He would fight monsters while hunting for treasures buried in deep caves.
