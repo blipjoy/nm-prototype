@@ -168,10 +168,9 @@ game.story = {
         {
             "image" : null,
             "messages" : [
-                "Papa would talk about about so many things that it seemed",
-                "impossible to put it all on one island. I guess that's why he",
-                "set some of his adventures on smaller islands around",
-                "the mainland."
+                "Papa would talk about so many things that it seemed impossible",
+                "to put it all on one island. I guess that's why he set some of",
+                "his adventures on smaller islands around the mainland."
             ]
         },
         {
