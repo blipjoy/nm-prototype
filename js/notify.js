@@ -49,7 +49,7 @@ game.Notify = Object.extend({
         self.isPersistent = true;
         me.game.add(self, 10000);
 
-        me.subscribe("notify", function notify(message) {
+        me.event.subscribe("notify", function notify(message) {
             self.queue.push(message);
         });
     },

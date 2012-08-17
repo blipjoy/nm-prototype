@@ -166,7 +166,7 @@ game.Weapon = me.AnimationSheet.extend({
                 me.audio.play(self.settings.sfx_whomp[Number.prototype.random(0, len)]);
 
                 if (!game.stat.load("tutorial6")) {
-                    me.publish("notify", [ "MOG! This mallet is amerzing!! I should probably be careful where I swing it..." ]);
+                    me.event.publish("notify", [ "MOG! This mallet is amerzing!! I should probably be careful where I swing it..." ]);
                     game.stat.save("tutorial6", true);
                 }
 

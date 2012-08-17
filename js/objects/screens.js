@@ -113,8 +113,8 @@ game.InfoScreen = me.ScreenObject.extend({
         self.currentPage = 0;
 
         if (this.notify) {
-            me.publish("notify", [ "Press the action key (Enter or Space) to advance to the next page." ]);
-            me.publish("notify", [ "Press the skip key (ESC) to skip the story." ]);
+            me.event.publish("notify", [ "Press the action key (Enter or Space) to advance to the next page." ]);
+            me.event.publish("notify", [ "Press the skip key (ESC) to skip the story." ]);
         }
 
         if (self.fade) {
@@ -242,22 +242,22 @@ game.PlayScreen = game.AnimatedScreen.extend({
             switch (settings.to) {
                 case "rachels_house":
                     if (!game.stat.load("tutorial2")) {
-                        me.publish("notify", [ "That's Jessica. We should say hi using the action key!" ]);
+                        me.event.publish("notify", [ "That's Jessica. We should say hi using the action key!" ]);
                         game.stat.save("tutorial2", true);
                     }
                     break;
 
                 case "earth":
                     if (!game.stat.load("tutorial3")) {
-                        me.publish("notify", [ "We should talk to some more people. Maybe we could help them with something!" ]);
-                        me.publish("notify", [ "If you hold Shift, I promise to hurry as fast as I can!" ]);
+                        me.event.publish("notify", [ "We should talk to some more people. Maybe we could help them with something!" ]);
+                        me.event.publish("notify", [ "If you hold Shift, I promise to hurry as fast as I can!" ]);
                         game.stat.save("tutorial3", true);
                     }
                     break;
 
                 case "general_store":
                     if (!game.stat.load("tutorial4")) {
-                        me.publish("notify", [ "Let's look around a bit; there might be something here we can buy." ]);
+                        me.event.publish("notify", [ "Let's look around a bit; there might be something here we can buy." ]);
                         game.stat.save("tutorial4", true);
                     }
                     break;
@@ -283,9 +283,9 @@ game.PlayScreen = game.AnimatedScreen.extend({
         game.installBaddieHandler();
 
         if (!game.stat.load("tutorial1")) {
-            me.publish("notify", [ "Hi, I'm Rachel. You can show me where to go using the arrow keys." ]);
-            me.publish("notify", [ "Or if you prefer, the WASD keys also work." ]);
-            me.publish("notify", [ "Open the chest with an action key. There may be something useful inside!" ]);
+            me.event.publish("notify", [ "Hi, I'm Rachel. You can show me where to go using the arrow keys." ]);
+            me.event.publish("notify", [ "Or if you prefer, the WASD keys also work." ]);
+            me.event.publish("notify", [ "Open the chest with an action key. There may be something useful inside!" ]);
             game.stat.save("tutorial1", true);
         }
 
