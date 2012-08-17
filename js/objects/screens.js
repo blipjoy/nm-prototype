@@ -355,28 +355,33 @@ game.TitleScreen = game.PlayScreen.extend({
         me.game.viewport.reset(x, y);
 
         // Choose a random destination position.
-        self.to_x = new me.Tween(me.game.viewport.pos).to({
-            "x" : ~~(x + (Math.random() * 800) - 400).clamp(0, w)
-        }, 15000).onUpdate(function (value) {
-            me.game.viewport.pos.x = me.game.viewport.pos.x.round();
-        });
-        self.to_x.easing(me.Tween.Easing.Quadratic.EaseInOut);
-        self.to_x.start();
+        self.to_x = new me.Tween(me.game.viewport.pos)
+            .to({
+                "x" : ~~(x + (Math.random() * 800) - 400).clamp(0, w)
+            }, 15000)
+            .onUpdate(function onUpdate(value) {
+                me.game.viewport.pos.x = me.game.viewport.pos.x.round();
+            })
+            .easing(me.Tween.Easing.Quadratic.EaseInOut)
+            .start();
 
-        self.to_y = new me.Tween(me.game.viewport.pos).to({
-            "y" : ~~(y + (Math.random() * 800) - 400).clamp(0, h)
-        }, 15000).onUpdate(function (value) {
-            me.game.viewport.pos.y = me.game.viewport.pos.y.round();
-        }).onComplete(function () {
-            // LET'S DO IT AGAIN!
-            self.loadLevel({
-                "to"        : "earth",
-                "fade"      : "black",
-                "duration"  : 1000
-            });
-        });
-        self.to_y.easing(me.Tween.Easing.Quadratic.EaseInOut);
-        self.to_y.start();
+        self.to_y = new me.Tween(me.game.viewport.pos)
+            .to({
+                "y" : ~~(y + (Math.random() * 800) - 400).clamp(0, h)
+            }, 15000)
+            .onUpdate(function onUpdate(value) {
+                me.game.viewport.pos.y = me.game.viewport.pos.y.round();
+            })
+            .onComplete(function onComplete() {
+                // LET'S DO IT AGAIN!
+                self.loadLevel({
+                    "to"        : "earth",
+                    "fade"      : "black",
+                    "duration"  : 1000
+                });
+            })
+            .easing(me.Tween.Easing.Quadratic.EaseInOut)
+            .start();
 
         // Make happy noises.
         if (settings.music) {
@@ -417,13 +422,15 @@ game.TitleScreen = game.PlayScreen.extend({
                 self.fader = 1;
 
                 // Don't reuse me.viewport.fade* : We want the logo to remain visible.
-                var tween = new me.Tween(self).to({
-                    "fader": 0
-                }, settings.duration).onComplete(function () {
-                    self.fader = -1;
-                });
-                tween.easing(me.Tween.Easing.Sinusoidal.EaseIn);
-                tween.start();
+                var tween = new me.Tween(self)
+                    .to({
+                        "fader": 0
+                    }, settings.duration)
+                    .onComplete(function onComplete() {
+                        self.fader = -1;
+                    })
+                    .easing(me.Tween.Easing.Sinusoidal.EaseIn)
+                    .start();
             }
         }
 
@@ -433,11 +440,13 @@ game.TitleScreen = game.PlayScreen.extend({
                 // Don't reuse me.viewport.fade* : We want the logo to remain visible.
                 self.fadeColor = fade;
                 self.fader = 0;
-                var tween = new me.Tween(self).to({
-                    "fader" : 1
-                }, settings.duration).onComplete(fadeComplete);
-                tween.easing(me.Tween.Easing.Sinusoidal.EaseIn);
-                tween.start();
+                var tween = new me.Tween(self)
+                    .to({
+                        "fader" : 1
+                    }, settings.duration)
+                    .onComplete(fadeComplete)
+                    .easing(me.Tween.Easing.Sinusoidal.EaseIn)
+                    .start();
             }
             else {
                 fadeComplete();
