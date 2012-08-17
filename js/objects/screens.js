@@ -358,7 +358,7 @@ game.TitleScreen = game.PlayScreen.extend({
         self.to_x = new me.Tween(me.game.viewport.pos).to({
             "x" : ~~(x + (Math.random() * 800) - 400).clamp(0, w)
         }, 15000).onUpdate(function (value) {
-            me.game.viewport.pos.x = ~~me.game.viewport.pos.x;
+            me.game.viewport.pos.x = me.game.viewport.pos.x.round();
         });
         self.to_x.easing(me.Tween.Easing.Quadratic.EaseInOut);
         self.to_x.start();
@@ -366,7 +366,7 @@ game.TitleScreen = game.PlayScreen.extend({
         self.to_y = new me.Tween(me.game.viewport.pos).to({
             "y" : ~~(y + (Math.random() * 800) - 400).clamp(0, h)
         }, 15000).onUpdate(function (value) {
-            me.game.viewport.pos.y = ~~me.game.viewport.pos.y;
+            me.game.viewport.pos.y = me.game.viewport.pos.y.round();
         }).onComplete(function () {
             // LET'S DO IT AGAIN!
             self.loadLevel({
