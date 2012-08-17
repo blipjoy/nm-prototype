@@ -101,7 +101,7 @@ game.InfoScreen = me.ScreenObject.extend({
     "init" : function init(pages, state, fade, duration, notify) {
         this.parent(true);
         this.pages = pages;
-        this.font = new me.Font("bold Tahoma", 20, "#fff");
+        this.font = new me.Font("Verdana", 16, "#fff");
         this.state = state || me.state.MENU;
         this.fade = fade;
         this.duration = duration || 250;
@@ -326,7 +326,7 @@ game.TitleScreen = game.PlayScreen.extend({
         this.isPersistent = true;
 
         this.logo = game.getImage("logo");
-        this.font = new me.Font("bold Tahoma", 20, "#fff");
+        this.font = new me.Font("Verdana", 16, "#fff");
     },
 
     "onLevelLoaded" : function onLevelLoaded(settings) {

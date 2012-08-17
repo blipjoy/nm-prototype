@@ -19,7 +19,7 @@
 /* Dialog box */
 game.dialog = function dialog(script, callback) {
     var background = game.getImage("dialog");
-    var font = new me.Font("Tahoma", 18, "#eee");
+    var font = new me.Font("Verdana", 16, "#eee");
 
     game.modal = true;
 
