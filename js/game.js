@@ -260,7 +260,7 @@ var game = {
                     if (subscribed.indexOf(item) === -1) {
                         subscribed.push(item);
 
-                        subscribe(item, (function subscribeFactory(event) {
+                        me.subscribe(item, (function subscriptionFactory(event) {
                             return function onPublish() {
                                 progress.apply(progress, [ event ].concat(
                                     Array.prototype.slice.call(arguments))

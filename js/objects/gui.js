@@ -96,11 +96,11 @@ game.installHUD = function HUD() {
             game.stat.save("coins", this.value);
 
             if (value > 0) {
-                publish("collect coin", [ value ]);
+                me.publish("collect coin", [ value ]);
                 me.audio.play("collect_coin");
             }
             else {
-                publish("spend coin", [ -value ]);
+                me.publish("spend coin", [ -value ]);
                 // Play thee sounds quickly in series.
                 me.audio.play("collect_coin");
                 setTimeout(function timeout() { me.audio.play("collect_coin") }, 200);
@@ -336,13 +336,13 @@ game.installHUD = function HUD() {
             this.weapon = item;
 
             me.audio.play("fanfare");
-            publish("acquire weapon", [ item.name ]);
+            me.publish("acquire weapon", [ item.name ]);
             game.dialog([ item.description ]);
 
             game.stat.save("inventory_weapon", item);
 
             if (!game.stat.load("tutorial5")) {
-                publish("notify", [ "At last I can defend myself! Use it with the attack key (Z or APOSTROPHE)" ]);
+                me.publish("notify", [ "At last I can defend myself! Use it with the attack key (Z or APOSTROPHE)" ]);
                 game.stat.save("tutorial5", true);
             }
 
@@ -360,7 +360,7 @@ game.installHUD = function HUD() {
             }
 
             me.audio.play("fanfare");
-            publish("acquire item", [ item.name ]);
+            me.publish("acquire item", [ item.name ]);
             game.dialog([ item.description ]);
 
             this.cacheIcon(item);
