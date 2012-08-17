@@ -28,6 +28,8 @@ game.NPCEntities = {
         },
 
         "interact" : function interact(actor, callback) {
+            this.parent(actor);
+
             if (!game.HUD.HUDItems.inventory.hasItem("clock")) {
                 game.dialog([
                     "Ermm, do you know what time it is? I'm stuck here at work for a while I think...",
@@ -55,6 +57,8 @@ game.NPCEntities = {
         },
 
         "interact" : function interact(actor, callback) {
+            this.parent(actor);
+
             game.dialog([
                 "What's up?",
                 "You should find something to help get rid of all these pesky snakes!",
@@ -79,8 +83,7 @@ game.NPCEntities = {
         "interact" : function interact(actor, callback) {
             var self = this;
 
-            // Turn 2 clicks (180 degrees) from actor's direction.
-            self.turn(2, actor.dir_name);
+            self.parent(actor);
 
             if (!game.HUD.HUDItems.inventory.hasItem("book")) {
                 game.dialog([
@@ -158,6 +161,8 @@ game.NPCEntities = {
         },
 
         "interact" : function interact(actor, callback) {
+            this.parent(actor);
+
             game.dialog([
                 "Hi!"
             ]);

@@ -240,8 +240,8 @@ game.Sprite = game.Chipmunk.extend({
         }
     },
 
-    "interact" : function interact() {
-        console.warn("Missing interaction for " + this.name);
+    "interact" : function interact(actor) {
+        console.warn("Missing interaction for " + this.name + " from " + actor.name);
     },
 
     "update" : function update() {

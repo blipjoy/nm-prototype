@@ -297,6 +297,11 @@ game.NPC = game.Sprite.extend({
         }
     },
 
+    "interact" : function interact(actor) {
+        // Turn 2 clicks (180 degrees) from actor's direction.
+        this.turn(2, actor.dir_name);
+    },
+
     "checkInteraction" : function checkInteraction() {
         // TODO: NPC AI.
     },
