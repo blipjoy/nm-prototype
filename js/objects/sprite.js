@@ -133,7 +133,6 @@ game.Sprite = game.Chipmunk.extend({
         // Set some things that the engine wants.
         self.GUID = GUID;
         self.name = settings.name ? settings.name.toLowerCase() : "";
-        self.pos.set(x, me.game.currentLevel ? (y + (settings.height || 0) - self.height) : y);
         self.isEntity = true;
 
         // Compose additional sprites.
