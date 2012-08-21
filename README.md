@@ -7,7 +7,7 @@ An entry for the Liberated Pixel Cup 2012
 Getting
 -------
 
-    $ git clone http://bitbucket.org/parasyte/lpcgame.git
+    $ git clone http://bitbucket.org/parasyte/neverwell-moor.git
 
 For development information, see my blog: http://blog.kodewerx.org/
 
@@ -57,7 +57,7 @@ Running
 
 ### Easy mode ###
 
-Just go to [the snapshot](http://parasyte.kodewerx.org/projects/lpcgame/) ;)
+Just go to [the snapshot](http://parasyte.kodewerx.org/projects/neverwell-moor/) ;)
 
 Level Editor
 ------------
