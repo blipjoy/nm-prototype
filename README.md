@@ -7,7 +7,7 @@ An entry for the Liberated Pixel Cup 2012
 Getting
 -------
 
-    $ git clone http://bitbucket.org/parasyte/neverwell-moor.git
+    $ git clone https://bitbucket.org/parasyte/neverwell-moor.git
 
 For development information, see my blog: http://blog.kodewerx.org/
 
