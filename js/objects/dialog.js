@@ -51,7 +51,7 @@ game.dialog = function dialog(script, callback) {
         // What to do when dialog has closed.
         callback
     );
-    me.game.add(dialog_box);
+    me.game.add(dialog_box, 1000);
     me.game.sort.defer(game.sort);
 };
 
@@ -59,7 +59,7 @@ game.dialog = function dialog(script, callback) {
 /**
  * A simple dialog manager.
  * @class
- * @extends me.SpriteObject
+ * @extends Object
  * @constructor
  * @param {int} x the x coordinates of the dialog box
  * @param {int} y the y coordinates of the dialog box
@@ -75,9 +75,9 @@ game.dialog = function dialog(script, callback) {
  * @example
  * dialog = new DialogObject(10, 10, background, dialog, background.width - OFFSET_SIZE_TEXT_X, background.width - OFFSET_SIZE_TEXT_Y, OFFSET_DIALOG_X, OFFSET_DIALOG_Y, new me.Font("acmesa",20,"#880D0D", "center"), "enter", activateControls);
  */
-game.DialogObject = me.SpriteObject.extend({
+game.DialogObject = Object.extend({
     "init" : function init(x, y, background, dialog, widthText, heightText, offsetTextX, offsetTextY, font, tagKey, callback) {
-        this.parent(x, y, background);
+        this.pos = new me.Vector2d(x, y);
         this.background = background;
         this.font = font;
         this.tagKey = tagKey;
@@ -91,7 +91,7 @@ game.DialogObject = me.SpriteObject.extend({
         this.rows = [ this.getWords(this.dialog[0]) ];
         this.currentRow = 0;
         this.callback = callback;
-        this.z = 1000;
+        this.visible = true;
     },
 
     "getWords" : function getWords(text) {
