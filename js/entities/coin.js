@@ -24,7 +24,7 @@ game.installCoinHandler = function installCoinHandler() {
         cm.getSpace().addCollisionHandler(
             c.COLLIDE_PLAYER,
             c.COLLIDE_COLLECTIBLE,
-            function exitCollision(arbiter, space) {
+            function coinCollision(arbiter, space) {
                 // Wrapped because game.rachel does not exist when the handler is installed.
                 game.rachel.collect.apply(game.rachel, arguments);
 
