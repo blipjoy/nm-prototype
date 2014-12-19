@@ -7,7 +7,7 @@ An entry for the Liberated Pixel Cup 2012
 Getting
 -------
 
-    $ git clone https://bitbucket.org/parasyte/neverwell-moor.git
+    $ git clone https://github.com/parasyte/nm-prototype.git
 
 For development information, see my blog: http://blog.kodewerx.org/
 
@@ -57,10 +57,10 @@ Running
 
 ### Easy mode ###
 
-Just go to [the snapshot](http://parasyte.kodewerx.org/projects/neverwell-moor/) ;)
+Just go to [the snapshot](http://parasyte.github.io/nm-prototype/) ;)
 
 Level Editor
 ------------
 
-Use [Tiled-QT](http://www.mapeditor.org/) to edit the maps. Version 0.9 was used
+Use [Tiled](http://www.mapeditor.org/) to edit the maps. Version 0.9 was used
 to run the automapping rules, which as of this writing is still in beta.
